@@ -50,6 +50,12 @@
             width: 100px;
             height: auto;
             opacity: 0.6;
+            transition: all 0.3s ease;
+        }
+        
+        .aperture-header-logo:hover {
+            opacity: 1;
+            transform: scale(1.15);
         }
 
         .aperture-header-logo img {
@@ -64,7 +70,7 @@
 
         .progress-fill {
             height: 100%;
-            background: #0366d6;
+            background: linear-gradient(90deg, #FF6700, #0098FF);
             transition: width 0.3s ease;
             width: 0%;
         }
@@ -423,15 +429,14 @@
         .footer p:last-child {
             font-size: 10px;
             opacity: 0.3;
-            transition: opacity 0.3s ease;  /* La transition doit être sur l'état de base */
+            transition: opacity 0.3s ease;
         }
         
         .footer p:last-child:hover {
             opacity: 0.7;
         }
         
-    
-        /* Portal Cake Footer */
+        /* Portal Cake Easter Egg */
         .portal-cake {
             position: fixed;
             bottom: 20px;
@@ -440,6 +445,7 @@
             height: auto;
             opacity: 0.35;
             transition: opacity 0.3s ease;
+            animation: float 3s ease-in-out infinite;
         }
 
         .portal-cake:hover {
@@ -449,6 +455,11 @@
         .portal-cake img {
             width: 100%;
             height: auto;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
         }
 
         @media (max-width: 768px) {
@@ -528,17 +539,15 @@
         </div>
     </div>
 
-    <!-- Portal Cake Easter Egg -->
+    <!-- Portal Cake Easter Egg (si tu veux mettre une image ici plus tard) -->
     <div class="portal-cake">
-        <img src="LogoQueTuVeux.png" alt="">
+        <!-- <img src="ton-image.png" alt=""> -->
     </div>
     
     <footer class="footer">
         <p>"The cake is a lie"</p>
         <p>Subject: you | Test Protocol: [REDACTED]</p>
     </footer>
-    
-
 
     <script>
         const modules = {
@@ -803,7 +812,6 @@
         }
 
         function validateAnswer() {
-            
             const question = currentQuestions[currentQuestion];
             const checkboxes = document.querySelectorAll('input[name="answer"]');
             const selectedAnswers = [];
@@ -815,10 +823,36 @@
             });
 
             if (selectedAnswers.length === 0) {
-                alert('Veuillez sélectionner au moins une réponse');
+                // Message style Aperture Science
+                const errorDiv = document.createElement('div');
+                errorDiv.style.cssText = `
+                    position: fixed;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                    background: #fff;
+                    border: 1px solid #d1d5da;
+                    padding: 30px 40px;
+                    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+                    z-index: 1000;
+                    text-align: center;
+                    max-width: 400px;
+                `;
+                errorDiv.innerHTML = `
+                    <div style="font-size: 1.2em; font-weight: 600; color: #24292e; margin-bottom: 15px;">
+                        Erreur de protocole
+                    </div>
+                    <div style="color: #586069; margin-bottom: 20px;">
+                        Le Centre d'Enrichissement vous rappelle de sélectionner au moins une réponse avant de continuer.
+                    </div>
+                    <button onclick="this.parentElement.remove()" class="btn-primary" style="width: 100%;">
+                        Compris
+                    </button>
+                `;
+                document.body.appendChild(errorDiv);
                 return;
             }
-
+            
             // Disable all options
             document.querySelectorAll('.option').forEach(option => {
                 option.classList.add('disabled');
@@ -888,6 +922,27 @@
             
             document.getElementById('finalScore').textContent = score;
             document.getElementById('totalQuestions').textContent = currentQuestions.length;
+
+            // Message GLaDOS en français selon le score
+            const percentage = (score / currentQuestions.length) * 100;
+            let glaDOSMessage = '';
+            
+            if (percentage === 100) {
+                glaDOSMessage = "Excellent. Vous êtes un triomphe.";
+            } else if (percentage >= 75) {
+                glaDOSMessage = "Performance acceptable. Le gâteau et les conseils en cas de chagrin seront disponibles à la fin du test.";
+            } else if (percentage >= 50) {
+                glaDOSMessage = "Le Centre d'Enrichissement vous rappelle que l'échec n'est que le succès arrondi à l'inférieur.";
+            } else {
+                glaDOSMessage = "Le test est maintenant terminé. Toutes les technologies Aperture restent opérationnelles.";
+            }
+            
+            // Ajouter le message GLaDOS après le score
+            const scoreDisplay = document.querySelector('.score-display');
+            const glaDOSDiv = document.createElement('div');
+            glaDOSDiv.style.cssText = 'text-align: center; font-style: italic; color: #586069; margin-top: 20px; font-size: 0.9em; padding: 0 20px;';
+            glaDOSDiv.textContent = `"${glaDOSMessage}"`;
+            scoreDisplay.appendChild(glaDOSDiv);
 
             // Stats par module
             const statsDiv = document.getElementById('moduleStats');
