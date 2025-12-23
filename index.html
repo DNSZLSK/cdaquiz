@@ -607,11 +607,26 @@
             'https://raw.githubusercontent.com/DNSZLSK/cdaquiz/master/what-are-you-doing.mp3'
         ];
         
-        // Fonction pour jouer un vocal aléatoire
+        // Variable pour stocker le dernier son joué
+        let lastPlayedIndex = -1;
+        
+        // Fonction pour jouer un vocal aléatoire (sans répétition immédiate)
         function playRandomPortalVoice() {
-            const randomIndex = Math.floor(Math.random() * portalVoices.length);
+            let randomIndex;
+            
+            // Si on a plusieurs sons, éviter de rejouer le même
+            if (portalVoices.length > 1) {
+                do {
+                    randomIndex = Math.floor(Math.random() * portalVoices.length);
+                } while (randomIndex === lastPlayedIndex);
+            } else {
+                randomIndex = 0;
+            }
+            
+            lastPlayedIndex = randomIndex;
+            
             const audio = new Audio(portalVoices[randomIndex]);
-            audio.volume = 0.5; // Volume à 50%
+            audio.volume = 0.5;
             audio.play().catch(err => console.log('Erreur lecture audio:', err));
         }
         
