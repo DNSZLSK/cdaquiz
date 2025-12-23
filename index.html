@@ -927,7 +927,9 @@
             const percentage = (score / currentQuestions.length) * 100;
             let glaDOSMessage = '';
             
-            if (percentage === 100) {
+            if (score === 0) {
+                glaDOSMessage = "Nous avons dû modifier vos résultats. Vous êtes un cas particulier.";
+            } else if (percentage === 100) {
                 glaDOSMessage = "Excellent. Vous êtes un triomphe.";
             } else if (percentage >= 75) {
                 glaDOSMessage = "Performance acceptable. Le gâteau et les conseils en cas de chagrin seront disponibles à la fin du test.";
