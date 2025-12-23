@@ -484,7 +484,7 @@
                 <h1>Quiz de Formation Développement</h1>
                 <p>Évaluation des connaissances</p>
             </div>
-            <div class="aperture-header-logo">
+            <div class="aperture-header-logo" id="apertureLogo" style="cursor: pointer;">
                 <img src="https://i.imgur.com/7FQrTbz.png" alt="The cake is a lie">
             </div>
         </div>
@@ -599,6 +599,30 @@
             }
         };
 
+        const portalVoices = [
+            'https://raw.githubusercontent.com/DNSZLSK/cdaquiz/master/hello-friend.mp3',
+            'https://raw.githubusercontent.com/DNSZLSK/cdaquiz/master/is-anyone-there.mp3',
+            'https://raw.githubusercontent.com/DNSZLSK/cdaquiz/master/noooooo.mp3',
+            'https://raw.githubusercontent.com/DNSZLSK/cdaquiz/master/please-stop.mp3',
+            'https://raw.githubusercontent.com/DNSZLSK/cdaquiz/master/what-are-you-doing.mp3'
+        ];
+        
+        // Fonction pour jouer un vocal aléatoire
+        function playRandomPortalVoice() {
+            const randomIndex = Math.floor(Math.random() * portalVoices.length);
+            const audio = new Audio(portalVoices[randomIndex]);
+            audio.volume = 0.5; // Volume à 50%
+            audio.play().catch(err => console.log('Erreur lecture audio:', err));
+        }
+        
+        // Ajouter l'événement au logo
+        document.addEventListener('DOMContentLoaded', function() {
+            const logo = document.getElementById('apertureLogo');
+            if (logo) {
+                logo.addEventListener('click', playRandomPortalVoice);
+            }
+        });
+        
         const quizData = [
             { id: 1, module: "python", question: "Quelle est la différence entre le type int et le type float ?", options: ["int stocke des nombres entiers, float stocke des nombres décimaux", "int utilise 32 bits tandis que float utilise toujours 64 bits", "float peut représenter des entiers plus grands grâce à l'exposant", "int est immutable alors que float est mutable"], correct: [0], explanation: "int (integer) stocke des nombres entiers (ex: 5, -3, 100), tandis que float stocke des nombres à virgule flottante (ex: 3.14, -0.5, 2.0). La taille en bits dépend de l'architecture." },
             { id: 2, module: "python", question: "Comment s'appelle cette opération : nom = \"Sophie \" + \"Duchemin\"", options: ["Concaténation", "Interpolation de chaînes", "Agrégation", "Serialisation"], correct: [0], explanation: "La concaténation est l'opération qui consiste à assembler deux chaînes de caractères bout à bout avec l'opérateur +." },
