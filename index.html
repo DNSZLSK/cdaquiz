@@ -419,7 +419,18 @@
             text-align: center;
             color: #586069;
         }
-
+        
+        .footer p:last-child {
+            font-size: 10px;
+            opacity: 0.3;
+            transition: opacity 0.3s ease;  /* La transition doit être sur l'état de base */
+        }
+        
+        .footer p:last-child:hover {
+            opacity: 0.7;
+        }
+        
+    
         /* Portal Cake Footer */
         .portal-cake {
             position: fixed;
@@ -524,9 +535,10 @@
     
     <footer class="footer">
         <p>"The cake is a lie"</p>
-        <p>© Aperture Science Innovators</p>
-
+        <p>Subject: you | Test Protocol: [REDACTED]</p>
     </footer>
+    
+
 
     <script>
         const modules = {
