@@ -600,6 +600,13 @@
             }
         };
 
+        // Seuils de score
+        const SCORE_THRESHOLDS = {
+            PERFECT: 100,
+            GOOD: 75,
+            MEDIUM: 50
+        };
+
         const portalVoices = [
             'https://raw.githubusercontent.com/DNSZLSK/cdaquiz/master/turretVocals/critical-error.mp3',
             'https://raw.githubusercontent.com/DNSZLSK/cdaquiz/master/turretVocals/good-shot.mp3',
@@ -649,6 +656,16 @@
                 logo.addEventListener('click', playRandomPortalVoice);
             }
         });
+        
+        // Son pour le survol des menus (pré-chargé pour optimiser les performances)
+        const menuHoverAudio = new Audio('https://raw.githubusercontent.com/DNSZLSK/cdaquiz/master/beepMenuChoice.mp3');
+        menuHoverAudio.volume = 0.3;
+        
+        // Fonction pour jouer le son de survol
+        function playMenuHoverSound() {
+            menuHoverAudio.currentTime = 0; // Restart le son
+            menuHoverAudio.play().catch(err => console.log('Erreur lecture audio:', err));
+        }
         
         const quizData = [
             { id: 1, module: "python", question: "Quelle est la différence entre le type int et le type float ?", options: ["int stocke des nombres entiers, float stocke des nombres décimaux", "int utilise 32 bits tandis que float utilise toujours 64 bits", "float peut représenter des entiers plus grands grâce à l'exposant", "int est immutable alors que float est mutable"], correct: [0], explanation: "int (integer) stocke des nombres entiers (ex: 5, -3, 100), tandis que float stocke des nombres à virgule flottante (ex: 3.14, -0.5, 2.0). La taille en bits dépend de l'architecture." },
@@ -710,7 +727,6 @@
             { id: 57, module: "unity", question: "Pourquoi utilise-t-on souvent le mot-clé public devant certaines variables dans Unity ? Quels avantages et risques cela entraîne-t-il ?", options: ["Avantage : visible dans l'Inspector. Risque : moins d'encapsulation et modification accidentelle", "Avantage : performances accrues. Risque : consommation mémoire", "C'est obligatoire pour la sérialisation", "Aucun risque, c'est la meilleure pratique"], correct: [0], explanation: "Les variables public sont éditables dans l'Inspector Unity (pratique pour le level design) mais exposent les données. Préférez [SerializeField] private pour garder l'encapsulation tout en ayant l'édition visuelle." },
             { id: 58, module: "unity", question: "Comment utiliser la composition pour enrichir le comportement d'un GameObject dans Unity ?", options: ["Attacher plusieurs scripts (composants) au même GameObject", "Créer une hiérarchie d'héritage complexe", "Utiliser des interfaces pour partager le code", "Regrouper toute la logique dans un seul MonoBehaviour"], correct: [0], explanation: "Unity favorise la composition (Entity Component System) : ajoutez plusieurs composants spécialisés (scripts) au GameObject plutôt qu'un seul script monolithique. Chaque composant gère une responsabilité." },
             { id: 59, module: "tests", question: "Que signifie le pattern AAA dans l'organisation d'un test unitaire ?", options: ["Arrange (préparer), Act (agir), Assert (vérifier)", "Allocate, Apply, Analyze", "Add, Activate, Approve", "Assign, Automate, Audit"], correct: [0], explanation: "Le pattern AAA structure les tests en 3 phases : Arrange (préparer le contexte et les données), Act (exécuter l'action testée), Assert (vérifier le résultat). Cela rend les tests lisibles et maintenables." },
-            { id: 59, module: "tests", question: "Que signifie le pattern AAA dans l'organisation d'un test unitaire ?", options: ["Arrange (préparer), Act (agir), Assert (vérifier)", "Allocate, Apply, Analyze", "Add, Activate, Approve", "Assign, Automate, Audit"], correct: [0], explanation: "Le pattern AAA structure les tests en 3 phases : Arrange (préparer le contexte et les données), Act (exécuter l'action testée), Assert (vérifier le résultat). Cela rend les tests lisibles et maintenables." },
             { id: 60, module: "tests", question: "Quelle est la différence entre any() et eq() dans Mockito ?", options: ["any() accepte n'importe quelle valeur du type, eq() vérifie l'égalité stricte", "any() est plus performant car il ne compare pas les valeurs", "eq() est déprécié en faveur de any()", "any() fonctionne uniquement avec les objets, eq() avec les primitifs"], correct: [0], explanation: "any(Type.class) accepte n'importe quelle valeur de ce type. eq(valeur) vérifie que le paramètre est exactement égal à la valeur donnée (via .equals()). Les matchers permettent de vérifier les appels de méthodes mockées de façon flexible." },
             { id: 61, module: "tests", question: "Quelle règle faut-il respecter quand on utilise des matchers Mockito (any(), eq(), etc.) ?", options: ["Si on utilise un matcher, tous les paramètres doivent être des matchers", "On ne peut utiliser qu'un seul matcher par méthode verify", "Les matchers doivent toujours être combinés avec des valeurs directes", "Les matchers sont interdits dans les assertions"], correct: [0], explanation: "Règle importante : si vous utilisez UN matcher, TOUS les paramètres doivent être des matchers. Incorrect : verify(mock).method(any(), valeur). Correct : verify(mock).method(any(), eq(valeur)). Sinon Mockito génère une erreur." },
             { id: 62, module: "tests", question: "Quelle est la différence entre verify() et when() dans Mockito ?", options: ["verify() vérifie qu'une méthode a été appelée, when() configure le comportement d'un mock", "verify() est utilisé dans Arrange, when() dans Assert", "when() vérifie les appels, verify() configure les mocks", "verify() fonctionne avec les vrais objets, when() avec les mocks"], correct: [0], explanation: "when(mock.method()).thenReturn(value) configure le comportement du mock (phase Arrange). verify(mock).method() vérifie que la méthode a bien été appelée (phase Assert). Ce sont deux opérations complémentaires mais différentes." }
@@ -730,23 +746,25 @@
         function renderModuleGrid() {
             const grid = document.getElementById('moduleGrid');
             grid.innerHTML = '';
-
+            
             // Option "Tous les modules"
             const allCard = document.createElement('div');
             allCard.className = 'module-card all';
             allCard.onclick = () => startQuiz('all');
+            allCard.onmouseenter = () => playMenuHoverSound();
             allCard.innerHTML = `
                 <h3>Tous les modules</h3>
                 <p>Évaluation complète</p>
                 <p class="question-count">${quizData.length} questions</p>
             `;
             grid.appendChild(allCard);
-
+            
             // Cartes pour chaque module
             for (const [key, module] of Object.entries(modules)) {
                 const card = document.createElement('div');
                 card.className = `module-card ${key}`;
                 card.onclick = () => startQuiz(key);
+                card.onmouseenter = () => playMenuHoverSound();
                 card.innerHTML = `
                     <h3>${module.name}</h3>
                     <p>${module.description}</p>
@@ -823,16 +841,16 @@
             container.innerHTML = `
                 <div class="question-container active">
                     <div class="question-header">
-                        <span class="question-number">Question ${currentQuestion + 1}/${currentQuestions.length}</span>
-                        <span class="module-tag">${modules[question.module]?.name || question.module}</span>
+                        <span class="question-number" role="status" aria-live="polite">Question ${currentQuestion + 1}/${currentQuestions.length}</span>
+                        <span class="module-tag" aria-label="Module: ${modules[question.module]?.name || question.module}">${modules[question.module]?.name || question.module}</span>
                     </div>
                     
                     <div class="question-text">${question.question}</div>
                     
                     <div class="options" id="options">
                         ${question.shuffledOptions.map((option, index) => `
-                            <label class="option" data-index="${index}">
-                                <input type="checkbox" name="answer" value="${index}">
+                            <label class="option" data-index="${index}" role="checkbox" aria-checked="false" tabindex="0">
+                                <input type="checkbox" name="answer" value="${index}" aria-label="Réponse ${index + 1}: ${option}">
                                 <span>${option}</span>
                             </label>
                         `).join('')}
@@ -981,11 +999,11 @@
             
             if (score === 0) {
                 glaDOSMessage = "Nous avons dû modifier vos résultats. Vous êtes un cas particulier.";
-            } else if (percentage === 100) {
+            } else if (percentage === SCORE_THRESHOLDS.PERFECT) {
                 glaDOSMessage = "Excellent. Vous êtes un triomphe.";
-            } else if (percentage >= 75) {
+            } else if (percentage >= SCORE_THRESHOLDS.GOOD) {
                 glaDOSMessage = "Performance acceptable. Le gâteau et les conseils en cas de chagrin seront disponibles à la fin du test.";
-            } else if (percentage >= 50) {
+            } else if (percentage >= SCORE_THRESHOLDS.MEDIUM) {
                 glaDOSMessage = "Le Centre d'Enrichissement vous rappelle que l'échec n'est que le succès arrondi à l'inférieur.";
             } else {
                 glaDOSMessage = "Le test est maintenant terminé. Toutes les technologies Aperture restent opérationnelles.";
@@ -998,6 +1016,31 @@
             glaDOSDiv.textContent = `"${glaDOSMessage}"`;
             scoreDisplay.appendChild(glaDOSDiv);
 
+            // Sauvegarder le meilleur score
+            const previousBest = parseInt(localStorage.getItem('bestScore')) || 0;
+            const previousBestTotal = parseInt(localStorage.getItem('bestScoreTotal')) || 0;
+            const currentPercentage = (score / currentQuestions.length) * 100;
+            const previousPercentage = previousBestTotal > 0 ? (previousBest / previousBestTotal) * 100 : 0;
+
+            if (currentPercentage > previousPercentage || previousBest === 0) {
+                localStorage.setItem('bestScore', score);
+                localStorage.setItem('bestScoreTotal', currentQuestions.length);
+            }
+
+            // Afficher le meilleur score
+            const bestScore = parseInt(localStorage.getItem('bestScore')) || 0;
+            const bestScoreTotal = parseInt(localStorage.getItem('bestScoreTotal')) || 0;
+            if (bestScore > 0) {
+                const bestPercentage = (bestScore / bestScoreTotal) * 100;
+                const bestScoreDiv = document.createElement('div');
+                bestScoreDiv.style.cssText = 'text-align: center; margin-top: 20px; padding: 15px; background: #fff3cd; border: 1px solid #ffc107; border-radius: 6px;';
+                bestScoreDiv.innerHTML = `
+                    <div style="font-weight: 600; color: #856404; margin-bottom: 5px;">Meilleur score</div>
+                    <div style="color: #856404;">${bestScore}/${bestScoreTotal} (${bestPercentage.toFixed(0)}%)</div>
+                `;
+                scoreDisplay.appendChild(bestScoreDiv);
+            }
+
             // Stats par module
             const statsDiv = document.getElementById('moduleStats');
             statsDiv.innerHTML = '<h3>Détails par module</h3>';
@@ -1005,8 +1048,8 @@
             for (const [moduleKey, stats] of Object.entries(moduleScores)) {
                 const percentage = (stats.correct / stats.total) * 100;
                 let scoreClass = 'bad';
-                if (percentage >= 75) scoreClass = 'good';
-                else if (percentage >= 50) scoreClass = 'medium';
+                if (percentage >= SCORE_THRESHOLDS.GOOD) scoreClass = 'good';
+                else if (percentage >= SCORE_THRESHOLDS.MEDIUM) scoreClass = 'medium';
 
                 const item = document.createElement('div');
                 item.className = 'stat-item';
