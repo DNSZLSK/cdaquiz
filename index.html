@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quiz Formation - Modulaire</title>
+    <title>CDA Quiz</title>
+    <link rel="icon" type="image/png" href="https://i.imgur.com/7FQrTbz.png">
     <style>
         * {
             margin: 0;
@@ -481,8 +482,8 @@
     <div class="container">
         <div class="header">
             <div class="header-content">
-                <h1>Quiz de Formation Développement</h1>
-                <p>Évaluation des connaissances</p>
+                <h1>Test d'Aptitude Développeur</h1>
+                <p>Protocole d'évaluation des compétences</p>
             </div>
             <div class="aperture-header-logo" id="apertureLogo" style="cursor: pointer;">
                 <img src="https://i.imgur.com/7FQrTbz.png" alt="The cake is a lie">
@@ -575,7 +576,7 @@
             tests: {
                 name: "Tests Unitaires",
                 description: "FIRST, mocks, assertions",
-                questions: [33, 34, 35, 36, 37, 38, 39, 40, 41]
+                questions: [33, 34, 35, 36, 37, 38, 39, 40, 41, 59, 60, 61, 62]
             },
             poo: {
                 name: "POO",
@@ -707,7 +708,12 @@
             { id: 55, module: "unity", question: "À quoi correspond une classe qui hérite de MonoBehaviour dans Unity ?", options: ["Un script qui peut être attaché à un GameObject", "Un composant natif du moteur Unity", "Un système de gestion des entrées utilisateur", "Une classe abstraite pour les animations"], correct: [0], explanation: "MonoBehaviour est la classe de base pour tous les scripts Unity attachables aux GameObjects, donnant accès au cycle de vie Unity (Start, Update, etc.) et aux composants." },
             { id: 56, module: "unity", question: "Quelle est la différence entre la méthode Start() et la méthode Update() dans une classe Unity ?", options: ["Start() s'exécute une fois au démarrage, Update() s'exécute à chaque frame", "Start() est appelée après Update()", "Update() est appelée seulement si l'objet est actif", "Start() peut être appelée plusieurs fois"], correct: [0], explanation: "Start() est appelée une fois lors de l'initialisation du script (avant la première frame). Update() est appelée à chaque frame (environ 60 fois par seconde selon le framerate)." },
             { id: 57, module: "unity", question: "Pourquoi utilise-t-on souvent le mot-clé public devant certaines variables dans Unity ? Quels avantages et risques cela entraîne-t-il ?", options: ["Avantage : visible dans l'Inspector. Risque : moins d'encapsulation et modification accidentelle", "Avantage : performances accrues. Risque : consommation mémoire", "C'est obligatoire pour la sérialisation", "Aucun risque, c'est la meilleure pratique"], correct: [0], explanation: "Les variables public sont éditables dans l'Inspector Unity (pratique pour le level design) mais exposent les données. Préférez [SerializeField] private pour garder l'encapsulation tout en ayant l'édition visuelle." },
-            { id: 58, module: "unity", question: "Comment utiliser la composition pour enrichir le comportement d'un GameObject dans Unity ?", options: ["Attacher plusieurs scripts (composants) au même GameObject", "Créer une hiérarchie d'héritage complexe", "Utiliser des interfaces pour partager le code", "Regrouper toute la logique dans un seul MonoBehaviour"], correct: [0], explanation: "Unity favorise la composition (Entity Component System) : ajoutez plusieurs composants spécialisés (scripts) au GameObject plutôt qu'un seul script monolithique. Chaque composant gère une responsabilité." }
+            { id: 58, module: "unity", question: "Comment utiliser la composition pour enrichir le comportement d'un GameObject dans Unity ?", options: ["Attacher plusieurs scripts (composants) au même GameObject", "Créer une hiérarchie d'héritage complexe", "Utiliser des interfaces pour partager le code", "Regrouper toute la logique dans un seul MonoBehaviour"], correct: [0], explanation: "Unity favorise la composition (Entity Component System) : ajoutez plusieurs composants spécialisés (scripts) au GameObject plutôt qu'un seul script monolithique. Chaque composant gère une responsabilité." },
+            { id: 59, module: "tests", question: "Que signifie le pattern AAA dans l'organisation d'un test unitaire ?", options: ["Arrange (préparer), Act (agir), Assert (vérifier)", "Allocate, Apply, Analyze", "Add, Activate, Approve", "Assign, Automate, Audit"], correct: [0], explanation: "Le pattern AAA structure les tests en 3 phases : Arrange (préparer le contexte et les données), Act (exécuter l'action testée), Assert (vérifier le résultat). Cela rend les tests lisibles et maintenables." },
+            { id: 59, module: "tests", question: "Que signifie le pattern AAA dans l'organisation d'un test unitaire ?", options: ["Arrange (préparer), Act (agir), Assert (vérifier)", "Allocate, Apply, Analyze", "Add, Activate, Approve", "Assign, Automate, Audit"], correct: [0], explanation: "Le pattern AAA structure les tests en 3 phases : Arrange (préparer le contexte et les données), Act (exécuter l'action testée), Assert (vérifier le résultat). Cela rend les tests lisibles et maintenables." },
+            { id: 60, module: "tests", question: "Quelle est la différence entre any() et eq() dans Mockito ?", options: ["any() accepte n'importe quelle valeur du type, eq() vérifie l'égalité stricte", "any() est plus performant car il ne compare pas les valeurs", "eq() est déprécié en faveur de any()", "any() fonctionne uniquement avec les objets, eq() avec les primitifs"], correct: [0], explanation: "any(Type.class) accepte n'importe quelle valeur de ce type. eq(valeur) vérifie que le paramètre est exactement égal à la valeur donnée (via .equals()). Les matchers permettent de vérifier les appels de méthodes mockées de façon flexible." },
+            { id: 61, module: "tests", question: "Quelle règle faut-il respecter quand on utilise des matchers Mockito (any(), eq(), etc.) ?", options: ["Si on utilise un matcher, tous les paramètres doivent être des matchers", "On ne peut utiliser qu'un seul matcher par méthode verify", "Les matchers doivent toujours être combinés avec des valeurs directes", "Les matchers sont interdits dans les assertions"], correct: [0], explanation: "Règle importante : si vous utilisez UN matcher, TOUS les paramètres doivent être des matchers. Incorrect : verify(mock).method(any(), valeur). Correct : verify(mock).method(any(), eq(valeur)). Sinon Mockito génère une erreur." },
+            { id: 62, module: "tests", question: "Quelle est la différence entre verify() et when() dans Mockito ?", options: ["verify() vérifie qu'une méthode a été appelée, when() configure le comportement d'un mock", "verify() est utilisé dans Arrange, when() dans Assert", "when() vérifie les appels, verify() configure les mocks", "verify() fonctionne avec les vrais objets, when() avec les mocks"], correct: [0], explanation: "when(mock.method()).thenReturn(value) configure le comportement du mock (phase Arrange). verify(mock).method() vérifie que la méthode a bien été appelée (phase Assert). Ce sont deux opérations complémentaires mais différentes." }
         ];
 
         let currentMode = 'normal';
