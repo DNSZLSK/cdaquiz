@@ -966,9 +966,6 @@
             const resultsDiv = document.getElementById('results');
             resultsDiv.classList.add('show');
             
-            document.getElementById('finalScore').textContent = score;
-            document.getElementById('totalQuestions').textContent = currentQuestions.length;
-
             // Message GLaDOS en français selon le score
             const percentage = (score / currentQuestions.length) * 100;
             let glaDOSMessage = '';
@@ -984,14 +981,16 @@
             } else {
                 glaDOSMessage = "Le test est maintenant terminé. Toutes les technologies Aperture restent opérationnelles.";
             }
-            
-            // Ajouter le message GLaDOS après le score
-            const scoreDisplay = document.querySelector('.score-display');
-            const glaDOSDiv = document.createElement('div');
-            glaDOSDiv.style.cssText = 'text-align: center; font-style: italic; color: #586069; margin-top: 20px; font-size: 0.9em; padding: 0 20px;';
-            glaDOSDiv.textContent = `"${glaDOSMessage}"`;
-            scoreDisplay.appendChild(glaDOSDiv);
 
+            const scoreDisplay = document.querySelector('.score-display');
+            scoreDisplay.innerHTML = `
+                <div class="score">${score}</div>
+                <div class="total">${currentQuestions.length} questions</div>
+                <div style="text-align: center; font-style: italic; color: #586069; margin-top: 20px; font-size: 0.9em; padding: 0 20px;">
+                    "${glaDOSMessage}"
+                </div>
+            `;
+        
             // Stats par module
             const statsDiv = document.getElementById('moduleStats');
             statsDiv.innerHTML = '<h3>Détails par module</h3>';
@@ -1001,7 +1000,7 @@
                 let scoreClass = 'bad';
                 if (percentage >= 75) scoreClass = 'good';
                 else if (percentage >= 50) scoreClass = 'medium';
-
+        
                 const item = document.createElement('div');
                 item.className = 'stat-item';
                 item.innerHTML = `
