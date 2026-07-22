@@ -1,7 +1,6 @@
 export default {
   "domain": "python",
   "title": "Python",
-  "icon": "🐍",
   "exercises": [
     {
       "id": "py-01",
@@ -15,7 +14,7 @@ export default {
       "question": "Qu'affiche ce code ?",
       "options": [
         "Kéwin a 34 ans",
-        "Erreur — on ne peut pas concaténer str et int",
+        "Erreur : on ne peut pas concaténer str et int",
         "Kéwin a age ans",
         "nom a 34 ans"
       ],
@@ -37,7 +36,7 @@ export default {
         "['jazz', 'reggae'] puis dub",
         "['rock', 'jazz', 'reggae'] puis techno",
         "['jazz', 'reggae', 'techno'] puis dub",
-        "Erreur — index négatif invalide"
+        "Erreur : index négatif invalide"
       ],
       "answer": 0,
       "explanation": "genres[1:3] prend les éléments d'index 1 (inclus) à 3 (exclu) → ['jazz', 'reggae']. genres[-1] prend le dernier élément → 'dub'. Le slicing en Python est toujours [début inclus : fin exclue].",
@@ -55,7 +54,7 @@ export default {
       "options": [
         "IPA Tempête 35",
         "IPA Tempête 45",
-        "Erreur — on ne peut pas modifier un dictionnaire",
+        "Erreur : on ne peut pas modifier un dictionnaire",
         "IPA Tempête -10"
       ],
       "answer": 0,
@@ -76,7 +75,7 @@ export default {
         "True puis False",
         "False puis False",
         "True puis True",
-        "Erreur — [::-1] n'existe pas"
+        "Erreur : [::-1] n'existe pas"
       ],
       "answer": 0,
       "explanation": "mot.lower() → 'kayak'. mot[::-1] inverse la string → 'kayak'. 'kayak' == 'kayak' → True. Pour 'python' : 'python'[::-1] = 'nohtyp'. 'python' != 'nohtyp' → False.",
@@ -95,7 +94,7 @@ export default {
         "120",
         "5",
         "15",
-        "Erreur — récursion infinie"
+        "Erreur : récursion infinie"
       ],
       "answer": 0,
       "explanation": "5! = 5 × 4 × 3 × 2 × 1 = 120. La récursion : factorielle(5) = 5 × factorielle(4) = 5 × 4 × factorielle(3) = ... jusqu'à factorielle(1) qui retourne 1.",

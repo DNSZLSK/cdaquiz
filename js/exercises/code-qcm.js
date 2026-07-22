@@ -1,6 +1,7 @@
 // Type d'exercice "code-qcm" : QCM a reponse unique avec bloc de code,
 // badges type/difficulte et indice depliable. Utilise par le Code Lab.
 import { escapeHtml, shuffleArray } from '../utils.js';
+import { highlightCode, langForExercise } from '../labo/highlight.js';
 
 const TYPE_LABELS = {
     predict: 'Predict',
@@ -27,12 +28,11 @@ export const codeQcmType = {
             <div class="labo-badges">
                 <span class="badge badge-type-${q.type}">${TYPE_LABELS[q.type] || q.type}</span>
                 <span class="badge badge-difficulty-${q.difficulty}">${DIFFICULTY_LABELS[q.difficulty] || q.difficulty}</span>
-                ${(q.concepts || []).map(c => `<span class="badge badge-concept">${escapeHtml(c)}</span>`).join('')}
             </div>
         `;
         bodyEl.innerHTML = `
             ${badges}
-            <pre class="code-block"><code>${escapeHtml(q.code)}</code></pre>
+            <pre class="code-block"><code>${highlightCode(q.code, langForExercise(q.id))}</code></pre>
             <div class="question-text">${escapeHtml(q.question)}</div>
             <div class="options">
                 ${runtime.options.map((option, index) => `

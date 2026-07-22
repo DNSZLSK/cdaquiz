@@ -1,7 +1,6 @@
 export default {
   "domain": "docker",
   "title": "Docker / Déploiement",
-  "icon": "🐳",
   "exercises": [
     {
       "id": "dk-01",
@@ -73,7 +72,7 @@ export default {
         "8080",
         "3000",
         "Les deux fonctionnent",
-        "Aucun — il manque --expose"
+        "Aucun : il manque --expose"
       ],
       "answer": 1,
       "explanation": "-p 3000:8080 mappe le port 3000 de l'hôte (votre machine) vers le port 8080 du container. Vous accédez donc à http://localhost:3000 depuis votre navigateur. L'app dans le container écoute toujours sur 8080.",

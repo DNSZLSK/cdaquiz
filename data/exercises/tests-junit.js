@@ -1,7 +1,6 @@
 export default {
   "domain": "tests-junit",
   "title": "Tests unitaires",
-  "icon": "🧪",
   "exercises": [
     {
       "id": "tu-01",
@@ -13,10 +12,10 @@ export default {
       "code": "class Convertisseur {\n    static double celsiusToFahrenheit(double celsius) {\n        return celsius * 9.0 / 5.0 + 32;\n    }\n}\n\n@Test\nvoid testConversion0Degre() {\n    assertEquals(32.0, Convertisseur.celsiusToFahrenheit(0));\n}",
       "question": "Ce test passe ou échoue ?",
       "options": [
-        "Passe ✅",
-        "Échoue ❌ — le résultat n'est pas 32.0",
-        "Échoue ❌ — erreur de compilation",
-        "Échoue ❌ — NullPointerException"
+        "Passe",
+        "Échoue : le résultat n'est pas 32.0",
+        "Échoue : erreur de compilation",
+        "Échoue : NullPointerException"
       ],
       "answer": 0,
       "explanation": "0 × 9/5 + 32 = 32.0. Le résultat correspond à la valeur attendue, le test passe.",
@@ -33,10 +32,10 @@ export default {
       "code": "class Formateur {\n    static String initialiser(String prenom, String nom) {\n        return prenom.substring(0, 1).toUpperCase() + \". \" + nom.toUpperCase();\n    }\n}\n\n@Test\nvoid testInitiales() {\n    assertEquals(\"K. LE GOFF\", Formateur.initialiser(\"kéwin\", \"Le Goff\"));\n}",
       "question": "Ce test passe ou échoue ?",
       "options": [
-        "Passe ✅ — le résultat vaut exactement \"K. LE GOFF\"",
-        "Échoue ❌ — substring(0, 1) sur \"kéwin\" renvoie \"ké\", pas \"k\"",
-        "Échoue ❌ — le résultat est \"K. Le Goff\", le nom n'est pas mis en majuscules",
-        "Échoue ❌ — toUpperCase() lève une exception sur le \"é\" accentué"
+        "Passe : le résultat vaut exactement \"K. LE GOFF\"",
+        "Échoue : substring(0, 1) sur \"kéwin\" renvoie \"ké\", pas \"k\"",
+        "Échoue : le résultat est \"K. Le Goff\", le nom n'est pas mis en majuscules",
+        "Échoue : toUpperCase() lève une exception sur le \"é\" accentué"
       ],
       "answer": 0,
       "explanation": "prenom.substring(0,1) = \"k\", .toUpperCase() = \"K\". nom.toUpperCase() = \"LE GOFF\". Résultat : \"K. LE GOFF\" qui correspond à l'attendu.",
@@ -52,10 +51,10 @@ export default {
       "code": "class Diviseur {\n    static int diviser(int a, int b) {\n        if (b == 0) throw new ArithmeticException(\"Division par zéro\");\n        return a / b;\n    }\n}\n\n@Test\nvoid testDivisionParZero() {\n    assertThrows(ArithmeticException.class, () -> {\n        Diviseur.diviser(10, 0);\n    });\n}",
       "question": "Ce test passe ou échoue ?",
       "options": [
-        "Passe ✅ — l'exception est bien levée",
-        "Échoue ❌ — l'exception n'est pas attrapée",
-        "Échoue ❌ — il faut utiliser assertEquals",
-        "Échoue ❌ — ArithmeticException n'est pas une RuntimeException"
+        "Passe : l'exception est bien levée",
+        "Échoue : l'exception n'est pas attrapée",
+        "Échoue : il faut utiliser assertEquals",
+        "Échoue : ArithmeticException n'est pas une RuntimeException"
       ],
       "answer": 0,
       "explanation": "assertThrows vérifie qu'une exception du type donné est bien levée par le code dans le lambda. Ici, diviser(10, 0) lève bien ArithmeticException, donc le test passe.",
@@ -92,10 +91,10 @@ export default {
       "code": "// Interface\ninterface IMeteoService {\n    int getTemperature(String ville);\n}\n\n// Classe à tester\nclass ConseilVestimentaire {\n    IMeteoService meteo;\n    \n    ConseilVestimentaire(IMeteoService meteo) {\n        this.meteo = meteo;\n    }\n    \n    String conseil(String ville) {\n        int temp = meteo.getTemperature(ville);\n        if (temp < 10) return \"Manteau\";\n        if (temp < 20) return \"Veste\";\n        return \"T-shirt\";\n    }\n}\n\n// Test\n@Test\nvoid testConseilFroid() {\n    IMeteoService mockMeteo = Mockito.mock(IMeteoService.class);\n    Mockito.when(mockMeteo.getTemperature(\"Brest\")).thenReturn(7);\n    \n    ConseilVestimentaire cv = new ConseilVestimentaire(mockMeteo);\n    assertEquals(\"Manteau\", cv.conseil(\"Brest\"));\n}",
       "question": "Ce test passe ou échoue ?",
       "options": [
-        "Passe ✅",
-        "Échoue ❌ — le mock retourne null",
-        "Échoue ❌ — on ne peut pas mocker une interface",
-        "Échoue ❌ — 7 n'est pas < 10"
+        "Passe",
+        "Échoue : le mock retourne null",
+        "Échoue : on ne peut pas mocker une interface",
+        "Échoue : 7 n'est pas < 10"
       ],
       "answer": 0,
       "explanation": "Le mock simule IMeteoService. Quand on appelle getTemperature(\"Brest\"), il retourne 7 (grâce au when/thenReturn). 7 < 10 donc conseil() retourne \"Manteau\". Le assertEquals vérifie que c'est bien \"Manteau\". Le test passe. C'est le principe de Mockito : on isole la classe testée de ses dépendances.",

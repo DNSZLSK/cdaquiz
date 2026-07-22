@@ -1,7 +1,6 @@
 export default {
   "domain": "spring-boot",
   "title": "Spring Boot / JPA",
-  "icon": "🌱",
   "exercises": [
     {
       "id": "sb-01",
@@ -193,9 +192,9 @@ export default {
       "code": "@RestController\n@RequestMapping(\"/api/cours\")\npublic class CoursController {\n    \n    private CoursService coursService;\n    \n    @GetMapping\n    public List<CoursDTO> getAll() {\n        return coursService.findAll();\n    }\n}",
       "question": "Ce code compile mais provoque une erreur au runtime. Laquelle et pourquoi ?",
       "options": [
-        "NullPointerException — coursService n'est jamais injecté (il manque @Autowired ou un constructeur)",
-        "ClassCastException — CoursDTO n'est pas compatible",
-        "404 Not Found — le mapping est incorrect",
+        "NullPointerException : coursService n'est jamais injecté (il manque @Autowired ou un constructeur)",
+        "ClassCastException : CoursDTO n'est pas compatible",
+        "404 Not Found : le mapping est incorrect",
         "Aucune erreur, ça fonctionne"
       ],
       "answer": 0,

@@ -7,11 +7,14 @@ import { renderModuleGrid } from './ui/menu.js';
 import { startQuiz, startRetry, restartQuiz, initQuizScreen } from './ui/quiz.js';
 import { saveScore } from './ui/results.js';
 import { playRandomPortalVoice } from './audio.js';
+import { initTabs, setTabsVisible, setActiveTab } from './ui/tabs.js';
 
 registerExerciseType('qcm', qcmType);
 
 registerScreen('menu', {
     show() {
+        setTabsVisible(true);
+        setActiveTab('quiz');
         renderModuleGrid();
         document.getElementById('menu').classList.add('active');
         document.getElementById('quizContent').style.display = 'block';
@@ -19,6 +22,7 @@ registerScreen('menu', {
         document.getElementById('progressBar').style.width = '0%';
     },
     hide() {
+        setTabsVisible(false);
         document.getElementById('menu').classList.remove('active');
     }
 });
@@ -42,6 +46,15 @@ registerScreen('results', {
 
 function initApp() {
     initQuizScreen();
+
+    // Onglets QUIZ | LABO (le hub labo se charge en lazy au premier clic)
+    initTabs({
+        onQuiz: () => showScreen('menu'),
+        onLabo: async () => {
+            const hub = await import('./labo/hub.js');
+            hub.openHub();
+        }
+    });
 
     // Grille de modules : delegation
     document.getElementById('moduleGrid').addEventListener('click', (e) => {

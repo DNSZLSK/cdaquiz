@@ -10,6 +10,7 @@ registerScreen('labo-hub', {
     show() {
         setTabsVisible(true);
         setActiveTab('labo');
+        document.getElementById('progressBar').style.width = '0%';
         renderHub();
         el().style.display = 'block';
     },
@@ -30,7 +31,7 @@ function renderHub() {
                 <div class="labo-progress-track">
                     <div class="labo-progress-fill" style="width: ${pct}%; background: ${d.color};"></div>
                 </div>
-                <p class="labo-progress-label">${stats.ok}/${d.count} réussis${pct === 100 ? ' — ✔ terminé' : ''}</p>
+                <p class="labo-progress-label">${stats.ok}/${d.count} réussis${pct === 100 ? ' · terminé' : ''}</p>
             </div>
         `;
     }).join('');

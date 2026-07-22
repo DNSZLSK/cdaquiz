@@ -1,7 +1,6 @@
 export default {
   "domain": "uml-archi",
   "title": "UML / Architecture",
-  "icon": "📐",
   "exercises": [
     {
       "id": "uml-01",
@@ -108,10 +107,10 @@ export default {
       "code": "public interface IProduitDAO {\n    Produit findById(Long id);\n    List<Produit> findAll();\n    void save(Produit p);\n    void delete(Long id);\n}\n\npublic class ProduitDAOMySQL implements IProduitDAO {\n    // Implémentation avec requêtes MySQL\n}\n\npublic class ProduitDAOMongo implements IProduitDAO {\n    // Implémentation avec MongoDB\n}",
       "question": "Quel pattern est utilisé ici et quel est son avantage ?",
       "options": [
-        "DAO (Data Access Object) — permet de changer de base de données sans modifier la logique métier",
-        "Singleton — garantit une seule instance de connexion à la BDD",
-        "Observer — notifie les composants quand les données changent",
-        "Factory — crée des objets Produit sans connaître le type exact"
+        "DAO (Data Access Object) : permet de changer de base de données sans modifier la logique métier",
+        "Singleton : garantit une seule instance de connexion à la BDD",
+        "Observer : notifie les composants quand les données changent",
+        "Factory : crée des objets Produit sans connaître le type exact"
       ],
       "answer": 0,
       "explanation": "Le pattern DAO isole l'accès aux données derrière une interface. Le Service utilise IProduitDAO sans savoir si c'est MySQL ou MongoDB derrière. Pour changer de BDD, on remplace l'implémentation sans toucher au reste du code. En Spring, les Repository sont des DAO.",

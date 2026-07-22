@@ -4,6 +4,7 @@ import { escapeHtml } from '../utils.js';
 import { loadSqlJs, createDb, execUser } from './sql-engine.js';
 import { validate, failureMessage } from './sql-compare.js';
 import { getStatus, record } from './progress.js';
+import { highlightCode } from './highlight.js';
 import './selftest.js';
 
 const MAX_ROWS = 200;
@@ -62,7 +63,7 @@ function renderScenarioList() {
             <div class="module-card labo-domain-card" style="--module-color: ${state.entry.color}" data-scenario="${i}">
                 <h3>${escapeHtml(sc.title)}</h3>
                 <p>${escapeHtml(sc.description)}</p>
-                <p class="question-count">${stats.total} exercices — niveau ${DIFFICULTY_LABELS[sc.difficulty] || sc.difficulty}</p>
+                <p class="question-count">${stats.total} exercices · niveau ${DIFFICULTY_LABELS[sc.difficulty] || sc.difficulty}</p>
                 <div class="labo-progress-track">
                     <div class="labo-progress-fill" style="width: ${pct}%; background: ${state.entry.color};"></div>
                 </div>
@@ -79,6 +80,7 @@ function renderScenarioList() {
         <h2>Choisissez un scénario</h2>
         <div class="module-grid">${cards}</div>
     `;
+    document.getElementById('progressBar').style.width = '0%';
 }
 
 function openScenario(i) {
@@ -112,7 +114,7 @@ function renderPlayer() {
         <details class="sql-table">
             <summary>${escapeHtml(t.name)} <span class="sql-table-cols">(${t.columns.length} colonnes)</span></summary>
             <ul>
-                ${t.columns.map(c => `<li><code>${escapeHtml(c.name)}</code> — ${escapeHtml(c.type)}</li>`).join('')}
+                ${t.columns.map(c => `<li><code>${escapeHtml(c.name)}</code> <span class="sql-coltype">${escapeHtml(c.type)}</span></li>`).join('')}
             </ul>
         </details>
     `).join('');
@@ -126,9 +128,7 @@ function renderPlayer() {
         <div class="labo-chips">${chips}</div>
         <div class="sql-player">
             <div class="sql-main">
-                <div class="labo-badges">
-                    ${(ex.concepts || []).map(c => `<span class="badge badge-concept">${escapeHtml(c)}</span>`).join('')}
-                </div>
+                <p class="sql-concepts">${(ex.concepts || []).map(c => escapeHtml(c)).join(' · ')}</p>
                 <div class="question-text">${escapeHtml(ex.question)}</div>
                 <details class="labo-hint">
                     <summary>Indice</summary>
@@ -151,21 +151,7 @@ function renderPlayer() {
             </aside>
         </div>
     `;
-}
-
-// Coloration regex -> spans, appliquee UNIQUEMENT sur du texte deja echappe.
-const SQL_KEYWORDS = /\b(SELECT|FROM|WHERE|JOIN|LEFT|RIGHT|OUTER|INNER|ON|GROUP|BY|ORDER|HAVING|DISTINCT|LIMIT|AS|AND|OR|NOT|IN|IS|NULL|LIKE|COUNT|SUM|AVG|MIN|MAX|INSERT|INTO|VALUES|UPDATE|SET|DELETE|CREATE|TABLE|DESC|ASC|CASE|WHEN|THEN|ELSE|END|BETWEEN|UNION)\b/gi;
-
-export function highlightSql(sql) {
-    const escaped = escapeHtml(sql);
-    // chaines d'abord (elles ne doivent pas etre re-traitees par les mots-cles)
-    const parts = escaped.split(/('[^']*')/);
-    return parts.map((part, i) => {
-        if (i % 2 === 1) return `<span class="sql-str">${part}</span>`;
-        return part
-            .replace(SQL_KEYWORDS, '<span class="sql-kw">$&</span>')
-            .replace(/\b(\d+(?:\.\d+)?)\b/g, '<span class="sql-num">$1</span>');
-    }).join('');
+    document.getElementById('progressBar').style.width = ((state.index + 1) / sc.exercises.length) * 100 + '%';
 }
 
 function renderResultTable(set, container) {
@@ -229,7 +215,7 @@ function showSolution() {
     if (getStatus('sql', ex.id) !== 'ok') record('sql', ex.id, 'sol');
     document.getElementById('sqlFeedback').innerHTML = `
         <div class="sql-banner sql-banner-info">Solution :</div>
-        <pre class="code-block sql-solution">${highlightSql(ex.solution)}</pre>
+        <pre class="code-block sql-solution">${highlightCode(ex.solution, 'sql')}</pre>
     `;
     refreshChips();
 }

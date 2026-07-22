@@ -1,7 +1,6 @@
 export default {
   "domain": "angular",
   "title": "Angular",
-  "icon": "🅰️",
   "exercises": [
     {
       "id": "ng-01",
@@ -35,7 +34,7 @@ export default {
       "options": [
         "Salut Kéwin, tu es développeur !",
         "Salut {{ nom }}, tu es {{ metier }} !",
-        "Erreur — nom n'est pas défini",
+        "Erreur : nom n'est pas défini",
         "Salut , tu es  !"
       ],
       "answer": 0,
@@ -77,7 +76,7 @@ export default {
         "Gold",
         "niveau",
         "undefined",
-        "Erreur — input.required n'est pas valide"
+        "Erreur : input.required n'est pas valide"
       ],
       "answer": 0,
       "explanation": "[niveau]=\"'Gold'\" passe la string 'Gold' au signal input du composant enfant. niveau() (avec les parenthèses, car c'est un signal) retourne 'Gold' dans le template.",
@@ -179,7 +178,7 @@ export default {
         "Jean puis une string vide",
         "Deux strings vides",
         "undefined deux fois",
-        "Erreur — formGroup non reconnu"
+        "Erreur : formGroup non reconnu"
       ],
       "answer": 1,
       "explanation": "Avec les Reactive Forms, la valeur vient du FormControl, pas de l'attribut HTML value. Les deux FormControl sont initialisés avec '' (string vide). L'attribut value=\"Jean\" sur l'input est ignoré car formControlName prend le contrôle. Résultat : deux strings vides.",

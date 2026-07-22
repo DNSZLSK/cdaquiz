@@ -59,6 +59,7 @@ function renderExercise() {
     `;
 
     getExerciseType(q).render(state.runtime, el().querySelector('.exercise-body'));
+    document.getElementById('progressBar').style.width = ((index + 1) / exercises.length) * 100 + '%';
     el().scrollIntoView({ block: 'start' });
 }
 

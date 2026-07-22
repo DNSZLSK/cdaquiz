@@ -1,7 +1,6 @@
 export default {
   "domain": "html-css",
   "title": "HTML / CSS",
-  "icon": "🎨",
   "exercises": [
     {
       "id": "hc-01",
@@ -94,9 +93,9 @@ export default {
       "code": "<img src=\"graphique-ventes.png\" />\n<img src=\"decoration.png\" alt=\"\" />\n<img src=\"logo-entreprise.png\" alt=\"Logo MonEntreprise\" />",
       "question": "Quelle image pose un problème d'accessibilité ?",
       "options": [
-        "La 1ère — il manque l'attribut alt",
-        "La 2ème — alt vide n'est pas valide",
-        "La 3ème — le alt est trop descriptif",
+        "La 1ère : il manque l'attribut alt",
+        "La 2ème : alt vide n'est pas valide",
+        "La 3ème : le alt est trop descriptif",
         "Aucune, tout est correct"
       ],
       "answer": 0,
@@ -137,7 +136,7 @@ export default {
         "Les éléments passent sur une seule colonne (empilés)",
         "Les éléments restent sur 3 colonnes",
         "Les éléments passent sur 2 colonnes",
-        "Erreur CSS — 1fr n'est pas valide"
+        "Erreur CSS : 1fr n'est pas valide"
       ],
       "answer": 0,
       "explanation": "600px < 768px donc la media query s'applique. grid-template-columns passe de repeat(3, 1fr) (3 colonnes) à 1fr (1 seule colonne). Les éléments s'empilent verticalement. C'est le pattern responsive classique.",

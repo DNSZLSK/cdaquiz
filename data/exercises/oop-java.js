@@ -1,7 +1,6 @@
 export default {
   "domain": "oop-java",
   "title": "POO Java",
-  "icon": "☕",
   "exercises": [
     {
       "id": "oop-01",

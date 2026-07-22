@@ -1,7 +1,6 @@
 export default {
   "domain": "sql",
   "title": "SQL Lab",
-  "icon": "🗄️",
   "scenarios": [
     {
       "id": "festival-breizh-rock",
