@@ -1,0 +1,394 @@
+/* Mode LABO — styles. Meme langage visuel que le quiz (cards, bordures #e1e4e8,
+   accents #FF6700 / #0098FF, radius 6px). */
+
+/* Onglets QUIZ | LABO */
+.mode-tabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 30px;
+    border: 1px solid #e1e4e8;
+    border-radius: 6px;
+    padding: 4px;
+    background: #f6f8fa;
+    width: fit-content;
+}
+
+.mode-tabs button {
+    border: none;
+    background: transparent;
+    padding: 8px 28px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    color: #586069;
+    border-radius: 4px;
+}
+
+.mode-tabs button.active {
+    background: #fff;
+    color: #24292e;
+    border: 1px solid #e1e4e8;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+}
+
+/* Hub */
+#laboHub h2, #laboSql h2 {
+    font-size: 1.5em;
+    font-weight: 600;
+    color: #24292e;
+    margin-bottom: 10px;
+}
+
+.labo-subtitle {
+    color: #586069;
+    font-size: 0.95em;
+    margin-bottom: 30px;
+}
+
+.labo-progress-track {
+    margin-top: 14px;
+    height: 6px;
+    background: #e1e4e8;
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.labo-progress-fill {
+    height: 100%;
+    border-radius: 3px;
+    transition: width 0.3s ease;
+}
+
+.labo-progress-label {
+    margin-top: 8px;
+    color: #959da5;
+    font-size: 0.8em;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+}
+
+/* Barre de titre des ecrans labo */
+.labo-topbar {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 20px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid #e1e4e8;
+}
+
+.labo-title {
+    font-weight: 600;
+    color: #24292e;
+    flex: 1;
+}
+
+.labo-counter {
+    background: #f6f8fa;
+    border: 1px solid #e1e4e8;
+    border-radius: 6px;
+    padding: 6px 12px;
+    font-size: 0.85em;
+    font-weight: 600;
+    color: #24292e;
+}
+
+/* Chips de navigation par exercice */
+.labo-chips {
+    display: flex;
+    gap: 6px;
+    overflow-x: auto;
+    padding-bottom: 8px;
+    margin-bottom: 20px;
+    -webkit-overflow-scrolling: touch;
+}
+
+.labo-chip {
+    min-width: 36px;
+    height: 36px;
+    padding: 0;
+    border: 1px solid #e1e4e8;
+    border-radius: 6px;
+    background: #f6f8fa;
+    color: #586069;
+    font-weight: 600;
+    font-size: 0.85em;
+    flex-shrink: 0;
+}
+
+.labo-chip-ok { background: #dcffe4; border-color: #28a745; color: #22863a; }
+.labo-chip-ko { background: #ffdce0; border-color: #d73a49; color: #cb2431; }
+.labo-chip-sol { background: #fff5b1; border-color: #f1c40f; color: #735c0f; }
+.labo-chip-current { outline: 2px solid #0366d6; outline-offset: 1px; }
+
+/* Badges */
+.labo-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 16px;
+}
+
+.badge {
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 0.75em;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border: 1px solid #e1e4e8;
+    background: #f6f8fa;
+    color: #586069;
+}
+
+.badge-type-predict { background: #f1f8ff; border-color: #c8e1ff; color: #0366d6; }
+.badge-type-complete { background: #dcffe4; border-color: #a2e8b8; color: #22863a; }
+.badge-type-identify { background: #f5f0ff; border-color: #d1bcf9; color: #6f42c1; }
+.badge-type-debug { background: #ffdce0; border-color: #f9b3ba; color: #cb2431; }
+.badge-difficulty-beginner { color: #22863a; }
+.badge-difficulty-intermediate { color: #b08800; }
+.badge-difficulty-advanced { color: #cb2431; }
+
+/* Bloc de code (lecture seule) */
+.code-block {
+    background: #24292e;
+    color: #e1e4e8;
+    border-radius: 6px;
+    padding: 16px 18px;
+    margin-bottom: 20px;
+    overflow-x: auto;
+    font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+    font-size: 0.88em;
+    line-height: 1.55;
+    tab-size: 4;
+    white-space: pre;
+}
+
+/* Indice depliable */
+.labo-hint {
+    margin: 16px 0;
+    border: 1px solid #f1c40f;
+    border-radius: 6px;
+    background: #fffbdd;
+}
+
+.labo-hint summary {
+    cursor: pointer;
+    padding: 10px 16px;
+    font-weight: 600;
+    font-size: 0.9em;
+    color: #735c0f;
+}
+
+.labo-hint p {
+    padding: 0 16px 12px;
+    color: #24292e;
+    font-size: 0.92em;
+    line-height: 1.5;
+}
+
+/* Actions communes labo */
+.labo-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 25px;
+    flex-wrap: wrap;
+}
+
+/* --- SQL Lab --- */
+.sql-loading {
+    color: #586069;
+    font-style: italic;
+    padding: 20px 0;
+}
+
+.sql-player {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 24px;
+}
+
+@media (min-width: 900px) {
+    .sql-player {
+        grid-template-columns: 1fr 280px;
+        align-items: start;
+    }
+    .sql-schema {
+        position: sticky;
+        top: 20px;
+    }
+}
+
+.sql-schema {
+    background: #fff;
+    border: 1px solid #e1e4e8;
+    border-radius: 6px;
+    padding: 16px;
+}
+
+.sql-schema h4 {
+    font-size: 0.85em;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #586069;
+    margin-bottom: 10px;
+}
+
+.sql-table summary {
+    cursor: pointer;
+    padding: 6px 0;
+    font-weight: 600;
+    font-size: 0.9em;
+    color: #24292e;
+    font-family: 'SFMono-Regular', Consolas, monospace;
+}
+
+.sql-table-cols {
+    color: #959da5;
+    font-weight: 400;
+    font-size: 0.85em;
+}
+
+.sql-table ul {
+    list-style: none;
+    padding: 4px 0 8px 14px;
+}
+
+.sql-table li {
+    font-size: 0.85em;
+    color: #586069;
+    padding: 2px 0;
+}
+
+.sql-table code {
+    color: #0366d6;
+    font-weight: 600;
+}
+
+.sql-editor {
+    width: 100%;
+    font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+    font-size: 16px; /* 16px minimum : evite le zoom automatique iOS au focus */
+    line-height: 1.5;
+    padding: 14px;
+    border: 1px solid #d1d5da;
+    border-radius: 6px;
+    background: #f6f8fa;
+    color: #24292e;
+    resize: vertical;
+    margin-top: 16px;
+}
+
+.sql-editor:focus {
+    outline: none;
+    border-color: #0366d6;
+    box-shadow: 0 0 0 3px rgba(3,102,214,0.1);
+    background: #fff;
+}
+
+.sql-actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 14px;
+    position: sticky;
+    bottom: 0;
+    background: #fafbfc;
+    padding: 10px 0;
+    z-index: 5;
+}
+
+.sql-actions button {
+    min-height: 44px; /* zone tactile confortable */
+}
+
+.sql-banner {
+    border-radius: 6px;
+    padding: 14px 18px;
+    margin-top: 16px;
+    font-weight: 600;
+    font-size: 0.95em;
+}
+
+.sql-banner-ok { background: #dcffe4; border: 1px solid #28a745; color: #22863a; }
+.sql-banner-ko { background: #ffdce0; border: 1px solid #d73a49; color: #cb2431; }
+.sql-banner-info { background: #f1f8ff; border: 1px solid #c8e1ff; color: #0366d6; }
+
+.sql-error {
+    background: #ffdce0;
+    border: 1px solid #d73a49;
+    border-radius: 6px;
+    padding: 14px 18px;
+    margin-top: 16px;
+    color: #cb2431;
+    font-family: 'SFMono-Regular', Consolas, monospace;
+    font-size: 0.85em;
+    white-space: pre-wrap;
+}
+
+.sql-result-wrap {
+    margin-top: 16px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.sql-result {
+    border-collapse: collapse;
+    width: 100%;
+    font-size: 0.9em;
+    background: #fff;
+}
+
+.sql-result th {
+    background: #f6f8fa;
+    border: 1px solid #e1e4e8;
+    padding: 8px 14px;
+    text-align: left;
+    font-weight: 600;
+    color: #24292e;
+    white-space: nowrap;
+}
+
+.sql-result td {
+    border: 1px solid #e1e4e8;
+    padding: 7px 14px;
+    color: #24292e;
+    white-space: nowrap;
+}
+
+.sql-result em { color: #959da5; }
+
+.sql-truncated, .sql-empty {
+    color: #586069;
+    font-style: italic;
+    font-size: 0.9em;
+    padding: 10px 0;
+}
+
+.sql-solution { margin-top: 10px; }
+
+/* Coloration syntaxique (blocs en lecture seule uniquement) */
+.sql-kw { color: #ff7b72; font-weight: 600; }
+.sql-str { color: #a5d6ff; }
+.sql-num { color: #79c0ff; }
+
+/* Radios du code lab : meme accent que les checkbox du quiz */
+.option input[type="radio"] {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    accent-color: #0366d6;
+    flex-shrink: 0;
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+    .mode-tabs { width: 100%; }
+    .mode-tabs button { flex: 1; }
+    .labo-actions button, .sql-actions button { flex: 1; min-height: 44px; }
+    .option { min-height: 44px; }
+    .option span { white-space: pre-line; }
+}
+
+/* Les options avec retours a la ligne (predict multi-lignes) */
+.option span { white-space: pre-line; }
