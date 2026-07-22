@@ -229,21 +229,15 @@ function autoUppercase(ta) {
 }
 
 // Coloration live : textarea au texte transparent superpose a un <pre> colorise,
-// synchronises au pixel (memes fonte/padding/line-height). Desktop uniquement —
-// sur mobile le risque de desynchronisation (zoom, claviers) coute plus cher
-// que la coloration ne rapporte.
+// synchronises au pixel (memes fonte/padding/line-height). Actif partout, avec
+// filet de securite : toute panne du calque rebascule en texte simple visible.
 function setupEditor() {
     const ta = document.getElementById('sqlEditor');
     const code = document.getElementById('sqlHighlight');
     const pre = code.parentElement;
-    const overlayOn = window.matchMedia('(min-width: 900px)').matches;
-
-    if (!overlayOn) {
-        pre.style.display = 'none';
-        ta.classList.add('sql-editor-plain');
-    } else {
-        ta.closest('.sql-editor-wrap').classList.add('overlay-on');
-    }
+    const wrap = ta.closest('.sql-editor-wrap');
+    wrap.classList.add('overlay-on');
+    const overlayOn = () => wrap.classList.contains('overlay-on');
 
     // Brouillon de la session : on retrouve sa requete en revenant sur l'exercice
     ta.value = getDraft(draftKey());
@@ -254,7 +248,7 @@ function setupEditor() {
         // un calque fige rendrait la frappe invisible.
         try { autoUppercase(ta); } catch (e) { /* on continue sans majuscules */ }
         setDraft(draftKey(), ta.value);
-        if (overlayOn) {
+        if (overlayOn()) {
             try {
                 // \n final : garde la derniere ligne vide visible dans le pre
                 code.innerHTML = highlightCode(ta.value, 'sql') + '\n';
@@ -262,7 +256,7 @@ function setupEditor() {
                 pre.scrollLeft = ta.scrollLeft;
             } catch (e) {
                 // Panne de coloration : retour au mode simple, texte visible
-                ta.closest('.sql-editor-wrap').classList.remove('overlay-on');
+                wrap.classList.remove('overlay-on');
                 pre.style.display = 'none';
             }
         }
