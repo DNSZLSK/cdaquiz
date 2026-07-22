@@ -330,6 +330,15 @@
     gap: 24px;
 }
 
+/* CRITIQUE : un enfant de grille a min-width:auto par defaut, donc il s'elargit
+   a la largeur intrinseque de la table de resultats (cellules nowrap) au lieu
+   de laisser .sql-result-wrap scroller — toute la page deborde au Valider.
+   min-width:0 rend le droit de retrecir et reactive le scroll interne. */
+.sql-main,
+.sql-schema {
+    min-width: 0;
+}
+
 @media (min-width: 900px) {
     .sql-player {
         grid-template-columns: 1fr 280px;
