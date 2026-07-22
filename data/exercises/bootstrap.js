@@ -1,0 +1,123 @@
+export default {
+  "domain": "bootstrap",
+  "title": "Bootstrap",
+  "exercises": [
+    {
+      "id": "bs-01",
+      "type": "predict",
+      "difficulty": "beginner",
+      "concepts": [
+        "grille",
+        "colonnes"
+      ],
+      "code": "<div class=\"container\">\n  <div class=\"row\">\n    <div class=\"col-6\">Gauche</div>\n    <div class=\"col-6\">Droite</div>\n  </div>\n</div>",
+      "question": "Comment s'affichent les deux blocs ?",
+      "options": [
+        "Côte à côte, chacun occupant la moitié de la largeur",
+        "Empilés l'un au-dessus de l'autre",
+        "Le premier prend toute la largeur, le second est caché",
+        "Côte à côte mais le second déborde"
+      ],
+      "answer": 0,
+      "explanation": "La grille Bootstrap fait 12 colonnes. col-6 = 6/12 = 50% de la largeur. Deux col-6 côte à côte remplissent la row. Le container centre le tout et ajoute du padding.",
+      "hint": "La grille Bootstrap = 12 colonnes. col-6 = 6 colonnes sur 12 = la moitié."
+    },
+    {
+      "id": "bs-02",
+      "type": "predict",
+      "difficulty": "beginner",
+      "concepts": [
+        "responsive",
+        "breakpoints"
+      ],
+      "code": "<div class=\"row\">\n  <div class=\"col-12 col-md-4\">A</div>\n  <div class=\"col-12 col-md-4\">B</div>\n  <div class=\"col-12 col-md-4\">C</div>\n</div>",
+      "question": "Comment s'affichent les blocs sur un téléphone (< 768px) ?",
+      "options": [
+        "Empilés verticalement (chacun prend toute la largeur)",
+        "Sur une seule ligne en 3 colonnes égales",
+        "Le premier prend toute la largeur, les deux autres côte à côte",
+        "Ils disparaissent"
+      ],
+      "answer": 0,
+      "explanation": "col-12 s'applique par défaut (mobile-first) : chaque bloc prend 12/12 = 100% de la largeur → empilés. col-md-4 s'active à partir de 768px (md) : chaque bloc prend 4/12 = 33% → 3 colonnes. C'est le pattern responsive classique de Bootstrap.",
+      "hint": "Bootstrap est mobile-first : col-12 (petit écran) puis col-md-4 (moyen écran et +)."
+    },
+    {
+      "id": "bs-03",
+      "type": "complete",
+      "difficulty": "beginner",
+      "concepts": [
+        "bouton"
+      ],
+      "code": "<button class=\"btn ______\">Valider</button>",
+      "question": "Quelle classe donne un bouton bleu (style primaire) Bootstrap ?",
+      "options": [
+        "btn-primary",
+        "btn-blue",
+        "button-primary",
+        "primary"
+      ],
+      "answer": 0,
+      "explanation": "btn-primary = bleu (couleur d'action principale). Bootstrap utilise des noms sémantiques : primary (bleu), success (vert), danger (rouge), warning (orange), info (cyan), secondary (gris). La classe btn seule donne le style de base.",
+      "hint": "Bootstrap utilise des noms de couleur sémantiques, pas des noms de couleur réels."
+    },
+    {
+      "id": "bs-04",
+      "type": "identify",
+      "difficulty": "intermediate",
+      "concepts": [
+        "card"
+      ],
+      "code": "<div class=\"card\" style=\"width: 18rem;\">\n  <img src=\"photo.jpg\" class=\"card-img-top\" alt=\"...\">\n  <div class=\"card-body\">\n    <h5 class=\"card-title\">Titre</h5>\n    <p class=\"card-text\">Description du contenu.</p>\n    <a href=\"#\" class=\"btn btn-primary\">Voir plus</a>\n  </div>\n</div>",
+      "question": "Quel composant Bootstrap est utilisé ici ?",
+      "options": [
+        "Card : un conteneur flexible avec image, titre, texte et action",
+        "Modal : une fenêtre pop-up",
+        "Carousel : un diaporama d'images",
+        "Navbar : une barre de navigation"
+      ],
+      "answer": 0,
+      "explanation": "Les Cards sont des conteneurs flexibles avec contenu varié (image, titre, texte, boutons). Très utilisées pour afficher des produits, des articles, des profils. Les classes card-img-top, card-body, card-title structurent le contenu.",
+      "hint": "Regardez la classe principale du conteneur div."
+    },
+    {
+      "id": "bs-05",
+      "type": "predict",
+      "difficulty": "intermediate",
+      "concepts": [
+        "navbar",
+        "responsive"
+      ],
+      "code": "<nav class=\"navbar navbar-expand-lg navbar-dark bg-dark\">\n  <a class=\"navbar-brand\" href=\"#\">MonSite</a>\n  <button class=\"navbar-toggler\" data-bs-toggle=\"collapse\" data-bs-target=\"#navMenu\">\n    <span class=\"navbar-toggler-icon\"></span>\n  </button>\n  <div class=\"collapse navbar-collapse\" id=\"navMenu\">\n    <ul class=\"navbar-nav\">\n      <li class=\"nav-item\"><a class=\"nav-link\" href=\"#\">Accueil</a></li>\n      <li class=\"nav-item\"><a class=\"nav-link\" href=\"#\">Contact</a></li>\n    </ul>\n  </div>\n</nav>",
+      "question": "Que se passe-t-il sur un écran < 992px (lg) ?",
+      "options": [
+        "Les liens de navigation sont cachés derrière un bouton hamburger (☰)",
+        "La navbar disparaît complètement",
+        "Rien ne change, la navbar reste identique",
+        "Les liens s'empilent verticalement sans hamburger"
+      ],
+      "answer": 0,
+      "explanation": "navbar-expand-lg = les liens sont visibles à partir de lg (992px). En dessous, le collapse les cache et le navbar-toggler affiche un bouton hamburger. Cliquer dessus déploie les liens verticalement. C'est le pattern responsive standard pour les navbars.",
+      "hint": "navbar-expand-lg = étendu à partir de lg. En dessous = replié (collapsed)."
+    },
+    {
+      "id": "bs-06",
+      "type": "complete",
+      "difficulty": "intermediate",
+      "concepts": [
+        "formulaire Bootstrap"
+      ],
+      "code": "<form>\n  <div class=\"______\">\n    <label for=\"email\" class=\"form-label\">Email</label>\n    <input type=\"email\" class=\"form-control\" id=\"email\" placeholder=\"nom@exemple.com\">\n  </div>\n  <button type=\"submit\" class=\"btn btn-primary\">Envoyer</button>\n</form>",
+      "question": "Quelle classe Bootstrap entoure un label + input pour l'espacement ?",
+      "options": [
+        "mb-3",
+        "form-group",
+        "input-group",
+        "form-field"
+      ],
+      "answer": 0,
+      "explanation": "En Bootstrap 5, mb-3 (margin-bottom: 1rem) est la méthode standard pour espacer les champs de formulaire. form-group existait en Bootstrap 4 mais est remplacé par les utilitaires d'espacement (mb-*). form-control stylise l'input, form-label stylise le label.",
+      "hint": "En Bootstrap 5, l'espacement utilise des classes utilitaires : m = margin, b = bottom, 3 = taille."
+    }
+  ]
+};

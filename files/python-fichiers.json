@@ -1,0 +1,113 @@
+{
+  "domain": "python-fichiers",
+  "title": "Python — Fichiers & données",
+  "icon": "📂",
+  "exercises": [
+    {
+      "id": "pyf-01",
+      "type": "predict",
+      "difficulty": "intermediate",
+      "concepts": ["CSV", "lecture"],
+      "code": "import csv\n\nwith open('agents.csv', 'r') as f:\n    reader = csv.DictReader(f)\n    for row in reader:\n        print(row['nom'], row['langues'])\n\n# agents.csv :\n# nom,langues,pays_visites\n# Alice,\"français,anglais\",France\n# Boris,russe,Russie",
+      "question": "Qu'affiche ce code ?",
+      "options": ["Alice français,anglais puis Boris russe", "Erreur — la virgule dans 'français,anglais' casse le parsing", "Alice français puis Alice anglais", "Alice ['français', 'anglais'] puis Boris russe"],
+      "answer": 0,
+      "explanation": "csv.DictReader gère les champs entre guillemets : \"français,anglais\" est traité comme UNE seule valeur (pas splitté par la virgule interne). Chaque ligne est un dictionnaire {colonne: valeur}. Le champ langues est la string \"français,anglais\" et non une liste.",
+      "hint": "Les guillemets dans un CSV protègent les virgules à l'intérieur d'un champ."
+    },
+    {
+      "id": "pyf-02",
+      "type": "complete",
+      "difficulty": "intermediate",
+      "concepts": ["CSV", "filtrage"],
+      "code": "import csv\n\npolyglotes = []\nwith open('agents.csv', 'r') as f:\n    reader = csv.DictReader(f)\n    for row in reader:\n        langues = row['langues']._______(',')\n        if len(langues) > 1:\n            polyglotes.append(row['nom'])\n\nprint(polyglotes)",
+      "question": "Quelle méthode string découpe le champ langues en une liste ?",
+      "options": ["split", "cut", "divide", "separate"],
+      "answer": 0,
+      "explanation": "split(',') découpe la string sur chaque virgule et retourne une liste. 'français,anglais'.split(',') → ['français', 'anglais']. len() > 1 vérifie qu'il y a plus d'une langue. C'est exactement le pattern utilisé dans Débusquer l'espion pour trouver les personnes multilingues.",
+      "hint": "C'est la méthode Python standard pour découper une string en liste. Le séparateur est passé en argument."
+    },
+    {
+      "id": "pyf-03",
+      "type": "predict",
+      "difficulty": "intermediate",
+      "concepts": ["JSON", "écriture"],
+      "code": "import json\n\nespion = {\n    \"nom\": \"Viktor\",\n    \"ancien_nom\": \"Serguei\",\n    \"langues\": [\"russe\", \"anglais\", \"allemand\"],\n    \"pays_visites\": [\"France\", \"Allemagne\"]\n}\n\nwith open('espion.json', 'w') as f:\n    json.dump(espion, f, indent=2, ensure_ascii=False)\n\nwith open('espion.json', 'r') as f:\n    data = json.load(f)\n    print(type(data['langues']))\n    print(data['langues'][0])",
+      "question": "Qu'affiche ce code ?",
+      "options": ["<class 'list'> puis russe", "<class 'str'> puis russe", "<class 'dict'> puis russe", "Erreur — ensure_ascii=False"],
+      "answer": 0,
+      "explanation": "json.dump() écrit le dict en JSON dans le fichier. json.load() relit le fichier et reconstruit la structure Python. Les listes JSON redeviennent des listes Python. ensure_ascii=False permet d'écrire les accents directement (sinon 'français' → 'fran\\u00e7ais'). indent=2 rend le fichier lisible.",
+      "hint": "JSON → Python : object → dict, array → list, string → str. Les types sont conservés automatiquement."
+    },
+    {
+      "id": "pyf-04",
+      "type": "predict",
+      "difficulty": "intermediate",
+      "concepts": ["fichier texte", "écriture"],
+      "code": "scores = [\n    {\"joueur\": \"Alice\", \"score\": 12.5},\n    {\"joueur\": \"Bob\", \"score\": 8.3}\n]\n\nwith open('scores.txt', 'w') as f:\n    for s in scores:\n        f.write(f\"{s['joueur']} : {s['score']}\\n\")\n\nwith open('scores.txt', 'r') as f:\n    contenu = f.read()\n    print(contenu)",
+      "question": "Qu'affiche ce code ?",
+      "options": ["Alice : 12.5\\nBob : 8.3\\n", "{'joueur': 'Alice', 'score': 12.5}", "Alice12.5Bob8.3", "Erreur — write n'accepte pas de f-string"],
+      "answer": 0,
+      "explanation": "f.write() écrit la f-string dans le fichier. Le \\n ajoute un retour à la ligne après chaque entrée. f.read() lit tout le contenu du fichier d'un coup. C'est le même format que le fichier scores.txt du Juste Prix.",
+      "hint": "write() écrit exactement ce qu'on lui donne. Le \\n est nécessaire pour les retours à la ligne."
+    },
+    {
+      "id": "pyf-05",
+      "type": "debug",
+      "difficulty": "intermediate",
+      "concepts": ["fichier", "mode d'ouverture"],
+      "code": "# On veut AJOUTER un score sans effacer les précédents\nwith open('scores.txt', 'w') as f:\n    f.write(\"Charlie : 15.2\\n\")",
+      "question": "Ce code efface les scores existants au lieu de les ajouter. Pourquoi ?",
+      "options": [
+        "Le mode 'w' (write) écrase le fichier — il faut utiliser 'a' (append)",
+        "Il faut utiliser writelines() au lieu de write()",
+        "Le fichier doit être ouvert en 'r+' obligatoirement",
+        "write() efface toujours le fichier"
+      ],
+      "answer": 0,
+      "explanation": "Mode 'w' = write = crée le fichier ou l'ÉCRASE s'il existe. Mode 'a' = append = ajoute à la fin sans effacer. Mode 'r' = read = lecture seule. Mode 'r+' = lecture + écriture. Pour ajouter un score : open('scores.txt', 'a').",
+      "hint": "w = write (écraser). a = append (ajouter). La différence est cruciale."
+    },
+    {
+      "id": "pyf-06",
+      "type": "predict",
+      "difficulty": "intermediate",
+      "concepts": ["CSV", "écriture"],
+      "code": "import csv\n\nresultats = [\n    ['Nom', 'Score', 'Temps'],\n    ['Alice', 95, '02:30'],\n    ['Bob', 87, '03:15']\n]\n\nwith open('resultats.csv', 'w', newline='') as f:\n    writer = csv.writer(f)\n    writer.writerows(resultats)\n\n# Contenu du fichier :",
+      "question": "Que contient le fichier CSV créé ?",
+      "options": [
+        "Nom,Score,Temps\\nAlice,95,02:30\\nBob,87,03:15",
+        "[['Nom', 'Score', 'Temps'], ['Alice', 95, '02:30']]",
+        "Erreur — writerows n'existe pas",
+        "Nom;Score;Temps (séparateur point-virgule)"
+      ],
+      "answer": 0,
+      "explanation": "csv.writer convertit les listes en lignes CSV séparées par des virgules. writerows() écrit toutes les lignes d'un coup. La première liste devient l'en-tête. newline='' empêche les doubles retours à la ligne sur Windows.",
+      "hint": "writerows() prend une liste de listes. Chaque sous-liste = une ligne du CSV."
+    },
+    {
+      "id": "pyf-07",
+      "type": "complete",
+      "difficulty": "intermediate",
+      "concepts": ["gestion d'erreurs", "fichier"],
+      "code": "import json\n\ndef charger_scores(chemin):\n    ______:\n        with open(chemin, 'r') as f:\n            return json.load(f)\n    except FileNotFoundError:\n        print(\"Fichier non trouvé, création d'un nouveau.\")\n        return []\n    except json.JSONDecodeError:\n        print(\"Fichier corrompu.\")\n        return []",
+      "question": "Quel mot-clé commence le bloc de gestion d'erreurs ?",
+      "options": ["try", "catch", "begin", "handle"],
+      "answer": 0,
+      "explanation": "En Python : try/except (pas try/catch comme en Java/JS). Le code dans try est exécuté. Si une exception survient, le except correspondant la gère. Ici on gère deux cas : fichier inexistant et JSON invalide. Dans les deux cas, on retourne une liste vide au lieu de planter.",
+      "hint": "En Python c'est try/except. En Java et JavaScript c'est try/catch. Même concept, mot-clé différent."
+    },
+    {
+      "id": "pyf-08",
+      "type": "predict",
+      "difficulty": "intermediate",
+      "concepts": ["tri", "lambda"],
+      "code": "joueurs = [\n    {\"nom\": \"Alice\", \"temps\": 45.2},\n    {\"nom\": \"Bob\", \"temps\": 32.8},\n    {\"nom\": \"Charlie\", \"temps\": 51.0}\n]\n\nclassement = sorted(joueurs, key=lambda j: j['temps'])\nprint(classement[0]['nom'])",
+      "question": "Qu'affiche ce code ?",
+      "options": ["Bob", "Alice", "Charlie", "Erreur — lambda ne peut pas accéder aux dict"],
+      "answer": 0,
+      "explanation": "sorted() trie la liste. key=lambda j: j['temps'] dit de trier par le champ 'temps'. Par défaut c'est croissant. Bob (32.8) < Alice (45.2) < Charlie (51.0). classement[0] = Bob (le plus rapide). C'est le pattern qu'on utiliserait pour afficher le classement du Juste Prix.",
+      "hint": "sorted() par défaut = croissant. Le premier élément est celui avec le plus petit 'temps'."
+    }
+  ]
+}

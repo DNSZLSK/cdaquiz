@@ -4,7 +4,7 @@ import { escapeHtml } from '../utils.js';
 import { loadSqlJs, createDb, execUser } from './sql-engine.js';
 import { validate, failureMessage } from './sql-compare.js';
 import { getStatus, record } from './progress.js';
-import { highlightCode } from './highlight.js';
+import { highlightCode, isSqlKeyword } from './highlight.js';
 import './selftest.js';
 
 const MAX_ROWS = 200;
@@ -134,8 +134,11 @@ function renderPlayer() {
                     <summary>Indice</summary>
                     <p>${escapeHtml(ex.hint || '')}</p>
                 </details>
-                <textarea class="sql-editor" id="sqlEditor" rows="5" placeholder="Écrivez votre requête SQL ici…"
-                    autocapitalize="none" autocorrect="off" spellcheck="false" autocomplete="off"></textarea>
+                <div class="sql-editor-wrap">
+                    <pre class="sql-editor-highlight" aria-hidden="true"><code id="sqlHighlight"></code></pre>
+                    <textarea class="sql-editor" id="sqlEditor" rows="5" placeholder="Écrivez votre requête SQL ici…"
+                        autocapitalize="none" autocorrect="off" spellcheck="false" autocomplete="off"></textarea>
+                </div>
                 <div class="sql-actions">
                     <button data-action="run">Exécuter</button>
                     <button class="btn-primary" data-action="validate">Valider</button>
@@ -152,6 +155,60 @@ function renderPlayer() {
         </div>
     `;
     document.getElementById('progressBar').style.width = ((state.index + 1) / sc.exercises.length) * 100 + '%';
+    setupEditor();
+}
+
+// Auto-majuscules : des qu'un separateur est tape apres un mot-cle SQL en
+// minuscules (hors chaine '...'), le mot passe en majuscules.
+function autoUppercase(ta) {
+    const pos = ta.selectionStart;
+    const val = ta.value;
+    if (pos < 2 || pos !== ta.selectionEnd) return;
+    if (!/[\s,;()=*<>!]/.test(val[pos - 1])) return;
+    const before = val.slice(0, pos - 1);
+    const m = before.match(/([A-Za-z_]+)$/);
+    if (!m) return;
+    const word = m[1];
+    if (word === word.toUpperCase()) return;
+    if (!isSqlKeyword(word.toUpperCase())) return;
+    if (((before.match(/'/g) || []).length) % 2 === 1) return; // dans une chaine
+    const start = pos - 1 - word.length;
+    ta.value = val.slice(0, start) + word.toUpperCase() + val.slice(pos - 1);
+    ta.setSelectionRange(pos, pos);
+}
+
+// Coloration live : textarea au texte transparent superpose a un <pre> colorise,
+// synchronises au pixel (memes fonte/padding/line-height). Desktop uniquement —
+// sur mobile le risque de desynchronisation (zoom, claviers) coute plus cher
+// que la coloration ne rapporte.
+function setupEditor() {
+    const ta = document.getElementById('sqlEditor');
+    const code = document.getElementById('sqlHighlight');
+    const pre = code.parentElement;
+    const overlayOn = window.matchMedia('(min-width: 900px)').matches;
+
+    if (!overlayOn) {
+        pre.style.display = 'none';
+        ta.classList.add('sql-editor-plain');
+    } else {
+        ta.closest('.sql-editor-wrap').classList.add('overlay-on');
+    }
+
+    const sync = () => {
+        autoUppercase(ta);
+        if (overlayOn) {
+            // \n final : garde la derniere ligne vide visible dans le pre
+            code.innerHTML = highlightCode(ta.value, 'sql') + '\n';
+            pre.scrollTop = ta.scrollTop;
+            pre.scrollLeft = ta.scrollLeft;
+        }
+    };
+    ta.addEventListener('input', sync);
+    ta.addEventListener('scroll', () => {
+        pre.scrollTop = ta.scrollTop;
+        pre.scrollLeft = ta.scrollLeft;
+    });
+    sync();
 }
 
 function renderResultTable(set, container) {

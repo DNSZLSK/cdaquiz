@@ -145,10 +145,9 @@ export default {
         {
           "id": "fbr-01",
           "question": "Affichez toutes les informations de tous les artistes.",
-          "hint": "La commande la plus simple : SELECT suivi d'un caractère spécial pour dire 'tout'.",
+          "hint": "La commande de base pour lire des données commence par un mot-clé de 6 lettres. Pour tout afficher, un caractère spécial remplace la liste des colonnes.",
           "concepts": [
-            "SELECT",
-            "étoile"
+            "lecture"
           ],
           "solution": "SELECT * FROM artiste;"
         },
@@ -232,7 +231,7 @@ export default {
         {
           "id": "fbr-10",
           "question": "Affichez le nom et le cachet de l'artiste le mieux payé.",
-          "hint": "Utilisez une sous-requête : WHERE cachet = (SELECT MAX(cachet) FROM artiste).",
+          "hint": "Le WHERE peut comparer une colonne au résultat d'une autre requête, placée entre parenthèses.",
           "concepts": [
             "sous-requête",
             "MAX"
@@ -250,7 +249,7 @@ export default {
         },
         {
           "id": "fbr-12",
-          "question": "Affichez les artistes dont le cachet est supérieur au cachet moyen.",
+          "question": "Affichez le nom et le cachet des artistes dont le cachet est supérieur au cachet moyen.",
           "hint": "Combinez WHERE avec une sous-requête utilisant AVG().",
           "concepts": [
             "sous-requête",
@@ -281,8 +280,8 @@ export default {
         },
         {
           "id": "fbr-15",
-          "question": "Affichez tous les concerts du samedi avec le nom de l'artiste et le nom de la scène, triés par heure de début.",
-          "hint": "Ajoutez un WHERE jour = 'samedi' à votre jointure, puis ORDER BY heure_debut.",
+          "question": "Affichez le nom de l'artiste, le nom de la scène et l'heure de début des concerts du samedi, triés par heure de début.",
+          "hint": "Repartez de la jointure de l'exercice précédent, filtrez sur le jour, puis triez.",
           "concepts": [
             "JOIN",
             "WHERE",
@@ -303,8 +302,8 @@ export default {
         },
         {
           "id": "fbr-17",
-          "question": "Affichez les bénévoles qui sont affectés à la scène 'Maen Braz'.",
-          "hint": "Joignez affectation, benevole et scene. Filtrez sur scene.nom.",
+          "question": "Affichez le nom et le prénom des bénévoles affectés à la scène 'Maen Braz'.",
+          "hint": "Joignez affectation, benevole et scene, puis filtrez sur le nom de la scène. Attention : un bénévole affecté plusieurs jours apparaîtra en double sans DISTINCT.",
           "concepts": [
             "JOIN",
             "WHERE",
@@ -314,7 +313,7 @@ export default {
         },
         {
           "id": "fbr-18",
-          "question": "Affichez les bénévoles qui travaillent plus d'un jour (affectés sur au moins 2 jours différents).",
+          "question": "Affichez le nom, le prénom et le nombre de jours travaillés des bénévoles affectés sur au moins 2 jours différents.",
           "hint": "GROUP BY sur le bénévole, comptez les jours DISTINCT, filtrez avec HAVING >= 2.",
           "concepts": [
             "GROUP BY",
@@ -492,7 +491,7 @@ export default {
         {
           "id": "tym-01",
           "question": "Affichez toutes les bières triées par degré d'alcool décroissant.",
-          "hint": "ORDER BY ... DESC",
+          "hint": "Le tri se fait avec ORDER BY ; un mot-clé supplémentaire le rend décroissant.",
           "concepts": [
             "ORDER BY",
             "DESC"
@@ -501,8 +500,8 @@ export default {
         },
         {
           "id": "tym-02",
-          "question": "Affichez les bières dont le stock est à zéro.",
-          "hint": "WHERE stock = 0",
+          "question": "Affichez le nom des bières dont le stock est à zéro.",
+          "hint": "Filtrez avec WHERE sur la colonne stock.",
           "concepts": [
             "WHERE",
             "comparaison"
@@ -512,7 +511,7 @@ export default {
         {
           "id": "tym-03",
           "question": "Calculez le chiffre d'affaires potentiel si tout le stock était vendu (somme de prix_unitaire × stock pour chaque bière).",
-          "hint": "SUM(prix_unitaire * stock)",
+          "hint": "SUM() accepte une expression calculée, pas seulement une colonne.",
           "concepts": [
             "SUM",
             "expression"
@@ -531,7 +530,7 @@ export default {
         },
         {
           "id": "tym-05",
-          "question": "Affichez le nom de chaque bière avec la liste de ses ingrédients.",
+          "question": "Affichez le nom de la bière, le nom de l'ingrédient et la quantité (en kg) de chaque ligne de recette, triés par nom de bière.",
           "hint": "Joignez biere → recette_ingredient → ingredient.",
           "concepts": [
             "JOIN",
@@ -541,7 +540,7 @@ export default {
         },
         {
           "id": "tym-06",
-          "question": "Calculez le coût en ingrédients de chaque bière (somme de quantite_kg × prix_kg par bière).",
+          "question": "Affichez le nom de chaque bière et son coût total en ingrédients (somme de quantite_kg × prix_kg).",
           "hint": "JOIN les 3 tables, GROUP BY biere.nom, SUM(quantite_kg * prix_kg).",
           "concepts": [
             "JOIN",
@@ -553,7 +552,7 @@ export default {
         },
         {
           "id": "tym-07",
-          "question": "Affichez les clients qui ont passé au moins 2 commandes.",
+          "question": "Affichez le nom des clients et leur nombre de commandes, pour ceux qui ont passé au moins 2 commandes.",
           "hint": "GROUP BY client, HAVING COUNT(*) >= 2.",
           "concepts": [
             "GROUP BY",
@@ -564,7 +563,7 @@ export default {
         },
         {
           "id": "tym-08",
-          "question": "Affichez le montant total de chaque commande (somme de quantite × prix_unitaire).",
+          "question": "Affichez l'id, la date et le montant total de chaque commande (somme de quantite × prix_unitaire).",
           "hint": "Joignez commande → ligne_commande → biere, GROUP BY commande.id.",
           "concepts": [
             "JOIN",
@@ -575,7 +574,7 @@ export default {
         },
         {
           "id": "tym-09",
-          "question": "Affichez la bière la plus commandée (en quantité totale).",
+          "question": "Affichez le nom de la bière la plus commandée et sa quantité totale commandée.",
           "hint": "GROUP BY sur la bière avec SUM(quantite), puis triez en décroissant et gardez la première ligne : ORDER BY ... DESC LIMIT 1.",
           "concepts": [
             "GROUP BY",
@@ -587,8 +586,8 @@ export default {
         },
         {
           "id": "tym-10",
-          "question": "Affichez les bières qui n'ont jamais été commandées.",
-          "hint": "LEFT JOIN ligne_commande sur biere, puis WHERE ligne_commande.id IS NULL.",
+          "question": "Affichez le nom des bières qui n'ont jamais été commandées.",
+          "hint": "Un LEFT JOIN conserve les bières même sans commande correspondante ; repérez-les ensuite avec IS NULL.",
           "concepts": [
             "LEFT JOIN",
             "IS NULL"
@@ -597,8 +596,8 @@ export default {
         },
         {
           "id": "tym-11",
-          "question": "Affichez les clients qui n'ont jamais passé de commande.",
-          "hint": "LEFT JOIN commande sur client, puis WHERE commande.id IS NULL.",
+          "question": "Affichez le nom des clients qui n'ont jamais passé de commande.",
+          "hint": "Même technique que l'exercice précédent, côté clients cette fois.",
           "concepts": [
             "LEFT JOIN",
             "IS NULL"
@@ -607,7 +606,7 @@ export default {
         },
         {
           "id": "tym-12",
-          "question": "Affichez le chiffre d'affaires par ville de client (seulement pour les commandes livrées).",
+          "question": "Affichez le chiffre d'affaires par ville de client (commandes livrées uniquement), trié du plus gros au plus petit CA.",
           "hint": "Joignez toute la chaîne client → commande → ligne_commande → biere, filtrez statut = 'livrée', GROUP BY ville.",
           "concepts": [
             "JOIN",
@@ -619,7 +618,7 @@ export default {
         },
         {
           "id": "tym-13",
-          "question": "Affichez les ingrédients de catégorie 'houblon' qui sont utilisés dans au moins 2 bières différentes.",
+          "question": "Affichez le nom des houblons utilisés dans au moins 2 bières différentes, avec le nombre de bières concernées.",
           "hint": "JOIN ingredient et recette_ingredient, WHERE categorie = 'houblon', GROUP BY ingredient, HAVING COUNT(DISTINCT id_biere) >= 2.",
           "concepts": [
             "JOIN",

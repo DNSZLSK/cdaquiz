@@ -270,26 +270,87 @@
     font-weight: 600;
 }
 
-.sql-editor {
-    width: 100%;
+/* Editeur SQL : textarea seul sur mobile, overlay colorise sur desktop.
+   REGLE CRITIQUE : .sql-editor et .sql-editor-highlight doivent partager
+   exactement fonte, taille, line-height, padding et regles de retour a la
+   ligne, sinon le texte et sa coloration se desynchronisent. */
+.sql-editor-wrap {
+    position: relative;
+    margin-top: 16px;
+}
+
+.sql-editor,
+.sql-editor-highlight {
     font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
     font-size: 16px; /* 16px minimum : evite le zoom automatique iOS au focus */
     line-height: 1.5;
     padding: 14px;
-    border: 1px solid #d1d5da;
     border-radius: 6px;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    tab-size: 4;
+}
+
+.sql-editor {
+    display: block;
+    width: 100%;
+    border: 1px solid #d1d5da;
     background: #f6f8fa;
     color: #24292e;
     resize: vertical;
-    margin-top: 16px;
+    position: relative;
+    z-index: 1;
 }
 
 .sql-editor:focus {
     outline: none;
     border-color: #0366d6;
     box-shadow: 0 0 0 3px rgba(3,102,214,0.1);
-    background: #fff;
 }
+
+/* Overlay actif (desktop) : le pre porte le fond, le textarea devient
+   transparent (seul le caret reste visible) */
+.sql-editor-highlight {
+    display: none;
+}
+
+.overlay-on .sql-editor-highlight {
+    display: block;
+    position: absolute;
+    inset: 0;
+    margin: 0;
+    border: 1px solid transparent; /* meme epaisseur que la bordure du textarea */
+    background: #f6f8fa;
+    color: #24292e;
+    overflow: hidden;
+    pointer-events: none;
+}
+
+.overlay-on .sql-editor {
+    background: transparent;
+    color: transparent;
+    caret-color: #24292e;
+    resize: none; /* le redimensionnement desynchroniserait l'overlay */
+}
+
+.overlay-on .sql-editor::selection {
+    background: rgba(3,102,214,0.25);
+    color: transparent;
+}
+
+.overlay-on .sql-editor:focus {
+    background: transparent;
+}
+
+.overlay-on .sql-editor::placeholder {
+    color: #959da5; /* le texte est transparent mais pas le placeholder */
+}
+
+/* Tokens sur fond clair (l'editeur n'est pas sur fond sombre) */
+.sql-editor-highlight .tok-kw { color: #d73a49; font-weight: 600; }
+.sql-editor-highlight .tok-str { color: #032f62; }
+.sql-editor-highlight .tok-num { color: #005cc5; }
+.sql-editor-highlight .tok-com { color: #6a737d; font-style: italic; }
 
 .sql-actions {
     display: flex;

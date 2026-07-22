@@ -1,0 +1,122 @@
+export default {
+  "domain": "spring-security",
+  "title": "Spring Security",
+  "exercises": [
+    {
+      "id": "sec-01",
+      "type": "identify",
+      "difficulty": "intermediate",
+      "concepts": [
+        "authentification vs autorisation"
+      ],
+      "code": "1. L'utilisateur envoie son email et mot de passe\n2. Le serveur vérifie que le couple email/mdp est correct\n3. Le serveur vérifie que cet utilisateur a le rôle ADMIN\n4. Le serveur autorise l'accès à la page d'administration",
+      "question": "Quelle est l'étape d'authentification et quelle est l'étape d'autorisation ?",
+      "options": [
+        "Étape 2 = authentification (qui es-tu ?), Étape 3 = autorisation (as-tu le droit ?)",
+        "Étape 1 = authentification, Étape 4 = autorisation",
+        "Les deux sont de l'authentification",
+        "Les deux sont de l'autorisation"
+      ],
+      "answer": 0,
+      "explanation": "Authentification = vérifier l'IDENTITÉ (est-ce bien toi ?). Autorisation = vérifier les DROITS (as-tu le droit de faire ça ?). L'authentification vient toujours en premier. Dans Spring Security, c'est le UserDetailsService qui authentifie et les rôles/authorities qui autorisent.",
+      "hint": "Authentification = QUI. Autorisation = QUOI (quels droits)."
+    },
+    {
+      "id": "sec-02",
+      "type": "identify",
+      "difficulty": "intermediate",
+      "concepts": [
+        "hachage mot de passe"
+      ],
+      "code": "// Dans le service d'inscription\n@Autowired\nprivate PasswordEncoder passwordEncoder;\n\npublic void inscrire(String email, String motDePasse) {\n    String hash = passwordEncoder.encode(motDePasse);\n    Utilisateur u = new Utilisateur(email, hash);\n    utilisateurRepository.save(u);\n}",
+      "question": "Pourquoi hacher le mot de passe avant de le sauvegarder ?",
+      "options": [
+        "Pour que le mot de passe en clair ne soit jamais stocké en BDD : même en cas de fuite de données",
+        "Pour que le mot de passe prenne moins de place en BDD",
+        "Pour accélérer la vérification à la connexion",
+        "C'est optionnel, on pourrait stocker en clair"
+      ],
+      "answer": 0,
+      "explanation": "Si la BDD est compromise (hack, fuite), les mots de passe hachés ne peuvent pas être inversés. BCrypt (l'encoder par défaut de Spring Security) est conçu pour être lent à bruteforcer. JAMAIS de mot de passe en clair en BDD.",
+      "hint": "Imaginez que quelqu'un vole toute votre base de données. Que voit-il ?"
+    },
+    {
+      "id": "sec-03",
+      "type": "complete",
+      "difficulty": "intermediate",
+      "concepts": [
+        "rôles",
+        "autorisation endpoint"
+      ],
+      "code": "@Configuration\npublic class SecurityConfig {\n    @Bean\n    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {\n        http.authorizeHttpRequests(auth -> auth\n            .requestMatchers(\"/api/public/**\").permitAll()\n            .requestMatchers(\"/api/admin/**\")._______(\"ADMIN\")\n            .anyRequest().authenticated()\n        );\n        return http.build();\n    }\n}",
+      "question": "Quelle méthode restreint l'accès aux utilisateurs avec le rôle ADMIN ?",
+      "options": [
+        "hasRole",
+        "requireRole",
+        "isAdmin",
+        "withRole"
+      ],
+      "answer": 0,
+      "explanation": "hasRole(\"ADMIN\") autorise uniquement les utilisateurs ayant le rôle ADMIN. permitAll() autorise tout le monde (même non connecté). authenticated() exige une connexion mais n'importe quel rôle. C'est la chaîne de filtres de Spring Security.",
+      "hint": "Le nom de la méthode est littéral en anglais : 'a le rôle'."
+    },
+    {
+      "id": "sec-04",
+      "type": "predict",
+      "difficulty": "intermediate",
+      "concepts": [
+        "JWT",
+        "stateless"
+      ],
+      "code": "// Flux JWT :\n// 1. POST /api/login (email + mdp) → le serveur retourne un token JWT\n// 2. GET /api/profil avec header: Authorization: Bearer eyJhbG...\n// 3. Le serveur vérifie le token et retourne les données",
+      "question": "Pourquoi utiliser un token JWT plutôt qu'une session serveur classique ?",
+      "options": [
+        "Le serveur n'a pas besoin de stocker l'état de session : le token contient toutes les infos (stateless)",
+        "Le JWT est plus sécurisé qu'une session",
+        "Le JWT est obligatoire pour les API REST",
+        "Les sessions ne fonctionnent pas avec Spring Boot"
+      ],
+      "answer": 0,
+      "explanation": "JWT est stateless : le token contient l'identité de l'utilisateur (claims), signé par le serveur. Le serveur n'a rien à stocker en mémoire. C'est idéal pour les API REST consommées par Angular/React, et pour le scaling horizontal (plusieurs serveurs). Les sessions existent aussi en Spring Boot mais stockent l'état côté serveur.",
+      "hint": "Stateless = le serveur ne garde rien en mémoire entre les requêtes. Toute l'info est dans le token."
+    },
+    {
+      "id": "sec-05",
+      "type": "debug",
+      "difficulty": "intermediate",
+      "concepts": [
+        "CORS"
+      ],
+      "code": "// Angular (port 4200) appelle l'API Spring Boot (port 8080)\n// Erreur dans la console du navigateur :\n// \"Access to XMLHttpRequest at 'http://localhost:8080/api/produits'\n//  from origin 'http://localhost:4200' has been blocked by CORS policy\"",
+      "question": "Pourquoi cette erreur et comment la résoudre ?",
+      "options": [
+        "Le navigateur bloque les requêtes cross-origin : ajouter @CrossOrigin sur le controller ou configurer CORS dans Spring Security",
+        "Angular ne peut pas faire de requêtes HTTP",
+        "Il faut utiliser HTTPS au lieu de HTTP",
+        "Le port 8080 est bloqué par le pare-feu"
+      ],
+      "answer": 0,
+      "explanation": "CORS (Cross-Origin Resource Sharing) : le navigateur bloque par défaut les requêtes vers un domaine/port différent. localhost:4200 ≠ localhost:8080. Solutions : @CrossOrigin(origins = \"http://localhost:4200\") sur le controller, ou configurer CORS globalement dans SecurityConfig. C'est une sécurité du navigateur, pas du serveur.",
+      "hint": "4200 ≠ 8080 = origines différentes. Le navigateur bloque par sécurité. Le serveur doit autoriser explicitement."
+    },
+    {
+      "id": "sec-06",
+      "type": "identify",
+      "difficulty": "intermediate",
+      "concepts": [
+        "UserDetailsService"
+      ],
+      "code": "@Service\npublic class CustomUserDetailsService implements UserDetailsService {\n    @Autowired\n    private UtilisateurRepository repo;\n    \n    @Override\n    public UserDetails loadUserByUsername(String email) \n            throws UsernameNotFoundException {\n        Utilisateur u = repo.findByEmail(email)\n            .orElseThrow(() -> new UsernameNotFoundException(\"Utilisateur non trouvé\"));\n        return new User(u.getEmail(), u.getMotDePasse(), \n            List.of(new SimpleGrantedAuthority(\"ROLE_\" + u.getRole())));\n    }\n}",
+      "question": "Quel est le rôle de cette classe dans Spring Security ?",
+      "options": [
+        "Charger les infos d'un utilisateur depuis la BDD pour que Spring Security puisse l'authentifier",
+        "Créer un nouvel utilisateur dans la BDD",
+        "Envoyer un email de confirmation",
+        "Générer un token JWT"
+      ],
+      "answer": 0,
+      "explanation": "UserDetailsService est l'interface que Spring Security appelle pour trouver un utilisateur par son identifiant. loadUserByUsername() cherche en BDD et retourne un UserDetails (email, mdp hashé, rôles). Spring Security se charge ensuite de comparer le mot de passe avec celui envoyé par l'utilisateur.",
+      "hint": "Spring Security ne sait pas où sont stockés vos utilisateurs. Cette classe fait le pont avec votre BDD."
+    }
+  ]
+};

@@ -7,7 +7,8 @@ const KEYWORDS = {
     python: 'def return if elif else for in while import from with as try except finally raise lambda class pass break continue and or not is None True False print global yield assert del',
     ts: 'const let var function export import from default class interface extends implements new return if else for of in while this async await try catch throw type readonly public private protected static null undefined true false',
     sql: 'SELECT FROM WHERE JOIN LEFT RIGHT OUTER INNER ON GROUP BY ORDER HAVING DISTINCT LIMIT AS AND OR NOT IN IS NULL LIKE COUNT SUM AVG MIN MAX INSERT INTO VALUES UPDATE SET DELETE CREATE TABLE DESC ASC CASE WHEN THEN ELSE END BETWEEN UNION PRIMARY KEY FOREIGN REFERENCES INTEGER VARCHAR DECIMAL BOOLEAN DATE DEFAULT',
-    docker: 'FROM COPY ADD RUN CMD ENTRYPOINT EXPOSE WORKDIR ENV ARG VOLUME USER LABEL docker build run exec ps stop rm rmi images pull push logs compose up down'
+    docker: 'FROM COPY ADD RUN CMD ENTRYPOINT EXPOSE WORKDIR ENV ARG VOLUME USER LABEL docker build run exec ps stop rm rmi images pull push logs compose up down',
+    shell: 'git init clone add commit push pull fetch merge rebase branch checkout switch restore status log diff stash tag reset revert remote cherry-pick config mv rm show blame'
 };
 
 const sets = {};
@@ -23,6 +24,7 @@ const COMMENT_PATTERNS = {
     ts: '\\/\\/[^\\n]*|\\/\\*[\\s\\S]*?\\*\\/',
     python: '#[^\\n]*',
     docker: '#[^\\n]*',
+    shell: '#[^\\n]*',
     sql: '--[^\\n]*'
 };
 
@@ -53,11 +55,17 @@ export function highlightCode(raw, lang = 'java') {
 
 // Langue deduite du prefixe d'id des exercices (oop-01, py-03, hc-02...)
 const LANG_BY_PREFIX = {
-    oop: 'java', tu: 'java', sb: 'java', uml: 'java',
-    ng: 'ts', py: 'python', hc: 'ts', dk: 'docker',
-    fbr: 'sql', tym: 'sql'
+    oop: 'java', tu: 'java', sb: 'java', uml: 'java', sec: 'java',
+    ng: 'ts', js: 'ts', hc: 'ts', bs: 'ts',
+    py: 'python', pyf: 'python',
+    dk: 'docker', git: 'shell',
+    fbr: 'sql', tym: 'sql', mcd: 'sql'
 };
 
 export function langForExercise(id) {
     return LANG_BY_PREFIX[String(id).split('-')[0]] || 'java';
+}
+
+export function isSqlKeyword(upperWord) {
+    return sets.sql.has(upperWord);
 }
