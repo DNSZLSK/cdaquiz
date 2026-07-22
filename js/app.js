@@ -77,6 +77,12 @@ function initApp() {
     if (logo) logo.addEventListener('click', playRandomPortalVoice);
 
     showScreen('menu');
+
+    // PWA : service worker network-first (mises a jour automatiques, offline en
+    // filet). Pas en dev local : un cache SW sur localhost rendrait fou.
+    if ('serviceWorker' in navigator && !['localhost', '127.0.0.1'].includes(location.hostname)) {
+        navigator.serviceWorker.register('sw.js').catch(() => { });
+    }
 }
 
 initApp();
