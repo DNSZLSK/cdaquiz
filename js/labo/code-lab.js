@@ -2,6 +2,7 @@
 import { registerExerciseType, getExerciseType } from '../exercises/registry.js';
 import { codeQcmType } from '../exercises/code-qcm.js';
 import { registerScreen, showScreen } from '../screens.js';
+import { showEmptyAnswerModal } from '../ui/quiz.js';
 import { getStatus, getEntry, record, getDomainStats } from './progress.js';
 import { playSuccess, playFail, playComplete, toggleMuted, muteButtonLabel } from './sounds.js';
 import { recapHtml } from './recap.js';
@@ -60,8 +61,7 @@ function renderExercise() {
         <div class="labo-actions">
             <button data-action="prev" ${index === 0 ? 'disabled' : ''}>Précédent</button>
             <button class="btn-primary" id="laboValidateBtn" data-action="validate">Valider</button>
-            <button class="btn-primary" id="laboNextBtn" data-action="${isLast ? 'finish' : 'next'}"
-                style="display: none;">${isLast ? 'Terminer' : 'Suivant'}</button>
+            <button data-action="${isLast ? 'finish' : 'next'}">${isLast ? 'Terminer' : 'Suivant'}</button>
         </div>
     `;
 
@@ -78,7 +78,10 @@ async function validate() {
     const bodyEl = el().querySelector('.exercise-body');
 
     const answer = handler.collectAnswer(bodyEl);
-    if (answer === null) return; // pas de reponse cochee : on ne juge pas
+    if (answer === null) {
+        showEmptyAnswerModal(); // meme modale "Erreur de protocole" que le quiz
+        return;
+    }
 
     const result = await handler.evaluate(state.runtime, answer);
     const prevStatus = getStatus(state.entry.domain, q.id);
@@ -92,8 +95,6 @@ async function validate() {
     handler.showCorrection(state.runtime, bodyEl, answer, result);
 
     document.getElementById('laboValidateBtn').style.display = 'none';
-    const nextBtn = document.getElementById('laboNextBtn');
-    nextBtn.style.display = 'block';
     const attemptsEl = document.getElementById('laboAttempts');
     attemptsEl.textContent = `Tentatives : ${getEntry(state.entry.domain, q.id)?.n || 1}`;
     attemptsEl.style.display = '';

@@ -105,7 +105,7 @@ async function validateAnswer() {
     document.getElementById('nextBtn').style.display = 'block';
 }
 
-function showEmptyAnswerModal() {
+export function showEmptyAnswerModal() {
     const errorDiv = document.createElement('div');
     errorDiv.style.cssText = `
         position: fixed;
