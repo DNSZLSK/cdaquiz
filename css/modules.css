@@ -1,0 +1,18 @@
+/* Couleurs par module (--module-color). Le mode LABO ajoutera ses domaines ici. */
+.module-card.all { --module-color: #6f42c1; }
+.module-card.python { --module-color: #3572A5; }
+.module-card.git { --module-color: #F14E32; }
+.module-card.recursivite { --module-color: #00ADD8; }
+.module-card.debogage { --module-color: #CC6699; }
+.module-card.memoire { --module-color: #F1C40F; }
+.module-card.tests { --module-color: #27AE60; }
+.module-card.poo { --module-color: #E67E22; }
+.module-card.documentation { --module-color: #95A5A6; }
+.module-card.uml { --module-color: #3498DB; }
+.module-card.unity { --module-color: #000000; }
+.module-card.bdd { --module-color: #E74C3C; }
+.module-card.web { --module-color: #E34F26; }
+.module-card.conception { --module-color: #9B59B6; }
+.module-card.agile { --module-color: #009688; }
+.module-card.architecture { --module-color: #6DB33F; }
+.module-card.docker { --module-color: #2496ED; }
