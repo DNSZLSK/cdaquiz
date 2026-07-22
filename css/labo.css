@@ -22,6 +22,10 @@
     gap: 12px;
 }
 
+/* Les deux portails : QUIZ = bleu, LABO = orange */
+.mode-tabs-buttons button[data-tab="quiz"] { --tab-color: #0098FF; }
+.mode-tabs-buttons button[data-tab="labo"] { --tab-color: #FF6700; }
+
 .mode-tabs-buttons button {
     position: relative;
     display: flex;
@@ -58,7 +62,7 @@
     height: 5px;
     background: repeating-linear-gradient(
         -45deg,
-        #FF6700 0, #FF6700 8px,
+        var(--tab-color) 0, var(--tab-color) 8px,
         transparent 8px, transparent 16px
     );
     opacity: 0;
@@ -66,18 +70,19 @@
 }
 
 .mode-tabs-buttons button:hover {
-    border-color: #FF6700;
+    border-color: var(--tab-color);
     color: #24292e;
 }
 
 .mode-tabs-buttons button.active {
-    border-color: #FF6700;
+    border-color: var(--tab-color);
     color: #24292e;
-    box-shadow: 0 3px 12px rgba(255,103,0,0.15);
+    box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+    box-shadow: 0 3px 12px color-mix(in srgb, var(--tab-color) 18%, transparent);
 }
 
 .mode-tabs-buttons button.active .tab-num {
-    color: #FF6700;
+    color: var(--tab-color);
 }
 
 .mode-tabs-buttons button.active::after {
