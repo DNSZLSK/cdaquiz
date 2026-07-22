@@ -3,12 +3,34 @@ import { registerScreen, showScreen } from '../screens.js';
 import { escapeHtml } from '../utils.js';
 import { loadSqlJs, createDb, execUser } from './sql-engine.js';
 import { validate, failureMessage } from './sql-compare.js';
-import { getStatus, record } from './progress.js';
+import { getStatus, getEntry, record } from './progress.js';
 import { highlightCode, isSqlKeyword } from './highlight.js';
 import './selftest.js';
 
 const MAX_ROWS = 200;
 const DIFFICULTY_LABELS = { beginner: 'débutant', intermediate: 'intermédiaire', advanced: 'avancé' };
+
+const GLADOS_OK = [
+    "Résultat identique. Calibration réussie.",
+    "Correct. Le Centre d'Enrichissement prend note de votre efficacité.",
+    "Requête conforme. Vous faites des progrès remarquables. Pour un humain.",
+    "Résultat validé. Le gâteau se rapproche.",
+    "Exact. Nous n'avons même pas eu besoin de falsifier ce résultat."
+];
+
+const GLADOS_KO = [
+    "Ne vous découragez pas. Les sujets de test médiocres sont aussi utiles à la science.",
+    "L'échec n'est que le succès arrondi à l'inférieur.",
+    "Cette tentative a été consignée dans votre dossier permanent.",
+    "Réessayez. La science ne se fait pas en un jour. Sauf ici.",
+    "Le Centre d'Enrichissement vous rappelle que la base de données ne vous juge pas. Nous, si."
+];
+
+const pick = arr => arr[Math.floor(Math.random() * arr.length)];
+
+// Brouillons de requetes conserves pendant la session (par exercice)
+const drafts = new Map();
+const draftKey = () => `${state.scenario.id}:${state.scenario.exercises[state.index].id}`;
 
 let state = null; // { entry, bank, SQL, scenario, index, db }
 let lastEntry = null; // pour le bouton Reessayer si le chargement initial echoue
@@ -129,6 +151,7 @@ function renderPlayer() {
         <div class="sql-player">
             <div class="sql-main">
                 <p class="sql-concepts">${(ex.concepts || []).map(c => escapeHtml(c)).join(' · ')}</p>
+                <p class="labo-attempts" id="laboAttempts" ${getEntry('sql', ex.id)?.n ? '' : 'style="display: none;"'}>Tentatives : ${getEntry('sql', ex.id)?.n || 0}</p>
                 <div class="question-text">${escapeHtml(ex.question)}</div>
                 <details class="labo-hint">
                     <summary>Indice</summary>
@@ -140,10 +163,12 @@ function renderPlayer() {
                         autocapitalize="none" autocorrect="off" spellcheck="false" autocomplete="off"></textarea>
                 </div>
                 <div class="sql-actions">
-                    <button data-action="run">Exécuter</button>
-                    <button class="btn-primary" data-action="validate">Valider</button>
+                    <button data-action="run" title="Ctrl+Entrée">Exécuter</button>
+                    <button class="btn-primary" data-action="validate" title="Ctrl+Maj+Entrée">Valider</button>
+                    <button data-action="expected">Résultat attendu</button>
                     <button data-action="solution">Solution</button>
-                    <button data-action="next" ${state.index === sc.exercises.length - 1 ? 'disabled' : ''}>Suivant</button>
+                    <button data-action="${state.index === sc.exercises.length - 1 ? 'back-scenarios' : 'next'}">
+                        ${state.index === sc.exercises.length - 1 ? 'Terminer' : 'Suivant'}</button>
                 </div>
                 <div class="sql-feedback" id="sqlFeedback"></div>
                 <div class="sql-result-wrap" id="sqlResult"></div>
@@ -155,6 +180,8 @@ function renderPlayer() {
         </div>
     `;
     document.getElementById('progressBar').style.width = ((state.index + 1) / sc.exercises.length) * 100 + '%';
+    const chipsEl = el().querySelector('.labo-chips');
+    if (chipsEl.scrollWidth > chipsEl.clientWidth) chipsEl.classList.add('scrollable');
     setupEditor();
 }
 
@@ -194,8 +221,12 @@ function setupEditor() {
         ta.closest('.sql-editor-wrap').classList.add('overlay-on');
     }
 
+    // Brouillon de la session : on retrouve sa requete en revenant sur l'exercice
+    ta.value = drafts.get(draftKey()) || '';
+
     const sync = () => {
         autoUppercase(ta);
+        drafts.set(draftKey(), ta.value);
         if (overlayOn) {
             // \n final : garde la derniere ligne vide visible dans le pre
             code.innerHTML = highlightCode(ta.value, 'sql') + '\n';
@@ -207,6 +238,12 @@ function setupEditor() {
     ta.addEventListener('scroll', () => {
         pre.scrollTop = ta.scrollTop;
         pre.scrollLeft = ta.scrollLeft;
+    });
+    ta.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
+            e.preventDefault();
+            e.shiftKey ? validateAction() : run();
+        }
     });
     sync();
 }
@@ -256,14 +293,40 @@ function validateAction() {
 
     if (verdict.correct) {
         record('sql', ex.id, 'ok');
-        feedback.innerHTML = '<div class="sql-banner sql-banner-ok">Résultat identique. Calibration réussie.</div>';
+        feedback.innerHTML = `<div class="sql-banner sql-banner-ok">${pick(GLADOS_OK)}</div>`;
     } else {
         record('sql', ex.id, 'ko');
-        feedback.innerHTML = `<div class="sql-banner sql-banner-ko">${escapeHtml(failureMessage(verdict))}</div>`;
+        feedback.innerHTML = `
+            <div class="sql-banner sql-banner-ko">${escapeHtml(failureMessage(verdict))}</div>
+            <p class="sql-glados">${pick(GLADOS_KO)}</p>
+        `;
     }
     if (verdict.userSet) renderResultTable(verdict.userSet, result);
     if (verdict.mode === 'state') resetDb(); // le bac a sable repart propre apres un UPDATE/DELETE
+    const attemptsEl = document.getElementById('laboAttempts');
+    attemptsEl.textContent = `Tentatives : ${getEntry('sql', ex.id)?.n || 1}`;
+    attemptsEl.style.display = '';
     refreshChips();
+}
+
+// Montre la table attendue sans reveler la requete : le juste milieu entre
+// l'indice et la solution.
+function showExpected() {
+    const ex = state.scenario.exercises[state.index];
+    const feedback = document.getElementById('sqlFeedback');
+    const result = document.getElementById('sqlResult');
+    if (/^\s*(UPDATE|DELETE|INSERT)/i.test(ex.solution)) {
+        feedback.innerHTML = '<div class="sql-banner sql-banner-info">Cet exercice modifie la base : c\'est l\'état final des tables qui est comparé, pas un résultat affichable.</div>';
+        return;
+    }
+    const db = createDb(state.SQL, state.scenario.schema.seed_sql);
+    try {
+        const res = db.exec(ex.solution);
+        feedback.innerHTML = '<div class="sql-banner sql-banner-info">Résultat attendu (à vous de trouver la requête) :</div>';
+        renderResultTable(res.length ? res[res.length - 1] : null, result);
+    } finally {
+        db.close();
+    }
 }
 
 function showSolution() {
@@ -305,6 +368,7 @@ function wire() {
             case 'retry-load': if (lastEntry) openSqlLab(lastEntry); break;
             case 'run': run(); break;
             case 'validate': validateAction(); break;
+            case 'expected': showExpected(); break;
             case 'solution': showSolution(); break;
             case 'next':
                 if (state.index < state.scenario.exercises.length - 1) {

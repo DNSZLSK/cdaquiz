@@ -1,33 +1,87 @@
 /* Mode LABO — styles. Meme langage visuel que le quiz (cards, bordures #e1e4e8,
    accents #FF6700 / #0098FF, radius 6px). */
 
-/* Onglets QUIZ | LABO */
+/* Selecteur de protocole QUIZ | LABO — signaletique Aperture : numeros de
+   chambre de test, majuscules espacees, hachures orange sur le protocole actif */
 .mode-tabs {
-    display: flex;
-    gap: 8px;
     margin-bottom: 30px;
+}
+
+.mode-tabs-label {
+    display: block;
+    font-size: 0.7em;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: #959da5;
+    margin-bottom: 8px;
+}
+
+.mode-tabs-buttons {
+    display: flex;
+    gap: 12px;
+}
+
+.mode-tabs-buttons button {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 26px 14px;
     border: 1px solid #e1e4e8;
     border-radius: 6px;
-    padding: 4px;
-    background: #f6f8fa;
-    width: fit-content;
-}
-
-.mode-tabs button {
-    border: none;
-    background: transparent;
-    padding: 8px 28px;
-    font-weight: 600;
-    letter-spacing: 0.5px;
-    color: #586069;
-    border-radius: 4px;
-}
-
-.mode-tabs button.active {
     background: #fff;
+    color: #586069;
+    font-weight: 700;
+    font-size: 0.95em;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    overflow: hidden;
+    transition: all 0.2s ease;
+}
+
+.mode-tabs-buttons .tab-num {
+    font-size: 1.35em;
+    font-weight: 300;
+    color: #d1d5da;
+    letter-spacing: 0;
+    transition: color 0.2s ease;
+}
+
+/* Bande de hachures type signaletique, revelee sur le protocole actif */
+.mode-tabs-buttons button::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 5px;
+    background: repeating-linear-gradient(
+        -45deg,
+        #FF6700 0, #FF6700 8px,
+        transparent 8px, transparent 16px
+    );
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+.mode-tabs-buttons button:hover {
+    border-color: #FF6700;
     color: #24292e;
-    border: 1px solid #e1e4e8;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+}
+
+.mode-tabs-buttons button.active {
+    border-color: #FF6700;
+    color: #24292e;
+    box-shadow: 0 3px 12px rgba(255,103,0,0.15);
+}
+
+.mode-tabs-buttons button.active .tab-num {
+    color: #FF6700;
+}
+
+.mode-tabs-buttons button.active::after {
+    opacity: 1;
 }
 
 /* Hub */
@@ -123,6 +177,45 @@
     border-color: #0366d6;
     box-shadow: inset 0 0 0 1px #0366d6;
     color: #0366d6;
+}
+
+/* Fondu aux bords quand la rangee de chips deborde (indice de scroll) */
+.labo-chips.scrollable {
+    -webkit-mask-image: linear-gradient(to right, transparent 0, #000 18px, #000 calc(100% - 18px), transparent 100%);
+    mask-image: linear-gradient(to right, transparent 0, #000 18px, #000 calc(100% - 18px), transparent 100%);
+}
+
+/* Compteur de tentatives */
+.labo-attempts {
+    color: #959da5;
+    font-size: 0.8em;
+    font-weight: 600;
+    margin-bottom: 12px;
+}
+
+/* Reinitialisation de la progression (hub) */
+.labo-reset {
+    margin-top: 30px;
+    background: none;
+    border: none;
+    color: #959da5;
+    font-size: 0.8em;
+    text-decoration: underline;
+    padding: 4px;
+}
+
+.labo-reset:hover {
+    color: #d73a49;
+    background: none;
+    border: none;
+}
+
+/* Message GLaDOS sous le verdict SQL */
+.sql-glados {
+    color: #586069;
+    font-style: italic;
+    font-size: 0.85em;
+    margin-top: 8px;
 }
 
 /* Badges */
@@ -468,8 +561,7 @@
 
 /* Mobile */
 @media (max-width: 768px) {
-    .mode-tabs { width: 100%; }
-    .mode-tabs button { flex: 1; }
+    .mode-tabs-buttons button { flex: 1; justify-content: center; }
     .labo-actions button, .sql-actions button { flex: 1; min-height: 44px; }
     .option { min-height: 44px; }
     .option span { white-space: pre-line; }

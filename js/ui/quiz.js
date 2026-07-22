@@ -67,7 +67,18 @@ function renderQuestion() {
     `;
 
     const bodyEl = container.querySelector('.exercise-body');
-    getExerciseType(question).render(runtime, bodyEl);
+    const handler = getExerciseType(question);
+    handler.render(runtime, bodyEl);
+
+    // Question deja validee (retour via Precedent) : on reaffiche la correction
+    // au lieu de permettre une re-validation (et un double comptage du score).
+    const saved = session.answers.get(session.index);
+    if (saved) {
+        handler.restoreAnswer?.(runtime, bodyEl, saved.answer);
+        handler.showCorrection(runtime, bodyEl, saved.answer, saved.result);
+        document.getElementById('validateBtn').style.display = 'none';
+        document.getElementById('nextBtn').style.display = 'block';
+    }
 }
 
 async function validateAnswer() {
@@ -83,7 +94,10 @@ async function validateAnswer() {
         return;
     }
 
+    if (session.answers.has(session.index)) return; // deja validee
+
     const result = await handler.evaluate(runtime, answer);
+    session.answers.set(session.index, { answer, result });
     session.recordResult(question, result.correct);
     handler.showCorrection(runtime, bodyEl, answer, result);
 

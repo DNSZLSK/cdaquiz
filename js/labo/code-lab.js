@@ -2,7 +2,7 @@
 import { registerExerciseType, getExerciseType } from '../exercises/registry.js';
 import { codeQcmType } from '../exercises/code-qcm.js';
 import { registerScreen, showScreen } from '../screens.js';
-import { getStatus, record } from './progress.js';
+import { getStatus, getEntry, record } from './progress.js';
 
 // Les banques utilisent type: predict|complete|identify|debug — tous rendus par code-qcm.
 for (const t of ['predict', 'complete', 'identify', 'debug']) {
@@ -42,6 +42,9 @@ function renderExercise() {
         `<button class="${chipClass(getStatus(entry.domain, ex.id), i === index)}" data-goto="${i}">${i + 1}</button>`
     ).join('');
 
+    const isLast = index === exercises.length - 1;
+    const attempts = getEntry(entry.domain, q.id)?.n || 0;
+
     el().innerHTML = `
         <div class="labo-topbar">
             <button data-action="back">← Labo</button>
@@ -49,17 +52,20 @@ function renderExercise() {
             <span class="labo-counter">${index + 1}/${exercises.length}</span>
         </div>
         <div class="labo-chips">${chips}</div>
+        <p class="labo-attempts" id="laboAttempts" ${attempts ? '' : 'style="display: none;"'}>Tentatives : ${attempts}</p>
         <div class="exercise-body"></div>
         <div class="labo-actions">
             <button data-action="prev" ${index === 0 ? 'disabled' : ''}>Précédent</button>
             <button class="btn-primary" id="laboValidateBtn" data-action="validate">Valider</button>
-            <button class="btn-primary" id="laboNextBtn" data-action="next" style="display: none;"
-                ${index === exercises.length - 1 ? 'disabled' : ''}>Suivant</button>
+            <button class="btn-primary" id="laboNextBtn" data-action="${isLast ? 'back' : 'next'}"
+                style="display: none;">${isLast ? 'Terminer' : 'Suivant'}</button>
         </div>
     `;
 
     getExerciseType(q).render(state.runtime, el().querySelector('.exercise-body'));
     document.getElementById('progressBar').style.width = ((index + 1) / exercises.length) * 100 + '%';
+    const chipsEl = el().querySelector('.labo-chips');
+    if (chipsEl.scrollWidth > chipsEl.clientWidth) chipsEl.classList.add('scrollable');
     el().scrollIntoView({ block: 'start' });
 }
 
@@ -78,6 +84,9 @@ async function validate() {
     document.getElementById('laboValidateBtn').style.display = 'none';
     const nextBtn = document.getElementById('laboNextBtn');
     nextBtn.style.display = 'block';
+    const attemptsEl = document.getElementById('laboAttempts');
+    attemptsEl.textContent = `Tentatives : ${getEntry(state.entry.domain, q.id)?.n || 1}`;
+    attemptsEl.style.display = '';
     refreshChips();
 }
 

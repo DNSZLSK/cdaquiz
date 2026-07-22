@@ -2,7 +2,7 @@
 import { laboCatalog } from '../../data/exercises/index.js';
 import { registerScreen, showScreen } from '../screens.js';
 import { setTabsVisible, setActiveTab } from '../ui/tabs.js';
-import { getDomainStats } from './progress.js';
+import { getDomainStats, resetAll } from './progress.js';
 
 const el = () => document.getElementById('laboHub');
 
@@ -27,6 +27,7 @@ function renderHub() {
         return `
             <div class="module-card labo-domain-card" style="--module-color: ${d.color}" data-domain="${d.domain}">
                 <h3>${d.title}</h3>
+                <p>${d.description}</p>
                 <p class="question-count">${d.count} exercices</p>
                 <div class="labo-progress-track">
                     <div class="labo-progress-fill" style="width: ${pct}%; background: ${d.color};"></div>
@@ -40,6 +41,7 @@ function renderHub() {
         <h2>Laboratoire d'Enrichissement</h2>
         <p class="labo-subtitle">Exercices pratiques : écrire, lire et comprendre du code.</p>
         <div class="module-grid">${cards}</div>
+        <button class="labo-reset" data-action="reset-progress">Réinitialiser la progression du laboratoire</button>
     `;
 }
 
@@ -57,6 +59,13 @@ async function openDomain(domainKey) {
 
 // Cablage unique : ce module n'est importe qu'une fois (cache des imports ES).
 el().addEventListener('click', (e) => {
+    if (e.target.closest('[data-action="reset-progress"]')) {
+        if (window.confirm('Effacer toute la progression du laboratoire ? Les scores du quiz ne sont pas concernés.')) {
+            resetAll();
+            renderHub();
+        }
+        return;
+    }
     const card = e.target.closest('[data-domain]');
     if (card) openDomain(card.dataset.domain);
 });

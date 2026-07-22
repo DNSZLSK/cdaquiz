@@ -14,6 +14,7 @@ export function createQuizSession({ questions, moduleKey }) {
         score: 0,
         moduleScores: {},
         wrongIds: [],
+        answers: new Map(), // index -> {answer, result} : une question validee ne se rejoue pas
         startTime: Date.now(),
         lastElapsedSec: 0,
 

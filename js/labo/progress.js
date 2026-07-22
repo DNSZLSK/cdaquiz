@@ -26,6 +26,14 @@ export function record(domain, id, status) {
     localStorage.setItem(KEY, JSON.stringify(all));
 }
 
+export function getEntry(domain, id) {
+    return loadAll()[domain]?.[id] || null;
+}
+
+export function resetAll() {
+    localStorage.removeItem(KEY);
+}
+
 export function getDomainStats(domain, idPrefix = '') {
     const entries = Object.entries(loadAll()[domain] || {})
         .filter(([id]) => id.startsWith(idPrefix));

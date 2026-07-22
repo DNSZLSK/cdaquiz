@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CDA Quiz</title>
-    <link rel="icon" type="image/png" href="https://imgur.com/LRbytrt.png?v=4">
+    <link rel="icon" type="image/png" href="assets/favicon.png">
     <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="css/modules.css">
     <link rel="stylesheet" href="css/labo.css">
@@ -17,7 +17,7 @@
                 <p>Protocole d'évaluation des compétences</p>
             </div>
             <div class="aperture-header-logo" id="apertureLogo" style="cursor: pointer;">
-                <img src="https://i.imgur.com/7FQrTbz.png" alt="The cake is a lie">
+                <img src="assets/aperture-logo.png" alt="The cake is a lie">
             </div>
         </div>
         
@@ -26,10 +26,13 @@
         </div>
 
         <div class="content">
-            <!-- Onglets QUIZ | LABO -->
+            <!-- Selecteur de protocole QUIZ | LABO -->
             <div class="mode-tabs" id="modeTabs" style="display: none;">
-                <button data-tab="quiz" class="active">QUIZ</button>
-                <button data-tab="labo">LABO</button>
+                <span class="mode-tabs-label">Protocole d'évaluation</span>
+                <div class="mode-tabs-buttons">
+                    <button data-tab="quiz" class="active"><span class="tab-num">01</span>Quiz</button>
+                    <button data-tab="labo"><span class="tab-num">02</span>Labo</button>
+                </div>
             </div>
 
             <!-- Menu principal -->

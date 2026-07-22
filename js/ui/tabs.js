@@ -11,7 +11,7 @@ export function initTabs({ onQuiz, onLabo }) {
 }
 
 export function setTabsVisible(visible) {
-    document.getElementById('modeTabs').style.display = visible ? 'flex' : 'none';
+    document.getElementById('modeTabs').style.display = visible ? '' : 'none';
 }
 
 export function setActiveTab(name) {

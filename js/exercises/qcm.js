@@ -38,6 +38,13 @@ export const qcmType = {
         `;
     },
 
+    // Re-coche les cases d'une reponse deja validee (retour via Precedent)
+    restoreAnswer(runtime, bodyEl, answer) {
+        bodyEl.querySelectorAll('input[name="answer"]').forEach((checkbox, index) => {
+            checkbox.checked = answer.includes(index);
+        });
+    },
+
     collectAnswer(bodyEl) {
         const selected = [];
         bodyEl.querySelectorAll('input[name="answer"]').forEach((checkbox, index) => {
