@@ -112,7 +112,7 @@ function renderScenarioList() {
                 <div class="labo-progress-track">
                     <div class="labo-progress-fill" style="width: ${pct}%; background: ${state.entry.color};"></div>
                 </div>
-                <p class="labo-progress-label">${stats.ok}/${stats.total} réussis</p>
+                <p class="labo-progress-label">${stats.ok}/${stats.total} calibrés</p>
             </div>
         `;
     }).join('');

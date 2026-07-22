@@ -33,7 +33,7 @@ function renderHub() {
                 <div class="labo-progress-track">
                     <div class="labo-progress-fill" style="width: ${pct}%; background: ${d.color};"></div>
                 </div>
-                <p class="labo-progress-label">${stats.ok}/${d.count} réussis${pct === 100 ? ' · terminé' : ''}</p>
+                <p class="labo-progress-label">${stats.ok}/${d.count} calibrés${pct === 100 ? ' · protocole terminé' : ''}</p>
             </div>
         `;
     }).join('');

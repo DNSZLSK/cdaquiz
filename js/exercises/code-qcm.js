@@ -34,6 +34,7 @@ export const codeQcmType = {
             ${badges}
             <pre class="code-block"><code>${highlightCode(q.code, langForExercise(q.id))}</code></pre>
             <div class="question-text">${escapeHtml(q.question)}</div>
+            <div class="answer-hint">Sélectionnez la bonne réponse</div>
             <div class="options">
                 ${runtime.options.map((option, index) => `
                     <label class="option" data-index="${index}">
