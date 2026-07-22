@@ -56,7 +56,7 @@ function renderExercise() {
             <span class="labo-counter">${index + 1}/${exercises.length}</span>
         </div>
         <div class="labo-chips">${chips}</div>
-        <p class="labo-attempts" id="laboAttempts" ${attempts ? '' : 'style="display: none;"'}>Tentatives : ${attempts}</p>
+        <p class="labo-attempts" id="laboAttempts" style="visibility: ${attempts ? 'visible' : 'hidden'};">Tentatives : ${attempts}</p>
         <div class="exercise-body"></div>
         <div class="labo-actions">
             <button data-action="prev" ${index === 0 ? 'disabled' : ''}>Précédent</button>
@@ -94,10 +94,11 @@ async function validate() {
     }
     handler.showCorrection(state.runtime, bodyEl, answer, result);
 
-    document.getElementById('laboValidateBtn').style.display = 'none';
+    // disabled (pas display:none) : masquer le bouton ferait glisser les autres
+    document.getElementById('laboValidateBtn').disabled = true;
     const attemptsEl = document.getElementById('laboAttempts');
     attemptsEl.textContent = `Tentatives : ${getEntry(state.entry.domain, q.id)?.n || 1}`;
-    attemptsEl.style.display = '';
+    attemptsEl.style.visibility = 'visible';
     refreshChips();
 }
 

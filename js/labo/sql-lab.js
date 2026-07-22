@@ -175,7 +175,7 @@ function renderPlayer() {
         <div class="sql-player">
             <div class="sql-main">
                 <p class="sql-concepts">${(ex.concepts || []).map(c => escapeHtml(c)).join(' · ')}</p>
-                <p class="labo-attempts" id="laboAttempts" ${getEntry('sql', ex.id)?.n ? '' : 'style="display: none;"'}>Tentatives : ${getEntry('sql', ex.id)?.n || 0}</p>
+                <p class="labo-attempts" id="laboAttempts" style="visibility: ${getEntry('sql', ex.id)?.n ? 'visible' : 'hidden'};">Tentatives : ${getEntry('sql', ex.id)?.n || 0}</p>
                 <div class="question-text">${escapeHtml(ex.question)}</div>
                 <details class="labo-hint">
                     <summary>Indice</summary>
@@ -249,13 +249,22 @@ function setupEditor() {
     ta.value = getDraft(draftKey());
 
     const sync = () => {
-        autoUppercase(ta);
+        // L'auto-majuscule ne doit JAMAIS pouvoir interrompre la mise a jour du
+        // calque colorise : en mode overlay le texte du textarea est transparent,
+        // un calque fige rendrait la frappe invisible.
+        try { autoUppercase(ta); } catch (e) { /* on continue sans majuscules */ }
         setDraft(draftKey(), ta.value);
         if (overlayOn) {
-            // \n final : garde la derniere ligne vide visible dans le pre
-            code.innerHTML = highlightCode(ta.value, 'sql') + '\n';
-            pre.scrollTop = ta.scrollTop;
-            pre.scrollLeft = ta.scrollLeft;
+            try {
+                // \n final : garde la derniere ligne vide visible dans le pre
+                code.innerHTML = highlightCode(ta.value, 'sql') + '\n';
+                pre.scrollTop = ta.scrollTop;
+                pre.scrollLeft = ta.scrollLeft;
+            } catch (e) {
+                // Panne de coloration : retour au mode simple, texte visible
+                ta.closest('.sql-editor-wrap').classList.remove('overlay-on');
+                pre.style.display = 'none';
+            }
         }
     };
     ta.addEventListener('input', sync);
@@ -335,7 +344,7 @@ function validateAction() {
     if (verdict.mode === 'state') resetDb(); // le bac a sable repart propre apres un UPDATE/DELETE
     const attemptsEl = document.getElementById('laboAttempts');
     attemptsEl.textContent = `Tentatives : ${getEntry('sql', ex.id)?.n || 1}`;
-    attemptsEl.style.display = '';
+    attemptsEl.style.visibility = 'visible';
     refreshChips();
 }
 
