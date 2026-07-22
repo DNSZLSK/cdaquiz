@@ -3,7 +3,9 @@ import { registerScreen, showScreen } from '../screens.js';
 import { escapeHtml } from '../utils.js';
 import { loadSqlJs, createDb, execUser } from './sql-engine.js';
 import { validate, failureMessage } from './sql-compare.js';
-import { getStatus, getEntry, record } from './progress.js';
+import { getStatus, getEntry, record, getDomainStats } from './progress.js';
+import { playSuccess, playFail, playSqlError, playComplete, toggleMuted, muteButtonLabel } from './sounds.js';
+import { recapHtml } from './recap.js';
 import { highlightCode, isSqlKeyword } from './highlight.js';
 import './selftest.js';
 
@@ -67,6 +69,28 @@ export async function openSqlLab(entry) {
             <button class="btn-primary" data-action="retry-load">Réessayer</button>
         `;
     }
+}
+
+function scenarioPrefix() {
+    return state.scenario.exercises[0].id.split('-')[0] + '-';
+}
+
+function renderRecap() {
+    const sc = state.scenario;
+    const stats = getDomainStats('sql', scenarioPrefix());
+    el().innerHTML = `
+        <div class="labo-topbar">
+            <button data-action="back-scenarios">← Scénarios</button>
+            <span class="labo-title">${escapeHtml(sc.title)}</span>
+        </div>
+        <h2>Protocole terminé</h2>
+        ${recapHtml(stats, sc.exercises.length)}
+        <div class="labo-actions">
+            <button data-action="review">Revoir les exercices</button>
+            <button class="btn-primary" data-action="back-scenarios">Retour aux scénarios</button>
+        </div>
+    `;
+    document.getElementById('progressBar').style.width = '100%';
 }
 
 function scenarioStats(sc) {
@@ -145,6 +169,7 @@ function renderPlayer() {
         <div class="labo-topbar">
             <button data-action="back-scenarios">← Scénarios</button>
             <span class="labo-title">${escapeHtml(sc.title)}</span>
+            <button class="labo-mute" data-action="mute">${muteButtonLabel()}</button>
             <span class="labo-counter">${state.index + 1}/${sc.exercises.length}</span>
         </div>
         <div class="labo-chips">${chips}</div>
@@ -167,7 +192,7 @@ function renderPlayer() {
                     <button class="btn-primary" data-action="validate" title="Ctrl+Maj+Entrée">Valider</button>
                     <button data-action="expected">Résultat attendu</button>
                     <button data-action="solution">Solution</button>
-                    <button data-action="${state.index === sc.exercises.length - 1 ? 'back-scenarios' : 'next'}">
+                    <button data-action="${state.index === sc.exercises.length - 1 ? 'finish' : 'next'}">
                         ${state.index === sc.exercises.length - 1 ? 'Terminer' : 'Suivant'}</button>
                 </div>
                 <div class="sql-feedback" id="sqlFeedback"></div>
@@ -290,16 +315,22 @@ function validateAction() {
 
     const ex = state.scenario.exercises[state.index];
     const verdict = validate(ex, sql, state.scenario, state.SQL);
+    const prevStatus = getStatus('sql', ex.id);
 
     if (verdict.correct) {
         record('sql', ex.id, 'ok');
         feedback.innerHTML = `<div class="sql-banner sql-banner-ok">${pick(GLADOS_OK)}</div>`;
+        if (prevStatus !== 'ok') {
+            const done = getDomainStats('sql', scenarioPrefix()).ok === state.scenario.exercises.length;
+            done ? playComplete() : playSuccess();
+        }
     } else {
         record('sql', ex.id, 'ko');
         feedback.innerHTML = `
             <div class="sql-banner sql-banner-ko">${escapeHtml(failureMessage(verdict))}</div>
             <p class="sql-glados">${pick(GLADOS_KO)}</p>
         `;
+        verdict.sqlError ? playSqlError() : playFail();
     }
     if (verdict.userSet) renderResultTable(verdict.userSet, result);
     if (verdict.mode === 'state') resetDb(); // le bac a sable repart propre apres un UPDATE/DELETE
@@ -370,6 +401,9 @@ function wire() {
             case 'validate': validateAction(); break;
             case 'expected': showExpected(); break;
             case 'solution': showSolution(); break;
+            case 'finish': renderRecap(); break;
+            case 'review': state.index = 0; resetDb(); renderPlayer(); break;
+            case 'mute': toggleMuted(); btn.textContent = muteButtonLabel(); break;
             case 'next':
                 if (state.index < state.scenario.exercises.length - 1) {
                     state.index++;

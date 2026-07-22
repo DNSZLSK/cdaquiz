@@ -2,7 +2,9 @@
 import { registerExerciseType, getExerciseType } from '../exercises/registry.js';
 import { codeQcmType } from '../exercises/code-qcm.js';
 import { registerScreen, showScreen } from '../screens.js';
-import { getStatus, getEntry, record } from './progress.js';
+import { getStatus, getEntry, record, getDomainStats } from './progress.js';
+import { playSuccess, playFail, playComplete, toggleMuted, muteButtonLabel } from './sounds.js';
+import { recapHtml } from './recap.js';
 
 // Les banques utilisent type: predict|complete|identify|debug — tous rendus par code-qcm.
 for (const t of ['predict', 'complete', 'identify', 'debug']) {
@@ -49,6 +51,7 @@ function renderExercise() {
         <div class="labo-topbar">
             <button data-action="back">← Labo</button>
             <span class="labo-title">${entry.title}</span>
+            <button class="labo-mute" data-action="mute">${muteButtonLabel()}</button>
             <span class="labo-counter">${index + 1}/${exercises.length}</span>
         </div>
         <div class="labo-chips">${chips}</div>
@@ -57,7 +60,7 @@ function renderExercise() {
         <div class="labo-actions">
             <button data-action="prev" ${index === 0 ? 'disabled' : ''}>Précédent</button>
             <button class="btn-primary" id="laboValidateBtn" data-action="validate">Valider</button>
-            <button class="btn-primary" id="laboNextBtn" data-action="${isLast ? 'back' : 'next'}"
+            <button class="btn-primary" id="laboNextBtn" data-action="${isLast ? 'finish' : 'next'}"
                 style="display: none;">${isLast ? 'Terminer' : 'Suivant'}</button>
         </div>
     `;
@@ -78,7 +81,14 @@ async function validate() {
     if (answer === null) return; // pas de reponse cochee : on ne juge pas
 
     const result = await handler.evaluate(state.runtime, answer);
+    const prevStatus = getStatus(state.entry.domain, q.id);
     record(state.entry.domain, q.id, result.correct ? 'ok' : 'ko');
+    if (result.correct && prevStatus !== 'ok') {
+        const done = getDomainStats(state.entry.domain).ok === state.exercises.length;
+        done ? playComplete() : playSuccess();
+    } else if (!result.correct) {
+        playFail();
+    }
     handler.showCorrection(state.runtime, bodyEl, answer, result);
 
     document.getElementById('laboValidateBtn').style.display = 'none';
@@ -95,6 +105,24 @@ function refreshChips() {
     el().querySelectorAll('[data-goto]').forEach((chip, i) => {
         chip.className = chipClass(getStatus(entry.domain, exercises[i].id), i === index);
     });
+}
+
+function renderRecap() {
+    const { entry, exercises } = state;
+    const stats = getDomainStats(entry.domain);
+    el().innerHTML = `
+        <div class="labo-topbar">
+            <button data-action="back">← Labo</button>
+            <span class="labo-title">${entry.title}</span>
+        </div>
+        <h2>Protocole terminé</h2>
+        ${recapHtml(stats, exercises.length)}
+        <div class="labo-actions">
+            <button data-action="review">Revoir les exercices</button>
+            <button class="btn-primary" data-action="back">Retour au labo</button>
+        </div>
+    `;
+    document.getElementById('progressBar').style.width = '100%';
 }
 
 function wire() {
@@ -114,6 +142,9 @@ function wire() {
             case 'prev': if (state.index > 0) { state.index--; renderExercise(); } break;
             case 'next': if (state.index < state.exercises.length - 1) { state.index++; renderExercise(); } break;
             case 'validate': validate(); break;
+            case 'finish': renderRecap(); break;
+            case 'review': state.index = 0; renderExercise(); break;
+            case 'mute': toggleMuted(); btn.textContent = muteButtonLabel(); break;
         }
     });
 }
