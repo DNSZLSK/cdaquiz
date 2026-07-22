@@ -6,6 +6,7 @@ import { validate, failureMessage } from './sql-compare.js';
 import { getStatus, getEntry, record, getDomainStats } from './progress.js';
 import { playSuccess, playFail, playSqlError, playComplete, toggleMuted, muteButtonLabel } from './sounds.js';
 import { recapHtml } from './recap.js';
+import { getDraft, setDraft } from './drafts.js';
 import { highlightCode, isSqlKeyword } from './highlight.js';
 import './selftest.js';
 
@@ -30,8 +31,6 @@ const GLADOS_KO = [
 
 const pick = arr => arr[Math.floor(Math.random() * arr.length)];
 
-// Brouillons de requetes conserves pendant la session (par exercice)
-const drafts = new Map();
 const draftKey = () => `${state.scenario.id}:${state.scenario.exercises[state.index].id}`;
 
 let state = null; // { entry, bank, SQL, scenario, index, db }
@@ -247,11 +246,11 @@ function setupEditor() {
     }
 
     // Brouillon de la session : on retrouve sa requete en revenant sur l'exercice
-    ta.value = drafts.get(draftKey()) || '';
+    ta.value = getDraft(draftKey());
 
     const sync = () => {
         autoUppercase(ta);
-        drafts.set(draftKey(), ta.value);
+        setDraft(draftKey(), ta.value);
         if (overlayOn) {
             // \n final : garde la derniere ligne vide visible dans le pre
             code.innerHTML = highlightCode(ta.value, 'sql') + '\n';

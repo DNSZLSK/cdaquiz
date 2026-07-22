@@ -3,6 +3,7 @@ import { laboCatalog } from '../../data/exercises/index.js';
 import { registerScreen, showScreen } from '../screens.js';
 import { setTabsVisible, setActiveTab } from '../ui/tabs.js';
 import { getDomainStats, resetAll } from './progress.js';
+import { clearDrafts } from './drafts.js';
 
 const el = () => document.getElementById('laboHub');
 
@@ -62,6 +63,7 @@ el().addEventListener('click', (e) => {
     if (e.target.closest('[data-action="reset-progress"]')) {
         if (window.confirm('Effacer toute la progression du laboratoire ? Les scores du quiz ne sont pas concernés.')) {
             resetAll();
+            clearDrafts(); // les requetes ecrites dans l'editeur SQL repartent aussi de zero
             renderHub();
         }
         return;
