@@ -13,12 +13,12 @@ export default {
       "question": "Ce test passe ou échoue ?",
       "options": [
         "Passe",
-        "Échoue : le résultat n'est pas 32.0",
-        "Échoue : erreur de compilation",
-        "Échoue : NullPointerException"
+        "Échoue : la méthode renvoie l'entier 32, différent du double 32.0 attendu",
+        "Échoue : assertEquals ne peut pas comparer deux doubles sans delta",
+        "Échoue : erreur de compilation, on passe l'entier 0 à un paramètre double"
       ],
       "answer": 0,
-      "explanation": "0 × 9/5 + 32 = 32.0. Le résultat correspond à la valeur attendue, le test passe.",
+      "explanation": "0 × 9/5 + 32 = 32.0. Le résultat correspond à la valeur attendue, le test passe. Le calcul s'effectue entièrement en double (9.0 / 5.0) et la méthode renvoie 32.0, jamais un entier. assertEquals accepte deux doubles sans delta et passe quand l'égalité est exacte : le delta ne sert qu'à tolérer des arrondis. Enfin, passer l'entier 0 à un paramètre double compile sans problème, Java élargit automatiquement int vers double.",
       "hint": "Faites le calcul à la main : 0 × 9 / 5 + 32 = ?"
     },
     {
@@ -33,12 +33,12 @@ export default {
       "question": "Ce test passe ou échoue ?",
       "options": [
         "Passe : le résultat vaut exactement \"K. LE GOFF\"",
-        "Échoue : substring(0, 1) sur \"kéwin\" renvoie \"ké\", pas \"k\"",
-        "Échoue : le résultat est \"K. Le Goff\", le nom n'est pas mis en majuscules",
-        "Échoue : toUpperCase() lève une exception sur le \"é\" accentué"
+        "Échoue : substring(0, 1) renvoie \"ké\" car les index 0 et 1 sont inclus",
+        "Échoue : le résultat est \"K.LE GOFF\", il manque l'espace après le point",
+        "Échoue : toUpperCase() ne modifie pas nom, qui reste \"Le Goff\""
       ],
       "answer": 0,
-      "explanation": "prenom.substring(0,1) = \"k\", .toUpperCase() = \"K\". nom.toUpperCase() = \"LE GOFF\". Résultat : \"K. LE GOFF\" qui correspond à l'attendu.",
+      "explanation": "prenom.substring(0,1) = \"k\", .toUpperCase() = \"K\". nom.toUpperCase() = \"LE GOFF\". Résultat : \"K. LE GOFF\" qui correspond à l'attendu. substring(0, 1) s'arrête AVANT l'index de fin : il renvoie \"k\", pas \"ké\". L'espace est bien présent, la chaîne concaténée est \". \" avec un espace. Et si toUpperCase() ne modifie effectivement pas la chaîne d'origine (les String sont immuables), c'est sa valeur de RETOUR qui est concaténée ici, donc le nom est bien en majuscules.",
       "hint": "Tracez chaque opération : substring → toUpperCase sur la première lettre, puis toUpperCase sur tout le nom."
     },
     {
@@ -52,12 +52,12 @@ export default {
       "question": "Ce test passe ou échoue ?",
       "options": [
         "Passe : l'exception est bien levée",
-        "Échoue : l'exception n'est pas attrapée",
-        "Échoue : il faut utiliser assertEquals",
-        "Échoue : ArithmeticException n'est pas une RuntimeException"
+        "Échoue : l'exception levée dans le lambda interrompt le test avant la fin",
+        "Échoue : il faudrait un try/catch autour de l'appel pour attraper l'exception",
+        "Échoue : assertThrows attend une instance d'exception, pas ArithmeticException.class"
       ],
       "answer": 0,
-      "explanation": "assertThrows vérifie qu'une exception du type donné est bien levée par le code dans le lambda. Ici, diviser(10, 0) lève bien ArithmeticException, donc le test passe.",
+      "explanation": "assertThrows vérifie qu'une exception du type donné est bien levée par le code dans le lambda. Ici, diviser(10, 0) lève bien ArithmeticException, donc le test passe. L'exception n'interrompt pas le test : assertThrows exécute le lambda et attrape lui-même l'exception. Aucun try/catch n'est nécessaire, c'est précisément ce que assertThrows remplace. Et la signature attend bien la CLASSE de l'exception (ArithmeticException.class), pas une instance.",
       "hint": "assertThrows est SATISFAIT quand l'exception est levée. C'est le but du test."
     },
     {
@@ -71,12 +71,12 @@ export default {
       "question": "Quelle assertion complète le test ?",
       "options": [
         "assertEquals",
-        "assertTrue",
-        "assertNotNull",
-        "assertSame"
+        "assertSame",
+        "assertThat",
+        "assertArrayEquals"
       ],
       "answer": 0,
-      "explanation": "assertEquals avec 3 paramètres (attendu, réel, delta) est utilisé pour comparer des doubles. Le delta (0.01) tolère une petite différence due aux flottants. 9.99 + 5.50 + 3.00 = 18.49.",
+      "explanation": "assertEquals avec 3 paramètres (attendu, réel, delta) est utilisé pour comparer des doubles. Le delta (0.01) tolère une petite différence due aux flottants. 9.99 + 5.50 + 3.00 = 18.49. assertSame compare les références avec == et non les valeurs, et n'accepte pas de delta. assertThat (JUnit 4 / Hamcrest) s'utilise avec un matcher (is, closeTo...), pas avec trois valeurs numériques. assertArrayEquals compare deux tableaux élément par élément, or on compare ici deux doubles simples.",
       "hint": "Quand on compare des doubles, on ajoute un 3ème paramètre (delta) pour la tolérance des arrondis."
     },
     {
@@ -92,12 +92,12 @@ export default {
       "question": "Ce test passe ou échoue ?",
       "options": [
         "Passe",
-        "Échoue : le mock retourne null",
-        "Échoue : on ne peut pas mocker une interface",
-        "Échoue : 7 n'est pas < 10"
+        "Échoue : conseil() retourne \"Veste\", car 7 < 20 est vrai aussi",
+        "Échoue : sans @ExtendWith(MockitoExtension.class), le mock n'est pas initialisé",
+        "Échoue : il manque un Mockito.verify() pour que le test soit validé"
       ],
       "answer": 0,
-      "explanation": "Le mock simule IMeteoService. Quand on appelle getTemperature(\"Brest\"), il retourne 7 (grâce au when/thenReturn). 7 < 10 donc conseil() retourne \"Manteau\". Le assertEquals vérifie que c'est bien \"Manteau\". Le test passe. C'est le principe de Mockito : on isole la classe testée de ses dépendances.",
+      "explanation": "Le mock simule IMeteoService. Quand on appelle getTemperature(\"Brest\"), il retourne 7 (grâce au when/thenReturn). 7 < 10 donc conseil() retourne \"Manteau\". Le assertEquals vérifie que c'est bien \"Manteau\". Le test passe. C'est le principe de Mockito : on isole la classe testée de ses dépendances. Le premier if fait un return immédiat : la condition 7 < 20 n'est donc jamais évaluée. @ExtendWith(MockitoExtension.class) n'est requis que pour l'annotation @Mock, l'appel explicite Mockito.mock() suffit ici. Et verify() est optionnel : il contrôle les interactions avec le mock, il ne conditionne pas la validité du test.",
       "hint": "Le mock remplace le vrai service météo. when().thenReturn() définit ce que le mock retourne."
     },
     {
@@ -114,10 +114,10 @@ export default {
         "Fast (rapide)",
         "Independent (indépendant)",
         "Repeatable (reproductible)",
-        "Timely (opportun)"
+        "Self-validating (auto-validant)"
       ],
       "answer": 1,
-      "explanation": "Les deux tests partagent un état mutable (compteur). testIncrementB dépend du fait que testIncrementA s'exécute en premier. Si l'ordre d'exécution change, testIncrementB échouera. Chaque test doit être indépendant des autres.",
+      "explanation": "Les deux tests partagent un état mutable (compteur). testIncrementB dépend du fait que testIncrementA s'exécute en premier. Si l'ordre d'exécution change, testIncrementB échouera. Chaque test doit être indépendant des autres. Fast serait violé par des tests lents (réseau, base de données), pas par un état partagé. Repeatable est tentant, mais relancer la suite complète dans le même ordre redonne le même verdict : le vrai problème est la dépendance ENTRE les tests. Self-validating est respecté, chaque test rend un verdict pass/fail sans interprétation humaine.",
       "hint": "Que se passe-t-il si l'ordre d'exécution des tests change ?"
     },
     {
@@ -133,11 +133,11 @@ export default {
       "options": [
         "when",
         "verify",
-        "assert",
-        "mock"
+        "spy",
+        "times"
       ],
       "answer": 1,
-      "explanation": "Mockito.verify() vérifie qu'une méthode a bien été appelée sur le mock avec les bons paramètres. Ici on vérifie que envoyer() a été appelé avec le bon email et le bon sujet. C'est différent de when() qui configure le comportement du mock.",
+      "explanation": "Mockito.verify() vérifie qu'une méthode a bien été appelée sur le mock avec les bons paramètres. Ici on vérifie que envoyer() a été appelé avec le bon email et le bon sujet. when() configure ce que le mock retourne AVANT l'action, il ne vérifie rien après coup, et envoyer() étant void il n'y aurait rien à stuber. spy() enveloppe un objet réel pour en observer les appels, ce n'est pas une assertion. times() existe bien, mais uniquement comme second argument de verify (verify(mock, times(1))), jamais seul.",
       "hint": "when() configure ce que le mock RETOURNE. Ce mot-clé vérifie ce que le mock a REÇU."
     },
     {
@@ -151,13 +151,13 @@ export default {
       "code": "class Calculateur {\n    static String categorieAge(int age) {\n        if (age < 0) throw new IllegalArgumentException();\n        if (age < 18) return \"mineur\";\n        if (age < 65) return \"adulte\";\n        return \"senior\";\n    }\n}\n\n@Test\nvoid testAdulte() {\n    assertEquals(\"adulte\", Calculateur.categorieAge(18));\n}\n\n@Test\nvoid testSenior() {\n    assertEquals(\"senior\", Calculateur.categorieAge(64));\n}",
       "question": "Lequel de ces deux tests échoue ?",
       "options": [
-        "testAdulte échoue",
+        "Seul testAdulte échoue",
         "testSenior échoue",
-        "Les deux passent",
-        "Les deux échouent"
+        "Les deux tests passent",
+        "Les deux tests échouent"
       ],
       "answer": 1,
-      "explanation": "testAdulte : 18 n'est PAS < 18, donc on passe au if suivant. 18 < 65 = true → \"adulte\". Le test passe. testSenior : 64 < 65 = true → \"adulte\" (pas \"senior\"). Le test échoue car il attend \"senior\" mais reçoit \"adulte\". La valeur limite est 65, pas 64.",
+      "explanation": "testAdulte : 18 n'est PAS < 18, donc on passe au if suivant. 18 < 65 = true → \"adulte\". Le test passe. testSenior : 64 < 65 = true → \"adulte\" (pas \"senior\"). Le test échoue car il attend \"senior\" mais reçoit \"adulte\". La valeur limite est 65, pas 64. Croire que testAdulte échoue revient à lire la borne 18 < 18 comme vraie, or elle est stricte : 18 tombe bien dans \"adulte\". Croire que les deux passent revient à classer 64 en senior alors que 64 < 65 le classe adulte. Et les deux n'échouent pas : seul testSenior a mal choisi sa valeur limite.",
       "hint": "Attention aux bornes : < 65 signifie que 64 entre dans cette catégorie, pas dans la suivante."
     }
   ]

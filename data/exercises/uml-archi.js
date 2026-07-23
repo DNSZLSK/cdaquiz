@@ -14,11 +14,11 @@ export default {
       "options": [
         "A = composition, B = agrégation",
         "A = agrégation, B = composition",
-        "Les deux sont des compositions",
-        "Les deux sont des agrégations"
+        "A = composition, B = simple dépendance",
+        "A = association simple, B = agrégation"
       ],
       "answer": 0,
-      "explanation": "A : les Pièces sont créées DANS la Maison. Sans Maison, pas de Pièces. Si la Maison est détruite, les Pièces disparaissent → composition. B : les Chansons existent indépendamment de la Playlist. Supprimer la Playlist ne supprime pas les Chansons → agrégation.",
+      "explanation": "A : les Pièces sont créées DANS la Maison. Sans Maison, pas de Pièces. Si la Maison est détruite, les Pièces disparaissent → composition. B : les Chansons existent indépendamment de la Playlist. Supprimer la Playlist ne supprime pas les Chansons → agrégation. L'inversion est le piège classique : c'est le cycle de vie qui tranche, pas le fait d'avoir une List. B n'est pas une simple dépendance : une dépendance serait un usage ponctuel (paramètre, variable locale) sans stockage, or Playlist conserve durablement ses chansons. Et A est plus qu'une association simple : le cycle de vie des Pièces est lié à celui de la Maison, ce que note le losange plein.",
       "hint": "La question clé : l'objet contenu peut-il exister SANS l'objet conteneur ?"
     },
     {
@@ -31,13 +31,13 @@ export default {
       "code": "class Auteur {\n    String nom;\n    List<Livre> livres; // un auteur écrit plusieurs livres\n}\n\nclass Livre {\n    String titre;\n    Auteur auteur; // un livre a un seul auteur (simplifié)\n}",
       "question": "Quelle est la multiplicité de la relation Auteur-Livre ?",
       "options": [
-        "1 - 1",
+        "N - 1",
         "1 - N",
         "N - N",
-        "0 - 1"
+        "1 - 1"
       ],
       "answer": 1,
-      "explanation": "Un Auteur a une List<Livre> (plusieurs livres) : côté N. Un Livre a un seul Auteur : côté 1. Multiplicité : 1 Auteur → N Livres.",
+      "explanation": "Un Auteur a une List<Livre> (plusieurs livres) : côté N. Un Livre a un seul Auteur : côté 1. Multiplicité : 1 Auteur → N Livres. N - 1 inverse le sens de lecture demandé (Auteur-Livre) : cela voudrait dire plusieurs auteurs pour un seul livre. N - N exigerait une collection des deux côtés, donc une List<Auteur> dans Livre, or Livre ne porte qu'une référence simple. 1 - 1 supposerait qu'un auteur n'écrit qu'un seul livre, ce que la List<Livre> contredit directement.",
       "hint": "List<> = plusieurs = côté N. Référence simple = un seul = côté 1."
     },
     {
@@ -56,7 +56,7 @@ export default {
         "1 table"
       ],
       "answer": 1,
-      "explanation": "Une association N-N avec attribut produit TOUJOURS une table de jointure. Résultat : table ETUDIANT, table MATIERE, table NOTER (avec etudiant_id, matiere_id, note). L'attribut 'note' est porté par la table de jointure car il dépend des deux entités.",
+      "explanation": "Une association N-N avec attribut produit TOUJOURS une table de jointure. Résultat : table ETUDIANT, table MATIERE, table NOTER (avec etudiant_id, matiere_id, note). L'attribut 'note' est porté par la table de jointure car il dépend des deux entités. Répondre 2 tables reviendrait à traiter l'association comme un 1-N en glissant matiere_id et note dans ETUDIANT, impossible : un étudiant a plusieurs notes. 4 tables supposerait une table séparée pour l'attribut note, alors qu'il se loge dans NOTER. 1 table aplatirait tout et dupliquerait les données de l'étudiant et de la matière à chaque note : c'est la dénormalisation à éviter.",
       "hint": "Règle MCD → MLD : une association N-N crée une 3ème table (table de jointure)."
     },
     {
@@ -71,11 +71,11 @@ export default {
       "options": [
         "A = Model, B = Controller, C = View",
         "A = Model, B = Model (logique métier), C = Controller",
-        "A = View, B = Model, C = Controller",
-        "A = Controller, B = View, C = Model"
+        "A = Model, B = View (mise en forme des données), C = Controller",
+        "A = Model, B = hors MVC (couche technique à part), C = Controller"
       ],
       "answer": 1,
-      "explanation": "A (@Entity) = Model (données). B (@Service) = aussi côté Model, c'est la logique métier (le M de MVC inclut les données ET la logique). C (@RestController) = Controller (reçoit les requêtes, coordonne). Dans une API REST, la View est le JSON retourné au client.",
+      "explanation": "A (@Entity) = Model (données). B (@Service) = aussi côté Model, c'est la logique métier (le M de MVC inclut les données ET la logique). C (@RestController) = Controller (reçoit les requêtes, coordonne). Dans une API REST, la View est le JSON retourné au client. B n'est pas le Controller : il ne reçoit aucune requête HTTP, il applique une règle métier. B n'est pas non plus la View : calculer un prix TTC est une règle de gestion, pas de la mise en forme. Enfin le Service n'est pas hors MVC : la logique métier est précisément ce que le M englobe en plus des entités.",
       "hint": "En Spring, le Model comprend DEUX choses : les Entity (données) et les Service (logique métier)."
     },
     {
@@ -89,12 +89,12 @@ export default {
       "question": "En UML, comment représente-t-on extends vs implements ?",
       "options": [
         "extends = flèche pleine avec triangle vide, implements = flèche pointillée avec triangle vide",
-        "Les deux utilisent la même flèche",
-        "extends = flèche pointillée, implements = flèche pleine",
-        "extends = flèche avec losange, implements = flèche simple"
+        "extends = flèche pointillée avec triangle vide, implements = flèche pleine avec triangle vide",
+        "extends = flèche pleine avec triangle vide, implements = flèche pointillée à pointe ouverte",
+        "extends = trait plein avec losange vide côté parent, implements = flèche pointillée avec triangle vide"
       ],
       "answer": 0,
-      "explanation": "En UML : l'héritage (extends) est une flèche pleine avec un triangle vide pointant vers le parent. L'implémentation (implements) est une flèche en pointillés avec un triangle vide pointant vers l'interface. Le triangle est toujours du côté du parent/interface.",
+      "explanation": "En UML : l'héritage (extends) est une flèche pleine avec un triangle vide pointant vers le parent. L'implémentation (implements) est une flèche en pointillés avec un triangle vide pointant vers l'interface. Le triangle est toujours du côté du parent/interface. L'inversion trait plein/pointillé est le piège le plus fréquent : le pointillé est réservé à la réalisation d'interface. La flèche pointillée à pointe ouverte existe bien, mais elle note la dépendance (use), pas implements. Quant au losange vide, il marque une agrégation en bout d'association, jamais un héritage.",
       "hint": "Plein = héritage (relation forte). Pointillé = implémentation (contrat, plus souple)."
     },
     {
@@ -108,12 +108,12 @@ export default {
       "question": "Quel pattern est utilisé ici et quel est son avantage ?",
       "options": [
         "DAO (Data Access Object) : permet de changer de base de données sans modifier la logique métier",
-        "Singleton : garantit une seule instance de connexion à la BDD",
-        "Observer : notifie les composants quand les données changent",
-        "Factory : crée des objets Produit sans connaître le type exact"
+        "Strategy : permet de changer d'algorithme de persistance à l'exécution sans toucher au client",
+        "Adapter : convertit les API incompatibles de MySQL et MongoDB vers une interface commune",
+        "Factory Method : délègue aux sous-classes le choix de l'implémentation concrète à instancier"
       ],
       "answer": 0,
-      "explanation": "Le pattern DAO isole l'accès aux données derrière une interface. Le Service utilise IProduitDAO sans savoir si c'est MySQL ou MongoDB derrière. Pour changer de BDD, on remplace l'implémentation sans toucher au reste du code. En Spring, les Repository sont des DAO.",
+      "explanation": "Le pattern DAO isole l'accès aux données derrière une interface. Le Service utilise IProduitDAO sans savoir si c'est MySQL ou MongoDB derrière. Pour changer de BDD, on remplace l'implémentation sans toucher au reste du code. En Spring, les Repository sont des DAO. Strategy a une structure identique (une interface, des implémentations interchangeables) mais son intention est d'encapsuler des algorithmes métier variables, pas d'isoler la couche de persistance : ici les noms et les méthodes CRUD signent un DAO. Adapter servirait à faire entrer une classe existante dans une interface qu'elle ne respecte pas, or les deux implémentations sont écrites directement pour IProduitDAO. Factory Method concerne la création d'objets : rien ici ne décide quelle instance fabriquer.",
       "hint": "L'interface définit le QUOI (findById, save...). Les implémentations définissent le COMMENT (SQL, Mongo...)."
     },
     {
@@ -127,12 +127,12 @@ export default {
       "question": "Quelles sont les cardinalités en MCD ?",
       "options": [
         "Client-(0,N)---Commande / Commande-(1,N)---Produit avec association N-N",
-        "Client-(1,1)---Commande / Commande-(1,1)---Produit",
-        "Client-(0,N)---Commande / Commande-(0,N)---Produit",
-        "Client-(1,N)---Commande / Produit-(1,N)---Commande"
+        "Client-(1,N)---Commande / Commande-(1,N)---Produit avec association N-N",
+        "Client-(0,N)---Commande / Commande-(0,N)---Produit avec association N-N",
+        "Client-(0,N)---Commande / Commande-(1,N)---Produit avec clé étrangère dans Commande"
       ],
       "answer": 0,
-      "explanation": "Client → Commande : un client peut avoir 0 ou N commandes (0,N). Commande → Client : une commande a 1 et 1 seul client (1,1 côté Commande). Commande-Produit : une commande contient 1 à N produits, un produit peut être dans 0 à N commandes → association N-N (table de jointure nécessaire).",
+      "explanation": "Client → Commande : un client peut avoir 0 ou N commandes (0,N). Commande → Client : une commande a 1 et 1 seul client (1,1 côté Commande). Commande-Produit : une commande contient 1 à N produits, un produit peut être dans 0 à N commandes → association N-N (table de jointure nécessaire). (1,N) côté Client oublierait le mot 'zéro' de la règle : un client sans aucune commande doit rester possible. (0,N) côté Commande vers Produit autoriserait une commande vide, or la règle impose 'un ou plusieurs' produits, donc un minimum de 1. Enfin une simple clé étrangère dans Commande ne peut porter qu'un seul produit par commande : une association N-N se traduit obligatoirement par une table de jointure au MLD.",
       "hint": "Lisez chaque règle métier et traduisez-la en (min, max)."
     },
     {
@@ -147,12 +147,12 @@ export default {
       "question": "Quelle architecture est monolithique et laquelle est microservices ?",
       "options": [
         "A = monolithique 3-tiers, B = microservices",
-        "A = microservices, B = monolithique",
-        "Les deux sont du 3-tiers",
-        "Les deux sont des microservices"
+        "A = microservices (un service par couche), B = monolithe distribué",
+        "A = monolithique 3-tiers, B = SOA : l'API Gateway y joue le rôle d'ESB",
+        "A = client-serveur 2-tiers, B = microservices"
       ],
       "answer": 0,
-      "explanation": "A : tout le code est dans un seul projet déployé ensemble → monolithique (architecture 3-tiers classique). B : chaque domaine métier est un service indépendant avec sa propre BDD, communiquant via l'API Gateway → microservices.",
+      "explanation": "A : tout le code est dans un seul projet déployé ensemble → monolithique (architecture 3-tiers classique). B : chaque domaine métier est un service indépendant avec sa propre BDD, communiquant via l'API Gateway → microservices. Les couches Controller/Service/Repository de A ne sont pas des microservices : ce sont des couches logiques d'un même déploiement, pas des services autonomes. B n'est pas un monolithe distribué : ce terme désigne des services séparés mais fortement couplés (souvent une BDD partagée), or ici chaque service possède la sienne. Une API Gateway n'est pas un ESB : elle route les requêtes sans centraliser d'orchestration ni de transformation, ce qui distingue les microservices de la SOA classique. Enfin A compte bien trois tiers (présentation, métier, données), pas deux.",
       "hint": "Monolithique = un seul déploiement. Microservices = plusieurs services indépendants."
     }
   ]
