@@ -225,26 +225,38 @@
     gap: 18px;
 }
 
+/* Indicateur discret : bordure grise, petit texte ; l'orange n'existe que
+   sur le point de statut quand la liaison est active. */
 .link-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
     border: 1px solid #e1e4e8;
-    background: #f6f8fa;
-    color: #586069;
-    font-size: 0.75em;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    padding: 8px 14px;
+    background: transparent;
+    color: #959da5;
+    font-size: 0.72em;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    padding: 5px 10px;
     border-radius: 6px;
     white-space: nowrap;
 }
 
-.link-badge.linked {
-    border-color: #FF6700;
-    color: #24292e;
+.link-badge:hover {
+    color: #586069;
+    background: #f6f8fa;
 }
 
-.link-badge.linked strong {
-    color: #FF6700;
+.link-badge.linked {
+    color: #586069;
+}
+
+.link-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #FF6700;
+    flex-shrink: 0;
 }
 
 /* Modale du protocole de liaison */
@@ -687,6 +699,12 @@
 
 /* Mobile */
 @media (max-width: 768px) {
+    /* Header : le badge s'ajoute sans faire deborder titre + logo */
+    .header { flex-wrap: wrap; gap: 10px; }
+    .header-side { gap: 10px; margin-left: auto; }
+    .aperture-header-logo { width: 56px; }
+    .link-badge { padding: 4px 8px; }
+
     .mode-tabs-buttons button { flex: 1; justify-content: center; }
     .labo-actions button, .sql-actions button { flex: 1; min-height: 44px; }
     .option { min-height: 44px; }

@@ -12,7 +12,7 @@ function renderBadge() {
     el.style.display = '';
     el.classList.toggle('linked', !!l);
     el.innerHTML = l
-        ? `Sujet : <strong>${escapeHtml(l.pseudo)}</strong>`
+        ? `<span class="link-dot"></span>${escapeHtml(l.pseudo)}`
         : 'S\'identifier';
 }
 
