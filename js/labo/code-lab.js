@@ -23,7 +23,14 @@ registerScreen('labo-code', {
 
 export async function openCodeLab(entry) {
     const bank = (await entry.load()).default;
-    state = { entry, exercises: bank.exercises, index: 0, runtime: null };
+    state = {
+        entry,
+        exercises: bank.exercises,
+        index: 0,
+        runtime: null,
+        runtimes: new Map(), // index -> runtime : le melange des options est stable pour la session
+        answers: new Map()   // index -> {answer, result} : reponse validee, restauree au retour
+    };
     wire();
     showScreen('labo-code');
     renderExercise();
@@ -39,7 +46,10 @@ function chipClass(status, isCurrent) {
 function renderExercise() {
     const { entry, exercises, index } = state;
     const q = exercises[index];
-    state.runtime = getExerciseType(q).prepare(q);
+    if (!state.runtimes.has(index)) {
+        state.runtimes.set(index, getExerciseType(q).prepare(q));
+    }
+    state.runtime = state.runtimes.get(index);
 
     const chips = exercises.map((ex, i) =>
         `<button class="${chipClass(getStatus(entry.domain, ex.id), i === index)}" data-goto="${i}">${i + 1}</button>`
@@ -66,6 +76,18 @@ function renderExercise() {
     `;
 
     getExerciseType(q).render(state.runtime, el().querySelector('.exercise-body'));
+
+    // Exercice deja valide dans cette session : on restaure la reponse et sa
+    // correction (comme le quiz). S'il etait rate, Valider devient Reessayer.
+    const saved = state.answers.get(index);
+    if (saved) {
+        const handler = getExerciseType(q);
+        const bodyEl = el().querySelector('.exercise-body');
+        handler.restoreAnswer?.(state.runtime, bodyEl, saved.answer);
+        handler.showCorrection(state.runtime, bodyEl, saved.answer, saved.result);
+        setValidateButtonAfterAnswer(saved.result.correct);
+    }
+
     document.getElementById('progressBar').style.width = ((index + 1) / exercises.length) * 100 + '%';
     const chipsEl = el().querySelector('.labo-chips');
     if (chipsEl.scrollWidth > chipsEl.clientWidth) chipsEl.classList.add('scrollable');
@@ -84,6 +106,7 @@ async function validate() {
     }
 
     const result = await handler.evaluate(state.runtime, answer);
+    state.answers.set(state.index, { answer, result });
     const prevStatus = getStatus(state.entry.domain, q.id);
     record(state.entry.domain, q.id, result.correct ? 'ok' : 'ko');
     if (result.correct && prevStatus !== 'ok') {
@@ -94,12 +117,29 @@ async function validate() {
     }
     handler.showCorrection(state.runtime, bodyEl, answer, result);
 
-    // disabled (pas display:none) : masquer le bouton ferait glisser les autres
-    document.getElementById('laboValidateBtn').disabled = true;
+    setValidateButtonAfterAnswer(result.correct);
     const attemptsEl = document.getElementById('laboAttempts');
     attemptsEl.textContent = `Tentatives : ${getEntry(state.entry.domain, q.id)?.n || 1}`;
     attemptsEl.style.visibility = 'visible';
     refreshChips();
+}
+
+// Apres une reponse : reussi -> Valider grise (rien a regagner) ; rate ->
+// Valider devient Reessayer, meme emplacement (aucun decalage de mise en page).
+function setValidateButtonAfterAnswer(correct) {
+    const btn = document.getElementById('laboValidateBtn');
+    if (correct) {
+        btn.disabled = true;
+    } else {
+        btn.textContent = 'Réessayer';
+        btn.dataset.action = 'retry-exercise';
+    }
+}
+
+function retryExercise() {
+    state.answers.delete(state.index);
+    state.runtimes.delete(state.index); // nouveau melange des options
+    renderExercise();
 }
 
 function refreshChips() {
@@ -144,6 +184,7 @@ function wire() {
             case 'prev': if (state.index > 0) { state.index--; renderExercise(); } break;
             case 'next': if (state.index < state.exercises.length - 1) { state.index++; renderExercise(); } break;
             case 'validate': validate(); break;
+            case 'retry-exercise': retryExercise(); break;
             case 'finish': renderRecap(); break;
             case 'review': state.index = 0; renderExercise(); break;
             case 'mute': toggleMuted(); btn.textContent = muteButtonLabel(); break;

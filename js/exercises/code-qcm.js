@@ -54,6 +54,12 @@ export const codeQcmType = {
         `;
     },
 
+    // Re-coche la radio d'une reponse deja validee (retour via Precedent/chips)
+    restoreAnswer(runtime, bodyEl, answer) {
+        const radio = bodyEl.querySelector(`input[name="answer"][value="${answer}"]`);
+        if (radio) radio.checked = true;
+    },
+
     collectAnswer(bodyEl) {
         const checked = bodyEl.querySelector('input[name="answer"]:checked');
         return checked ? Number(checked.value) : null;

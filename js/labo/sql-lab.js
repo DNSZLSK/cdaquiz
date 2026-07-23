@@ -56,7 +56,10 @@ export async function openSqlLab(entry) {
     `;
     try {
         const [SQL, mod] = await Promise.all([loadSqlJs(), entry.load()]);
-        state = { entry, bank: mod.default, SQL, scenario: null, index: 0, db: null };
+        state = {
+            entry, bank: mod.default, SQL, scenario: null, index: 0, db: null,
+            feedbackCache: new Map() // exId -> {fb, res} : dernier verdict, restaure au retour
+        };
         renderScenarioList();
     } catch (err) {
         el().innerHTML = `
@@ -207,6 +210,14 @@ function renderPlayer() {
     const chipsEl = el().querySelector('.labo-chips');
     if (chipsEl.scrollWidth > chipsEl.clientWidth) chipsEl.classList.add('scrollable');
     setupEditor();
+
+    // Dernier verdict de cet exercice (session) : restaure bandeau + table,
+    // comme le Code Lab restaure la reponse validee.
+    const cached = state.feedbackCache.get(ex.id);
+    if (cached) {
+        document.getElementById('sqlFeedback').innerHTML = cached.fb;
+        document.getElementById('sqlResult').innerHTML = cached.res;
+    }
 }
 
 // Auto-majuscules : des qu'un separateur est tape apres un mot-cle SQL en
@@ -339,6 +350,7 @@ function validateAction() {
     const attemptsEl = document.getElementById('laboAttempts');
     attemptsEl.textContent = `Tentatives : ${getEntry('sql', ex.id)?.n || 1}`;
     attemptsEl.style.visibility = 'visible';
+    state.feedbackCache.set(ex.id, { fb: feedback.innerHTML, res: result.innerHTML });
     refreshChips();
 }
 
