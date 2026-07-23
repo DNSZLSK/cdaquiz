@@ -250,8 +250,10 @@ function setupEditor() {
     wrap.classList.add('overlay-on');
     const overlayOn = () => wrap.classList.contains('overlay-on');
 
-    // Brouillon de la session : on retrouve sa requete en revenant sur l'exercice
-    ta.value = getDraft(draftKey());
+    // Brouillon de la session en priorite, sinon la derniere requete validee
+    // (durable, survit au rechargement)
+    const exId = state.scenario.exercises[state.index].id;
+    ta.value = getDraft(draftKey()) || getEntry('sql', exId)?.a || '';
 
     const sync = () => {
         // L'auto-majuscule ne doit JAMAIS pouvoir interrompre la mise a jour du
@@ -331,14 +333,14 @@ function validateAction() {
     const prevStatus = getStatus('sql', ex.id);
 
     if (verdict.correct) {
-        record('sql', ex.id, 'ok');
+        record('sql', ex.id, 'ok', sql);
         feedback.innerHTML = `<div class="sql-banner sql-banner-ok">${pick(GLADOS_OK)}</div>`;
         if (prevStatus !== 'ok') {
             const done = getDomainStats('sql', scenarioPrefix()).ok === state.scenario.exercises.length;
             done ? playComplete() : playSuccess();
         }
     } else {
-        record('sql', ex.id, 'ko');
+        record('sql', ex.id, 'ko', sql);
         feedback.innerHTML = `
             <div class="sql-banner sql-banner-ko">${escapeHtml(failureMessage(verdict))}</div>
             <p class="sql-glados">${pick(GLADOS_KO)}</p>

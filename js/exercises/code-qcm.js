@@ -60,6 +60,17 @@ export const codeQcmType = {
         if (radio) radio.checked = true;
     },
 
+    // Forme durable de la reponse : l'index d'ORIGINE de l'option (le melange
+    // change a chaque session, la position cochee n'est pas stockable).
+    toPersistedAnswer(runtime, answer) {
+        return runtime.options[answer].orig;
+    },
+
+    fromPersistedAnswer(runtime, persisted) {
+        const idx = runtime.options.findIndex(o => o.orig === persisted);
+        return idx >= 0 ? idx : null;
+    },
+
     collectAnswer(bodyEl) {
         const checked = bodyEl.querySelector('input[name="answer"]:checked');
         return checked ? Number(checked.value) : null;

@@ -29,7 +29,8 @@ export async function openCodeLab(entry) {
         index: 0,
         runtime: null,
         runtimes: new Map(), // index -> runtime : le melange des options est stable pour la session
-        answers: new Map()   // index -> {answer, result} : reponse validee, restauree au retour
+        answers: new Map(),  // index -> {answer, result} : reponse validee, restauree au retour
+        retrying: new Set()  // index en nouvelle tentative : ne pas re-restaurer la reponse durable
     };
     wire();
     showScreen('labo-code');
@@ -77,11 +78,22 @@ function renderExercise() {
 
     getExerciseType(q).render(state.runtime, el().querySelector('.exercise-body'));
 
-    // Exercice deja valide dans cette session : on restaure la reponse et sa
-    // correction (comme le quiz). S'il etait rate, Valider devient Reessayer.
-    const saved = state.answers.get(index);
+    // Exercice deja valide (dans cette session, ou lors d'une session passee
+    // via la reponse durable du localStorage) : on restaure la reponse et sa
+    // correction, comme le quiz. S'il etait rate, Valider devient Reessayer.
+    const handler = getExerciseType(q);
+    let saved = state.answers.get(index);
+    if (!saved && !state.retrying.has(index) && handler.fromPersistedAnswer) {
+        const persisted = getEntry(entry.domain, q.id)?.a;
+        if (persisted !== undefined && persisted !== null) {
+            const answer = handler.fromPersistedAnswer(state.runtime, persisted);
+            if (answer !== null) {
+                saved = { answer, result: handler.evaluate(state.runtime, answer) };
+                state.answers.set(index, saved);
+            }
+        }
+    }
     if (saved) {
-        const handler = getExerciseType(q);
         const bodyEl = el().querySelector('.exercise-body');
         handler.restoreAnswer?.(state.runtime, bodyEl, saved.answer);
         handler.showCorrection(state.runtime, bodyEl, saved.answer, saved.result);
@@ -107,8 +119,10 @@ async function validate() {
 
     const result = await handler.evaluate(state.runtime, answer);
     state.answers.set(state.index, { answer, result });
+    state.retrying.delete(state.index);
     const prevStatus = getStatus(state.entry.domain, q.id);
-    record(state.entry.domain, q.id, result.correct ? 'ok' : 'ko');
+    record(state.entry.domain, q.id, result.correct ? 'ok' : 'ko',
+        handler.toPersistedAnswer ? handler.toPersistedAnswer(state.runtime, answer) : undefined);
     if (result.correct && prevStatus !== 'ok') {
         const done = getDomainStats(state.entry.domain).ok === state.exercises.length;
         done ? playComplete() : playSuccess();
@@ -139,6 +153,7 @@ function setValidateButtonAfterAnswer(correct) {
 function retryExercise() {
     state.answers.delete(state.index);
     state.runtimes.delete(state.index); // nouveau melange des options
+    state.retrying.add(state.index);    // bloque la restauration durable jusqu'a revalidation
     renderExercise();
 }
 

@@ -16,13 +16,18 @@ export function getStatus(domain, id) {
 }
 
 // status : 'ok' (reussi, definitif) | 'ko' (echoue) | 'sol' (solution vue)
-export function record(domain, id, status) {
+// answer : derniere reponse donnee, sous forme durable (index d'origine pour
+// les QCM, texte de la requete pour le SQL) — restauree entre les sessions.
+export function record(domain, id, status, answer) {
     const all = loadAll();
     if (!all[domain]) all[domain] = {};
     const cur = all[domain][id] || { s: null, n: 0 };
     // 'ok' est definitif ; 'sol' n'ecrase pas 'ok'
     const next = cur.s === 'ok' ? 'ok' : status;
-    all[domain][id] = { s: next, n: cur.n + 1, t: Date.now() };
+    const entry = { s: next, n: cur.n + 1, t: Date.now() };
+    const a = answer !== undefined ? answer : cur.a; // 'sol' ne doit pas effacer la reponse
+    if (a !== undefined) entry.a = a;
+    all[domain][id] = entry;
     localStorage.setItem(KEY, JSON.stringify(all));
 }
 
