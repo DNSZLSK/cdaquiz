@@ -93,9 +93,9 @@ async function cloudLink() {
         );
         initCloudSync();
         renderHub();
-        document.getElementById('cloudStatus').textContent = report
-            ? `Liaison établie. Fusion initiale : ${report.labo} exercice(s), ${report.quiz} module(s), ${report.scores} score(s).`
-            : 'Liaison établie.';
+        document.getElementById('cloudStatus').textContent = report?.existed
+            ? `Liaison établie : dossier existant récupéré (${report.labo} exercice(s), ${report.quiz} module(s), ${report.scores} score(s) fusionnés).`
+            : 'Liaison établie : NOUVEAU dossier créé pour ce couple pseudo+PIN. Si vous vouliez retrouver une progression existante, rompez la liaison et vérifiez le pseudo et le PIN utilisés sur l\'autre appareil.';
     } catch (e) {
         unlink(); // liaison ratee : ne pas rester dans un etat a moitie appaire
         status.textContent = 'Échec : ' + e.message;

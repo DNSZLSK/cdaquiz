@@ -60,6 +60,10 @@ export function syncNow() {
         });
         if (!put.ok) throw new Error('Écriture cloud impossible (HTTP ' + put.status + ')');
         localStorage.setItem(LINK_KEY, JSON.stringify({ ...l, lastSync: Date.now() }));
+        // existed : permet a l'UI de distinguer "dossier existant recupere" de
+        // "nouveau dossier cree" (symptome d'un pseudo/PIN different de l'autre
+        // appareil : il n'y a pas de registre, donc pas d'erreur "mauvais PIN")
+        report.existed = remote !== null;
         return report;
     })().finally(() => { syncing = null; });
     return syncing;
