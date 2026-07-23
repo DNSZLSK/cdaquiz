@@ -16,6 +16,7 @@ export function addLeaderboardEntry(entry) {
     board.push(entry);
     board.sort((a, b) => b.pct - a.pct || a.timeSec - b.timeSec);
     localStorage.setItem(LEADERBOARD_KEY, JSON.stringify(board.slice(0, 50)));
+    window.dispatchEvent(new CustomEvent('cdaquiz:changed')); // synchro cloud eventuelle
 }
 
 export function loadProgress() {
@@ -30,4 +31,5 @@ export function recordProgress(moduleKey, sc, total) {
     const cur = p[moduleKey] || { bestPct: 0 };
     p[moduleKey] = { bestPct: Math.max(cur.bestPct || 0, pct), lastPct: pct };
     localStorage.setItem(PROGRESS_KEY, JSON.stringify(p));
+    window.dispatchEvent(new CustomEvent('cdaquiz:changed')); // synchro cloud eventuelle
 }

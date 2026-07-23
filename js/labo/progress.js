@@ -29,6 +29,7 @@ export function record(domain, id, status, answer) {
     if (a !== undefined) entry.a = a;
     all[domain][id] = entry;
     localStorage.setItem(KEY, JSON.stringify(all));
+    window.dispatchEvent(new CustomEvent('cdaquiz:changed')); // synchro cloud eventuelle
 }
 
 export function getEntry(domain, id) {

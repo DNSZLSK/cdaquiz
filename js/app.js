@@ -83,6 +83,12 @@ function initApp() {
     if ('serviceWorker' in navigator && !['localhost', '127.0.0.1'].includes(location.hostname)) {
         navigator.serviceWorker.register('sw.js').catch(() => { });
     }
+
+    // Liaison cloud : si l'appareil est appaire, la synchro auto demarre
+    // (module charge en lazy, le quiz seul ne paie rien)
+    if (localStorage.getItem('cdaquiz_cloud')) {
+        import('./labo/cloud.js').then(m => m.initCloudSync()).catch(() => { });
+    }
 }
 
 initApp();

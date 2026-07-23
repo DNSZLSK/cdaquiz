@@ -4,7 +4,8 @@ import { registerScreen, showScreen } from '../screens.js';
 import { setTabsVisible, setActiveTab } from '../ui/tabs.js';
 import { getDomainStats, resetAll } from './progress.js';
 import { clearDrafts } from './drafts.js';
-import { buildSyncCode, applySyncCode } from './sync.js';
+import { isConfigured, getLink, link, unlink, syncNow, initCloudSync } from './cloud.js';
+import { escapeHtml, formatTime } from '../utils.js';
 
 const el = () => document.getElementById('laboHub');
 
@@ -43,61 +44,74 @@ function renderHub() {
         <h2>Laboratoire d'Enrichissement</h2>
         <p class="labo-subtitle">Exercices pratiques : écrire, lire et comprendre du code.</p>
         <div class="module-grid">${cards}</div>
-
-        <div class="labo-sync">
-            <h3>Synchronisation entre appareils</h3>
-            <p class="labo-subtitle">Copiez le code sur cet appareil, collez-le sur l'autre.
-                La fusion garde le meilleur de chaque côté (quiz, labo et classement), sans rien écraser.</p>
-            <div class="labo-actions">
-                <button data-action="sync-copy">Copier ma progression</button>
-                <button data-action="sync-paste">Coller une progression</button>
-            </div>
-            <div id="syncPanel" style="display: none;">
-                <textarea id="syncInput" rows="3" placeholder="Collez le code de synchro ici (CDAQ...)"
-                    autocapitalize="none" autocorrect="off" spellcheck="false"></textarea>
-                <button class="btn-primary" data-action="sync-apply">Fusionner</button>
-            </div>
-            <p id="syncStatus" class="labo-progress-label"></p>
-        </div>
-
+        ${cloudPanelHtml()}
         <button class="labo-reset" data-action="reset-progress">Réinitialiser la progression du laboratoire</button>
     `;
 }
 
-async function syncCopy() {
-    const status = document.getElementById('syncStatus');
+function cloudPanelHtml() {
+    if (!isConfigured()) return '';
+    const l = getLink();
+    if (!l) {
+        return `
+            <div class="labo-sync">
+                <span class="mode-tabs-label">Protocole de liaison</span>
+                <p class="labo-subtitle">Liez cet appareil une seule fois : la progression (quiz, labo, classement)
+                    se synchronise ensuite automatiquement entre tous les appareils liés au même identifiant.</p>
+                <div class="cloud-form">
+                    <input type="text" id="cloudPseudo" placeholder="Pseudo" maxlength="20"
+                        autocapitalize="none" autocorrect="off" spellcheck="false">
+                    <input type="password" id="cloudPin" placeholder="PIN (4 à 8 chiffres)" inputmode="numeric" maxlength="8">
+                    <button class="btn-primary" data-action="cloud-link">Établir la liaison</button>
+                </div>
+                <p id="cloudStatus" class="labo-progress-label"></p>
+            </div>
+        `;
+    }
+    const last = l.lastSync ? `dernière synchro : ${formatTime(Math.max(0, Math.round((Date.now() - l.lastSync) / 1000)))} auparavant` : 'en attente de première synchro';
+    return `
+        <div class="labo-sync labo-sync-active">
+            <span class="mode-tabs-label">Protocole de liaison · actif</span>
+            <p class="labo-subtitle">Sujet <strong>${escapeHtml(l.pseudo)}</strong> · ${last}.
+                La progression se synchronise automatiquement.</p>
+            <div class="labo-actions">
+                <button data-action="cloud-sync">Synchroniser maintenant</button>
+                <button data-action="cloud-unlink">Rompre la liaison</button>
+            </div>
+            <p id="cloudStatus" class="labo-progress-label"></p>
+        </div>
+    `;
+}
+
+async function cloudLink() {
+    const status = document.getElementById('cloudStatus');
     try {
-        const code = await buildSyncCode();
-        try {
-            await navigator.clipboard.writeText(code);
-            status.textContent = `Code copié dans le presse-papiers (${code.length} caractères).`;
-        } catch (e) {
-            // Presse-papiers indisponible : on affiche le code pour copie manuelle
-            const panel = document.getElementById('syncPanel');
-            panel.style.display = 'block';
-            document.getElementById('syncInput').value = code;
-            status.textContent = 'Copiez le code affiché ci-dessus manuellement.';
-        }
+        status.textContent = 'Établissement de la liaison…';
+        const report = await link(
+            document.getElementById('cloudPseudo').value,
+            document.getElementById('cloudPin').value
+        );
+        initCloudSync();
+        renderHub();
+        document.getElementById('cloudStatus').textContent = report
+            ? `Liaison établie. Fusion initiale : ${report.labo} exercice(s), ${report.quiz} module(s), ${report.scores} score(s).`
+            : 'Liaison établie.';
     } catch (e) {
-        status.textContent = 'Impossible de générer le code : ' + e.message;
+        unlink(); // liaison ratee : ne pas rester dans un etat a moitie appaire
+        status.textContent = 'Échec : ' + e.message;
     }
 }
 
-async function syncApply() {
-    const status = document.getElementById('syncStatus');
-    const input = document.getElementById('syncInput');
-    if (!input.value.trim()) {
-        status.textContent = 'Collez d\'abord un code de synchro.';
-        return;
-    }
+async function cloudSyncNow() {
+    const status = document.getElementById('cloudStatus');
     try {
-        const report = await applySyncCode(input.value);
-        status.textContent = `Fusion réussie : ${report.labo} exercice(s) labo, ${report.quiz} module(s) quiz, ${report.scores} score(s) de classement mis à jour.`;
-        input.value = '';
+        status.textContent = 'Synchronisation…';
+        const report = await syncNow();
         renderHub();
-        document.getElementById('syncStatus').textContent = status.textContent;
+        document.getElementById('cloudStatus').textContent =
+            `Synchronisé : ${report.labo} exercice(s), ${report.quiz} module(s), ${report.scores} score(s) mis à jour.`;
     } catch (e) {
-        status.textContent = 'Échec de la fusion : ' + e.message;
+        status.textContent = 'Échec : ' + e.message + ' (la progression locale reste intacte)';
     }
 }
 
@@ -124,13 +138,15 @@ el().addEventListener('click', (e) => {
         return;
     }
     const action = e.target.closest('[data-action]')?.dataset.action;
-    if (action === 'sync-copy') { syncCopy(); return; }
-    if (action === 'sync-paste') {
-        const panel = document.getElementById('syncPanel');
-        panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
+    if (action === 'cloud-link') { cloudLink(); return; }
+    if (action === 'cloud-sync') { cloudSyncNow(); return; }
+    if (action === 'cloud-unlink') {
+        if (window.confirm('Rompre la liaison sur cet appareil ? La progression locale est conservée ; les données cloud restent disponibles pour les autres appareils liés.')) {
+            unlink();
+            renderHub();
+        }
         return;
     }
-    if (action === 'sync-apply') { syncApply(); return; }
     const card = e.target.closest('[data-domain]');
     if (card) openDomain(card.dataset.domain);
 });

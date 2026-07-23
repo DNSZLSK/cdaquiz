@@ -240,24 +240,37 @@
     margin-top: 0;
 }
 
-#syncPanel {
-    margin-top: 14px;
+.labo-sync .mode-tabs-label {
+    margin-bottom: 10px;
 }
 
-#syncInput {
-    width: 100%;
-    font-family: 'SFMono-Regular', Consolas, monospace;
-    font-size: 0.8em;
-    padding: 10px;
+.labo-sync-active {
+    border-left: 4px solid #FF6700;
+}
+
+.cloud-form {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.cloud-form input {
+    flex: 1;
+    min-width: 140px;
+    padding: 10px 14px;
     border: 1px solid #d1d5da;
     border-radius: 6px;
-    background: #f6f8fa;
-    resize: vertical;
-    margin-bottom: 10px;
-    word-break: break-all;
+    font-size: 16px; /* anti-zoom iOS */
+    color: #24292e;
 }
 
-#syncStatus {
+.cloud-form input:focus {
+    outline: none;
+    border-color: #FF6700;
+    box-shadow: 0 0 0 3px rgba(255,103,0,0.1);
+}
+
+#cloudStatus {
     margin-top: 12px;
 }
 

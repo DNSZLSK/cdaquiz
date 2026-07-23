@@ -1,7 +1,7 @@
 // Service worker CDA Quiz — strategie network-first : en ligne on sert
 // toujours la version fraiche (les mises a jour arrivent toutes seules),
 // le cache ne sert que de filet hors-ligne.
-const CACHE = 'cdaquiz-v2'; // incremente quand ASSETS change : force le re-pre-cache complet
+const CACHE = 'cdaquiz-v3'; // incremente quand ASSETS change : force le re-pre-cache complet
 
 const ASSETS = [
     '.',
@@ -53,7 +53,9 @@ const ASSETS = [
     'js/labo/sql-compare.js',
     'js/labo/sql-engine.js',
     'js/labo/sql-lab.js',
-    'js/labo/sync.js',
+    'js/labo/cloud.js',
+    'js/labo/cloud-config.js',
+    'js/labo/merge.js',
     'js/ui/menu.js',
     'js/ui/quiz.js',
     'js/ui/results.js',

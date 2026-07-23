@@ -1,70 +1,24 @@
-// Code de synchro entre appareils : toute la progression (quiz, labo,
-// classement) compressee en une chaine a copier/coller. Fusion sans
-// ecrasement : le meilleur statut gagne, les tentatives s'additionnent.
+// Moteur de fusion de progression (quiz + labo + classement), IDEMPOTENT :
+// rejouer la meme fusion ne change rien. Utilise par la synchro cloud.
 const QUIZ_PROGRESS_KEY = 'cdaquiz_progress';
 const LABO_PROGRESS_KEY = 'cdaquiz_labo_progress';
 const LEADERBOARD_KEY = 'cdaquiz_leaderboard';
-
-const MAGIC_GZIP = 'CDAQ1:';
-const MAGIC_PLAIN = 'CDAQ0:';
 
 function readJson(key, fallback) {
     try { return JSON.parse(localStorage.getItem(key)) || fallback; }
     catch (e) { return fallback; }
 }
 
-function bytesToBase64(bytes) {
-    let bin = '';
-    for (let i = 0; i < bytes.length; i += 0x8000) {
-        bin += String.fromCharCode(...bytes.subarray(i, i + 0x8000));
-    }
-    return btoa(bin);
-}
-
-function base64ToBytes(b64) {
-    const bin = atob(b64);
-    const bytes = new Uint8Array(bin.length);
-    for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
-    return bytes;
-}
-
-export async function buildSyncCode() {
-    const payload = JSON.stringify({
+export function snapshotAll() {
+    return {
         p: readJson(QUIZ_PROGRESS_KEY, {}),
         l: readJson(LABO_PROGRESS_KEY, { v: 1 }),
         b: readJson(LEADERBOARD_KEY, [])
-    });
-    const raw = new TextEncoder().encode(payload);
-    if (typeof CompressionStream === 'undefined') {
-        return MAGIC_PLAIN + bytesToBase64(raw);
-    }
-    const gz = await new Response(
-        new Blob([raw]).stream().pipeThrough(new CompressionStream('gzip'))
-    ).arrayBuffer();
-    return MAGIC_GZIP + bytesToBase64(new Uint8Array(gz));
-}
-
-async function decodeSyncCode(code) {
-    const trimmed = code.trim();
-    let bytes;
-    if (trimmed.startsWith(MAGIC_GZIP)) {
-        const gz = base64ToBytes(trimmed.slice(MAGIC_GZIP.length));
-        bytes = await new Response(
-            new Blob([gz]).stream().pipeThrough(new DecompressionStream('gzip'))
-        ).arrayBuffer();
-    } else if (trimmed.startsWith(MAGIC_PLAIN)) {
-        bytes = base64ToBytes(trimmed.slice(MAGIC_PLAIN.length));
-    } else {
-        throw new Error('Code de synchro non reconnu (il doit commencer par CDAQ).');
-    }
-    const data = JSON.parse(new TextDecoder().decode(bytes));
-    if (typeof data !== 'object' || data === null) throw new Error('Contenu invalide.');
-    return data;
+    };
 }
 
 // ok est definitif ; sinon l'entree la plus recente decide du statut et de la
-// derniere reponse. Tentatives : max des deux (PAS la somme : la fusion doit
-// etre idempotente, rejouer le meme code ne doit rien changer).
+// derniere reponse. Tentatives : max des deux (idempotence).
 function mergeLaboEntry(a, b) {
     if (!a) return b;
     if (!b) return a;
@@ -79,9 +33,10 @@ function mergeLaboEntry(a, b) {
     return merged;
 }
 
-export async function applySyncCode(code) {
-    const incoming = await decodeSyncCode(code);
+// Fusionne un instantane distant {p, l, b} dans le localStorage local.
+export function mergeAll(incoming) {
     const report = { quiz: 0, labo: 0, scores: 0 };
+    if (!incoming || typeof incoming !== 'object') return report;
 
     // Progression quiz : meilleur pourcentage par module
     const localP = readJson(QUIZ_PROGRESS_KEY, {});
