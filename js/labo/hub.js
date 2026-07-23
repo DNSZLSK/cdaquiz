@@ -4,8 +4,7 @@ import { registerScreen, showScreen } from '../screens.js';
 import { setTabsVisible, setActiveTab } from '../ui/tabs.js';
 import { getDomainStats, resetAll } from './progress.js';
 import { clearDrafts } from './drafts.js';
-import { isConfigured, getLink, link, unlink, syncNow, initCloudSync } from './cloud.js';
-import { escapeHtml, formatTime } from '../utils.js';
+import { getLink, pushOverwrite } from './cloud.js';
 
 const el = () => document.getElementById('laboHub');
 
@@ -44,75 +43,8 @@ function renderHub() {
         <h2>Laboratoire d'Enrichissement</h2>
         <p class="labo-subtitle">Exercices pratiques : écrire, lire et comprendre du code.</p>
         <div class="module-grid">${cards}</div>
-        ${cloudPanelHtml()}
         <button class="labo-reset" data-action="reset-progress">Réinitialiser la progression du laboratoire</button>
     `;
-}
-
-function cloudPanelHtml() {
-    if (!isConfigured()) return '';
-    const l = getLink();
-    if (!l) {
-        return `
-            <div class="labo-sync">
-                <span class="mode-tabs-label">Protocole de liaison</span>
-                <p class="labo-subtitle">Liez cet appareil une seule fois : la progression (quiz, labo, classement)
-                    se synchronise ensuite automatiquement entre tous les appareils liés au même identifiant.</p>
-                <div class="cloud-form">
-                    <input type="text" id="cloudPseudo" placeholder="Pseudo" maxlength="20"
-                        autocapitalize="none" autocorrect="off" spellcheck="false">
-                    <input type="password" id="cloudPin" placeholder="PIN (4 à 8 chiffres)" inputmode="numeric" maxlength="8">
-                    <button class="btn-primary" data-action="cloud-link">Établir la liaison</button>
-                </div>
-                <p id="cloudStatus" class="labo-progress-label"></p>
-            </div>
-        `;
-    }
-    const last = l.lastSync ? `dernière synchro : ${formatTime(Math.max(0, Math.round((Date.now() - l.lastSync) / 1000)))} auparavant` : 'en attente de première synchro';
-    return `
-        <div class="labo-sync labo-sync-active">
-            <span class="mode-tabs-label">Protocole de liaison · actif</span>
-            <p class="labo-subtitle">Sujet <strong>${escapeHtml(l.pseudo)}</strong> · ${last}.
-                La progression se synchronise automatiquement.</p>
-            <div class="labo-actions">
-                <button data-action="cloud-sync">Synchroniser maintenant</button>
-                <button data-action="cloud-unlink">Rompre la liaison</button>
-            </div>
-            <p id="cloudStatus" class="labo-progress-label"></p>
-        </div>
-    `;
-}
-
-async function cloudLink() {
-    const status = document.getElementById('cloudStatus');
-    try {
-        status.textContent = 'Établissement de la liaison…';
-        const report = await link(
-            document.getElementById('cloudPseudo').value,
-            document.getElementById('cloudPin').value
-        );
-        initCloudSync();
-        renderHub();
-        document.getElementById('cloudStatus').textContent = report?.existed
-            ? `Liaison établie : dossier existant récupéré (${report.labo} exercice(s), ${report.quiz} module(s), ${report.scores} score(s) fusionnés).`
-            : 'Liaison établie : NOUVEAU dossier créé pour ce couple pseudo+PIN. Si vous vouliez retrouver une progression existante, rompez la liaison et vérifiez le pseudo et le PIN utilisés sur l\'autre appareil.';
-    } catch (e) {
-        unlink(); // liaison ratee : ne pas rester dans un etat a moitie appaire
-        status.textContent = 'Échec : ' + e.message;
-    }
-}
-
-async function cloudSyncNow() {
-    const status = document.getElementById('cloudStatus');
-    try {
-        status.textContent = 'Synchronisation…';
-        const report = await syncNow();
-        renderHub();
-        document.getElementById('cloudStatus').textContent =
-            `Synchronisé : ${report.labo} exercice(s), ${report.quiz} module(s), ${report.scores} score(s) mis à jour.`;
-    } catch (e) {
-        status.textContent = 'Échec : ' + e.message + ' (la progression locale reste intacte)';
-    }
 }
 
 async function openDomain(domainKey) {
@@ -130,19 +62,13 @@ async function openDomain(domainKey) {
 // Cablage unique : ce module n'est importe qu'une fois (cache des imports ES).
 el().addEventListener('click', (e) => {
     if (e.target.closest('[data-action="reset-progress"]')) {
-        if (window.confirm('Effacer toute la progression du laboratoire ? Les scores du quiz ne sont pas concernés.')) {
+        const linked = !!getLink();
+        const msg = 'Effacer toute la progression du laboratoire ? Les scores du quiz ne sont pas concernés.'
+            + (linked ? '\n\nAppareil lié : le dossier cloud sera aussi mis à jour (les autres appareils gardent leur copie locale).' : '');
+        if (window.confirm(msg)) {
             resetAll();
             clearDrafts(); // les requetes ecrites dans l'editeur SQL repartent aussi de zero
-            renderHub();
-        }
-        return;
-    }
-    const action = e.target.closest('[data-action]')?.dataset.action;
-    if (action === 'cloud-link') { cloudLink(); return; }
-    if (action === 'cloud-sync') { cloudSyncNow(); return; }
-    if (action === 'cloud-unlink') {
-        if (window.confirm('Rompre la liaison sur cet appareil ? La progression locale est conservée ; les données cloud restent disponibles pour les autres appareils liés.')) {
-            unlink();
+            if (linked) pushOverwrite().catch(() => { }); // sinon la synchro ressusciterait tout
             renderHub();
         }
         return;

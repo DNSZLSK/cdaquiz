@@ -24,6 +24,11 @@ export function loadProgress() {
     catch (e) { return {}; }
 }
 
+export function resetQuizProgress() {
+    localStorage.removeItem(PROGRESS_KEY);
+    localStorage.removeItem(LEADERBOARD_KEY);
+}
+
 export function recordProgress(moduleKey, sc, total) {
     if (moduleKey === 'retry' || !total) return;
     const p = loadProgress();

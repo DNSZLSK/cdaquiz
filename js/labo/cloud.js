@@ -69,6 +69,20 @@ export function syncNow() {
     return syncing;
 }
 
+// Ecrase le dossier cloud avec l'etat local ACTUEL, sans fusion prealable.
+// Reserve aux reinitialisations : un reset local serait sinon ressuscite par
+// le pull-fusion du cycle normal.
+export async function pushOverwrite() {
+    const l = getLink();
+    if (!l || !isConfigured()) return;
+    const put = await fetch(nodeUrl(l), {
+        method: 'PUT',
+        body: JSON.stringify({ ...snapshotAll(), t: Date.now() })
+    });
+    if (!put.ok) throw new Error('Écriture cloud impossible (HTTP ' + put.status + ')');
+    localStorage.setItem(LINK_KEY, JSON.stringify({ ...l, lastSync: Date.now() }));
+}
+
 let pushTimer = null;
 let initialized = false;
 

@@ -8,6 +8,9 @@ import { startQuiz, startRetry, restartQuiz, initQuizScreen } from './ui/quiz.js
 import { saveScore } from './ui/results.js';
 import { playRandomPortalVoice } from './audio.js';
 import { initTabs, setTabsVisible, setActiveTab } from './ui/tabs.js';
+import { initIdentity } from './ui/identity.js';
+import { resetQuizProgress } from './storage.js';
+import { getLink, pushOverwrite } from './labo/cloud.js';
 
 registerExerciseType('qcm', qcmType);
 
@@ -84,11 +87,20 @@ function initApp() {
         navigator.serviceWorker.register('sw.js').catch(() => { });
     }
 
-    // Liaison cloud : si l'appareil est appaire, la synchro auto demarre
-    // (module charge en lazy, le quiz seul ne paie rien)
-    if (localStorage.getItem('cdaquiz_cloud')) {
-        import('./labo/cloud.js').then(m => m.initCloudSync()).catch(() => { });
-    }
+    // Badge d'identification du header (protocole de liaison, visible partout).
+    // Demarre aussi la synchro auto si l'appareil est deja appaire.
+    initIdentity();
+
+    // Reinitialisation de la progression du quiz (pendant du bouton labo)
+    document.getElementById('quizResetBtn').addEventListener('click', async () => {
+        const linked = !!getLink();
+        const msg = 'Effacer la progression du quiz (calibrations par module) et le classement local ? La progression du laboratoire n\'est pas concernée.'
+            + (linked ? '\n\nAppareil lié : le dossier cloud sera aussi mis à jour (les autres appareils gardent leur copie locale).' : '');
+        if (!window.confirm(msg)) return;
+        resetQuizProgress();
+        if (linked) pushOverwrite().catch(() => { }); // sinon la synchro ressusciterait tout
+        renderModuleGrid();
+    });
 }
 
 initApp();
