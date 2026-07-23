@@ -218,6 +218,49 @@
     padding: 0 20px;
 }
 
+/* Synchronisation entre appareils (hub) */
+.labo-sync {
+    margin-top: 40px;
+    padding: 20px;
+    background: #fff;
+    border: 1px solid #e1e4e8;
+    border-radius: 6px;
+}
+
+.labo-sync h3 {
+    font-size: 0.85em;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #586069;
+    margin-bottom: 8px;
+}
+
+.labo-sync .labo-actions {
+    margin-top: 0;
+}
+
+#syncPanel {
+    margin-top: 14px;
+}
+
+#syncInput {
+    width: 100%;
+    font-family: 'SFMono-Regular', Consolas, monospace;
+    font-size: 0.8em;
+    padding: 10px;
+    border: 1px solid #d1d5da;
+    border-radius: 6px;
+    background: #f6f8fa;
+    resize: vertical;
+    margin-bottom: 10px;
+    word-break: break-all;
+}
+
+#syncStatus {
+    margin-top: 12px;
+}
+
 /* Reinitialisation de la progression (hub) */
 .labo-reset {
     margin-top: 30px;
