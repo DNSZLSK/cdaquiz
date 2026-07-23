@@ -1,6 +1,6 @@
 // Hub du mode LABO : une card par domaine, avec compteur et progression.
 import { laboCatalog } from '../../data/exercises/index.js';
-import { registerScreen, showScreen } from '../screens.js';
+import { registerScreen, showScreen, getCurrentScreen } from '../screens.js';
 import { setTabsVisible, setActiveTab } from '../ui/tabs.js';
 import { getDomainStats, resetAll } from './progress.js';
 import { clearDrafts } from './drafts.js';
@@ -75,6 +75,12 @@ el().addEventListener('click', (e) => {
     }
     const card = e.target.closest('[data-domain]');
     if (card) openDomain(card.dataset.domain);
+});
+
+// Meme rafraichissement pour le hub : une synchro qui apporte du nouveau
+// redessine les cards si le hub est a l'ecran
+window.addEventListener('cdaquiz:synced', () => {
+    if (getCurrentScreen() === 'labo-hub') renderHub();
 });
 
 export function openHub() {

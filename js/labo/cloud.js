@@ -60,6 +60,10 @@ export function syncNow() {
         });
         if (!put.ok) throw new Error('Écriture cloud impossible (HTTP ' + put.status + ')');
         localStorage.setItem(LINK_KEY, JSON.stringify({ ...l, lastSync: Date.now() }));
+        // La fusion a apporte du nouveau : les ecrans visibles se rafraichissent
+        if (report.quiz + report.labo + report.scores > 0) {
+            window.dispatchEvent(new CustomEvent('cdaquiz:synced'));
+        }
         // existed : permet a l'UI de distinguer "dossier existant recupere" de
         // "nouveau dossier cree" (symptome d'un pseudo/PIN different de l'autre
         // appareil : il n'y a pas de registre, donc pas d'erreur "mauvais PIN")

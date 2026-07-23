@@ -2,7 +2,7 @@
 // cable les listeners statiques, affiche le menu.
 import { registerExerciseType } from './exercises/registry.js';
 import { qcmType } from './exercises/qcm.js';
-import { registerScreen, showScreen } from './screens.js';
+import { registerScreen, showScreen, getCurrentScreen } from './screens.js';
 import { renderModuleGrid } from './ui/menu.js';
 import { startQuiz, startRetry, restartQuiz, initQuizScreen } from './ui/quiz.js';
 import { saveScore } from './ui/results.js';
@@ -90,6 +90,12 @@ function initApp() {
     // Badge d'identification du header (protocole de liaison, visible partout).
     // Demarre aussi la synchro auto si l'appareil est deja appaire.
     initIdentity();
+
+    // Une synchro (manuelle ou automatique) a rapporte du nouveau : si le menu
+    // quiz est a l'ecran, ses cartes se redessinent sans changer d'onglet
+    window.addEventListener('cdaquiz:synced', () => {
+        if (getCurrentScreen() === 'menu') renderModuleGrid();
+    });
 
     // Reinitialisation de la progression du quiz (pendant du bouton labo)
     document.getElementById('quizResetBtn').addEventListener('click', async () => {
