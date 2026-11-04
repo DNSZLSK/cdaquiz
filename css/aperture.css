@@ -272,3 +272,10 @@ body:has(.ap-lesson) .progress-bar { visibility: hidden; }
     .module-grid { grid-template-columns: 1fr; }
     .module-card p { font-size: .88em; }
 }
+
+/* ---------- Hub du labo : meme en-tete sobre que l'accueil ---------- */
+#laboHub > h2 { font-size: clamp(1.7rem, 3.4vw, 2.4rem); font-weight: 400; letter-spacing: -.01em; color: var(--ap-ink); margin: 0 0 8px; }
+#laboHub > .labo-subtitle { font-size: 1.02em; color: var(--ap-muted); margin-bottom: 24px; }
+.labo-domain-card .tile-foot { padding-top: 18px; }
+/* securite : un heros pas encore rempli (module JS en retard ou en cache) ne laisse pas de bloc blanc */
+.ap-hero:empty { display: none !important; }

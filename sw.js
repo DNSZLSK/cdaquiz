@@ -79,6 +79,7 @@ const ASSETS = [
     'js/sensei/engine.js',
     'js/ui/identity.js',
     'js/ui/mascot.js',
+    'js/ui/pictos.js',
     'js/ui/menu.js',
     'js/ui/quiz.js',
     'js/ui/results.js',

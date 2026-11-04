@@ -5,6 +5,7 @@ import { setTabsVisible, setActiveTab } from '../ui/tabs.js';
 import { getDomainStats, resetAll } from './progress.js';
 import { clearDrafts } from './drafts.js';
 import { getLink, pushOverwrite } from './cloud.js';
+import { PICTO } from '../ui/pictos.js';
 
 const el = () => document.getElementById('laboHub');
 
@@ -22,19 +23,31 @@ registerScreen('labo-hub', {
     }
 });
 
+// Pictogramme de chaque domaine (memes dessins que les modules du quiz)
+const DOMAIN_PICTO = {
+    'sql': 'bdd', 'mcd-mld': 'uml', 'oop-java': 'poo', 'tests-junit': 'tests', 'spring-boot': 'architecture',
+    'spring-security': 'lock', 'angular': 'web', 'javascript': 'python', 'html-css': 'web', 'bootstrap': 'conception',
+    'python': 'python', 'python-fichiers': 'documentation', 'git': 'git', 'docker': 'docker', 'uml-archi': 'uml'
+};
+
 function renderHub() {
-    const cards = laboCatalog.map(d => {
+    // Meme gabarit que les modules du quiz : numero de chambre fin, pictogramme,
+    // titre, description, puis seulement la calibration et sa barre
+    const cards = laboCatalog.map((d, i) => {
         const stats = getDomainStats(d.domain);
         const pct = Math.round((stats.ok / d.count) * 100);
         return `
             <div class="module-card labo-domain-card" style="--module-color: ${d.color}" data-domain="${d.domain}">
+                <span class="tile-head">
+                    <span class="tile-num">${String(i + 1).padStart(2, '0')}</span>
+                    <span class="tile-picto">${PICTO[DOMAIN_PICTO[d.domain]] || PICTO.all}</span>
+                </span>
                 <h3>${d.title}</h3>
                 <p>${d.description}</p>
-                <p class="question-count">${d.count} exercices</p>
-                <div class="labo-progress-track">
-                    <div class="labo-progress-fill" style="width: ${pct}%; background: ${d.color};"></div>
-                </div>
-                <p class="labo-progress-label">${stats.ok}/${d.count} calibrés${pct === 100 ? ' · protocole terminé' : ''}</p>
+                <span class="tile-foot">
+                    <span class="tile-cal${stats.ok ? '' : ' is-empty'}">${stats.ok}/${d.count} calibrés${pct === 100 ? ' · protocole terminé' : ''}</span>
+                </span>
+                <span class="tile-bar" aria-hidden="true"><i style="width:${pct}%"></i></span>
             </div>
         `;
     }).join('');
