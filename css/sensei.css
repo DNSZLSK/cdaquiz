@@ -1,0 +1,240 @@
+/* Onglet 03 Vocabulaire (Sensei). Tout est prefixe par #senseiRoot pour ne
+   jamais toucher au quiz ni au labo. Palette reprise de CDAquiz (orange/bleu Portal). */
+#senseiRoot{
+  --bg:#fafbfc; --surface:#ffffff; --sunk:#f6f8fa;
+  --ink:#24292e; --muted:#586069; --line:#e1e4e8;
+  --accent:#FF6700; --accent-ink:#ffffff; --accent-soft:#FFF0E5; --accent-deep:#CC5200;
+  --amber:#0098FF; --amber-soft:#E8F5FF; --amber-ink:#035C99;
+  --good:#28a745; --good-soft:#dcffe4; --good-deep:#1e7e34;
+  --bad:#d73a49; --bad-soft:#ffdce0; --bad-deep:#a72a37;
+  --p1:#FFF3EA; --p2:#EAF6FF; --p3:#F3F4F6; --p4:#FFF3EA; --p5:#EAF6FF;
+  --code-bg:#24292e; --code-ink:#e1e4e8; --code-kw:#ff9e57; --code-str:#a5d6ff; --code-num:#79c0ff; --code-op:#ffa657; --code-com:#8b949e;
+  --f-display:-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica', 'Arial', sans-serif;
+  --f-body:-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica', 'Arial', sans-serif;
+  --f-mono:'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+  --r:8px;
+}
+#senseiRoot *{box-sizing:border-box}
+#senseiRoot{color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.55}
+#senseiRoot.wrap{max-width:680px;margin:0 auto;padding-block:0 24px;display:flex;flex-direction:column;gap:18px}
+#senseiRoot.wrap.has-sheet{padding-bottom:calc(240px + env(safe-area-inset-bottom, 0px))}
+#senseiRoot h1,#senseiRoot h2,#senseiRoot h3,#senseiRoot h4{font-family:var(--f-display);text-wrap:balance;margin:0;line-height:1.15}
+#senseiRoot p{margin:0}
+#senseiRoot code{font-family:var(--f-mono);font-size:.88em;background:var(--sunk);padding:.08em .35em;border-radius:6px}
+#senseiRoot button{font:inherit;color:inherit;cursor:pointer;padding:0;border:0;background:none;border-radius:0;transition:none;font-weight:inherit;box-shadow:none}
+#senseiRoot button:disabled{opacity:1;cursor:default}
+#senseiRoot :focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+#senseiRoot .muted{color:var(--muted)} #senseiRoot .small{font-size:.9rem}
+#senseiRoot .row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+#senseiRoot .spread{display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+#senseiRoot .eyebrow{font-size:.75rem;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);font-weight:700}
+#senseiRoot .icon{width:1.1em;height:1.1em;vertical-align:-.15em}
+
+/* Boutons tactiles */
+#senseiRoot .btn{border:0;border-radius:8px;padding:13px 22px;font-weight:700;font-size:1rem;background:var(--accent);color:var(--accent-ink);border-bottom:4px solid var(--accent-deep);transition:transform .06s}
+#senseiRoot .btn:active:not(:disabled){transform:translateY(2px);border-bottom-width:2px;margin-top:2px}
+#senseiRoot .btn:disabled{opacity:.45;cursor:not-allowed}
+#senseiRoot .btn.ghost{background:var(--surface);color:var(--ink);border:2px solid var(--line);border-bottom-width:4px}
+#senseiRoot .btn.good{background:var(--good);border-bottom-color:var(--good-deep);color:var(--surface)}
+#senseiRoot .btn.bad{background:var(--bad);border-bottom-color:var(--bad-deep);color:var(--surface)}
+#senseiRoot .btn.small{padding:8px 14px;font-size:.9rem}
+#senseiRoot .btn.full{flex:1}
+#senseiRoot .actions{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+@media (prefers-reduced-motion: reduce){#senseiRoot .btn{transition:none}}
+
+/* Sensei, le mentor */
+#senseiRoot .sensei{flex:none;display:block}
+#senseiRoot .sensei.bob{animation:sn-bob .55s ease-out 1}
+@keyframes sn-bob{0%{transform:translateY(0)}35%{transform:translateY(-7px)}70%{transform:translateY(1px)}100%{transform:translateY(0)}}
+@media (prefers-reduced-motion: reduce){#senseiRoot .sensei.bob{animation:none}}
+#senseiRoot .say-row{display:flex;gap:12px;align-items:flex-end}
+#senseiRoot .bubble{position:relative;background:var(--surface);border:2px solid var(--line);border-radius:8px;padding:12px 16px;min-width:0;flex:1;font-size:1.05rem}
+#senseiRoot .bubble::before{content:"";position:absolute;left:-9px;bottom:16px;width:14px;height:14px;background:var(--surface);border-left:2px solid var(--line);border-bottom:2px solid var(--line);transform:rotate(45deg);border-radius:0 0 0 4px}
+#senseiRoot .bubble strong{font-weight:700}
+#senseiRoot .bubble .sub{display:block;font-size:.88rem;color:var(--muted);margin-top:4px}
+
+/* En-tête */
+#senseiRoot .top{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+#senseiRoot .brand{font-family:var(--f-display);font-weight:800;font-size:1.6rem;letter-spacing:-.02em;display:flex;align-items:center;gap:8px}
+#senseiRoot .brand-dot{width:12px;height:12px;border-radius:4px;background:var(--accent);transform:rotate(45deg)}
+#senseiRoot .chips{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+#senseiRoot .chip{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:5px 12px;font-size:.88rem;font-variant-numeric:tabular-nums;background:var(--surface);border:2px solid var(--line);font-weight:700}
+#senseiRoot .chip.streak{background:var(--amber-soft);border-color:transparent;color:var(--amber-ink)}
+#senseiRoot .chip.streak .icon{color:var(--amber)}
+#senseiRoot .lang{display:inline-flex;border:2px solid var(--line);border-radius:999px;overflow:hidden;background:var(--surface)}
+#senseiRoot .lang button{border:0;background:transparent;padding:4px 11px;font-size:.85rem;font-weight:700;color:var(--muted)}
+#senseiRoot .lang button[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink)}
+#senseiRoot .tabs{display:flex;gap:4px;background:var(--sunk);padding:5px;border-radius:999px}
+#senseiRoot .tabs button{flex:1;border:0;background:transparent;padding:9px 8px;border-radius:999px;font-weight:700;color:var(--muted);display:flex;align-items:center;justify-content:center;gap:6px}
+#senseiRoot .tabs button[aria-current="page"]{background:var(--surface);color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.08)}
+#senseiRoot .badge{background:var(--bad);color:var(--surface);border-radius:999px;font-size:.75rem;padding:0 7px;min-width:20px;font-variant-numeric:tabular-nums}
+
+/* Accueil */
+#senseiRoot .hero{display:flex;gap:14px;align-items:flex-end}
+#senseiRoot .hero .bubble{font-size:1.1rem}
+#senseiRoot .panel{background:var(--surface);border:2px solid var(--line);border-radius:var(--r);padding:16px 18px;display:flex;flex-direction:column;gap:8px;min-width:0}
+#senseiRoot .panel h2{font-size:1.2rem}
+#senseiRoot .panel.soft{background:var(--amber-soft);border-color:transparent}
+#senseiRoot .unit{display:flex;flex-direction:column;gap:14px}
+#senseiRoot .banner{border-radius:var(--r);padding:16px 18px;display:flex;flex-direction:column;gap:6px}
+#senseiRoot .banner.p1{background:var(--p1)} #senseiRoot .banner.p2{background:var(--p2)} #senseiRoot .banner.p3{background:var(--p3)} #senseiRoot .banner.p4{background:var(--p4)} #senseiRoot .banner.p5{background:var(--p5)}
+#senseiRoot .banner h2{font-size:1.3rem}
+#senseiRoot .meter{height:10px;background:color-mix(in srgb, var(--surface) 70%, transparent);border-radius:999px;overflow:hidden;flex:1;min-width:80px}
+#senseiRoot .meter i{display:block;height:100%;background:var(--good);border-radius:999px}
+#senseiRoot .path{list-style:none;margin:0;padding:6px 0;display:flex;flex-direction:column;align-items:center;gap:14px}
+#senseiRoot .path li{display:flex;flex-direction:column;align-items:center;gap:8px;width:100%}
+#senseiRoot .node-wrap{position:relative;display:flex;flex-direction:column;align-items:center}
+#senseiRoot .node{width:66px;height:66px;border-radius:50%;display:grid;place-items:center;font-family:var(--f-display);font-weight:800;font-size:1.3rem;border:0;background:var(--surface);color:var(--accent);box-shadow:inset 0 0 0 3px var(--accent-soft), 0 6px 0 var(--line)}
+#senseiRoot .node:active{transform:translateY(3px);box-shadow:inset 0 0 0 3px var(--accent-soft), 0 3px 0 var(--line)}
+#senseiRoot .node.done{background:var(--good);color:var(--surface);box-shadow:0 6px 0 var(--good-deep)}
+#senseiRoot .node.next{width:78px;height:78px;background:var(--accent);color:var(--accent-ink);box-shadow:0 0 0 6px var(--accent-soft), 0 7px 0 var(--accent-deep)}
+#senseiRoot .node.locked{background:var(--sunk);color:var(--muted);box-shadow:0 6px 0 var(--line)}
+#senseiRoot .node .icon{width:28px;height:28px}
+#senseiRoot .here{position:absolute;top:-30px;background:var(--surface);border:2px solid var(--accent);color:var(--accent);font-weight:800;font-size:.75rem;letter-spacing:.06em;text-transform:uppercase;padding:2px 10px;border-radius:999px;white-space:nowrap}
+#senseiRoot .node-wrap.has-here{margin-top:28px}
+#senseiRoot .node-label{font-weight:700;font-size:.92rem;text-align:center;max-width:14em}
+#senseiRoot .pop{width:100%;background:var(--surface);border:2px solid var(--accent);border-radius:var(--r);padding:14px 16px;display:flex;flex-direction:column;gap:8px}
+#senseiRoot .pop h3{font-size:1.15rem}
+#senseiRoot .missions{display:flex;flex-direction:column;gap:6px}
+#senseiRoot .mission{display:grid;grid-template-columns:28px 1fr;gap:8px;align-items:start;border:0;background:transparent;text-align:left;padding:4px 0}
+#senseiRoot .box{width:24px;height:24px;border:2px solid var(--line);border-radius:8px;display:grid;place-items:center;font-size:.8rem;font-weight:800;color:var(--surface);background:var(--surface)}
+#senseiRoot .mission[aria-checked="true"] .box{background:var(--good);border-color:var(--good)}
+#senseiRoot .mission[aria-checked="true"] span:last-child{color:var(--muted);text-decoration:line-through}
+#senseiRoot details.more{border-top:2px dashed var(--line);padding-top:10px}
+#senseiRoot details.more summary{cursor:pointer;font-weight:700;color:var(--muted);font-size:.9rem}
+#senseiRoot .pill{font-size:.75rem;font-weight:700;border-radius:999px;padding:2px 10px;background:var(--sunk);color:var(--muted);white-space:nowrap}
+#senseiRoot .pill.done{background:var(--good-soft);color:var(--good)}
+#senseiRoot .pill.warn{background:var(--amber-soft);color:var(--amber-ink)}
+
+/* Leçon */
+#senseiRoot .lesson-top{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+#senseiRoot .quit{border:0;background:transparent;color:var(--muted);width:36px;height:36px;border-radius:50%;display:grid;place-items:center}
+#senseiRoot .quit:hover{background:var(--sunk)}
+#senseiRoot .quit .icon{width:22px;height:22px}
+#senseiRoot .bar{flex:1;min-width:90px;height:14px;background:var(--sunk);border-radius:999px;overflow:hidden}
+#senseiRoot .bar i{display:block;height:100%;background:var(--accent);border-radius:999px;transition:width .35s;box-shadow:inset 0 -3px 0 var(--accent-deep)}
+@media (prefers-reduced-motion: reduce){#senseiRoot .bar i{transition:none}}
+#senseiRoot .origin{font-size:.85rem;color:var(--muted)}
+#senseiRoot .card{background:var(--surface);border:2px solid var(--line);border-radius:var(--r);padding:18px;display:flex;flex-direction:column;gap:14px;min-width:0}
+#senseiRoot .term{font-family:var(--f-display);font-size:2.1rem;font-weight:800;letter-spacing:-.01em}
+#senseiRoot .term mark{background:linear-gradient(transparent 58%, var(--amber) 58%);color:inherit;padding:0 2px}
+#senseiRoot .def{font-size:1.1rem}
+#senseiRoot .rule{background:var(--accent-soft);border-radius:8px;padding:12px 14px}
+#senseiRoot .rule b{display:block;font-size:.75rem;letter-spacing:.09em;text-transform:uppercase;color:var(--accent);margin-bottom:2px}
+#senseiRoot .versus{display:flex;flex-direction:column;gap:8px}
+#senseiRoot .vs{border-radius:8px;padding:10px 14px;display:flex;flex-direction:column;gap:2px}
+#senseiRoot .vs b{font-size:.75rem;letter-spacing:.09em;text-transform:uppercase}
+#senseiRoot .vs.before{background:var(--sunk);color:var(--muted)} #senseiRoot .vs.before span{text-decoration:line-through;text-decoration-color:color-mix(in srgb, var(--bad) 60%, transparent)}
+#senseiRoot .vs.after{background:var(--amber-soft);color:var(--amber-ink)} #senseiRoot .vs.after span{font-weight:700;font-size:1.05rem}
+#senseiRoot .codewrap{display:flex;flex-direction:column;gap:4px;min-width:0}
+#senseiRoot .fallback{font-size:.8rem;color:var(--muted)}
+#senseiRoot pre.code{margin:0;background:var(--code-bg);color:var(--code-ink);border-radius:8px;padding:14px 16px;overflow-x:auto;font-family:var(--f-mono);font-size:.9rem;line-height:1.7;counter-reset:ln}
+#senseiRoot pre.code .ln{display:block;white-space:pre}
+#senseiRoot pre.code .ln::before{counter-increment:ln;content:counter(ln);display:inline-block;width:1.6em;margin-right:12px;color:var(--code-com);text-align:right;user-select:none}
+#senseiRoot .t-kw{color:var(--code-kw);font-weight:600}#senseiRoot .t-str{color:var(--code-str)}#senseiRoot .t-num{color:var(--code-num)}#senseiRoot .t-op{color:var(--code-op)}#senseiRoot .t-com{color:var(--code-com);font-style:italic}
+#senseiRoot pre.code .mk{font:inherit;color:inherit;background:color-mix(in srgb, var(--amber) 30%, transparent);border:0;border-bottom:2px solid var(--amber);border-radius:5px;padding:0 2px}
+#senseiRoot pre.code .mk.ok{background:color-mix(in srgb, var(--good) 35%, transparent);border-bottom-color:var(--good)}
+#senseiRoot pre.code .mk.ko{background:color-mix(in srgb, var(--bad) 35%, transparent);border-bottom-color:var(--bad)}
+#senseiRoot pre.code .mk sup{font-family:var(--f-body);font-size:.65rem;font-weight:800;background:var(--amber);color:#3A2800;border-radius:999px;padding:0 4px;margin-left:2px}
+#senseiRoot .opts{display:flex;flex-direction:column;gap:10px}
+#senseiRoot .opt{border:2px solid var(--line);border-bottom-width:4px;background:var(--surface);border-radius:8px;padding:13px 15px;text-align:left;font-weight:700}
+#senseiRoot .opt:hover:not([disabled]){border-color:var(--accent)}
+#senseiRoot .opt:active:not([disabled]){transform:translateY(2px);border-bottom-width:2px}
+#senseiRoot .opt.sel{border-color:var(--accent);background:var(--accent-soft)}
+#senseiRoot .opt.ok{border-color:var(--good);background:var(--good-soft)}
+#senseiRoot .opt.ko{border-color:var(--bad);background:var(--bad-soft)}
+#senseiRoot .opt[disabled]{cursor:default}
+#senseiRoot .pair-terms{display:flex;flex-wrap:wrap;gap:8px}
+#senseiRoot .pair-defs{display:flex;flex-direction:column;gap:8px}
+#senseiRoot .pair{border:2px solid var(--line);border-bottom-width:4px;background:var(--surface);border-radius:8px;padding:10px 13px;text-align:left;font-weight:600;min-width:0;overflow-wrap:anywhere}
+#senseiRoot .pair.pair-term{border-radius:999px;font-weight:800;padding:7px 14px}
+#senseiRoot .pair:hover:not([disabled]){border-color:var(--accent)}
+#senseiRoot .pair:active:not([disabled]){transform:translateY(2px);border-bottom-width:2px}
+#senseiRoot .pair.sel{border-color:var(--accent);background:var(--accent-soft)}
+#senseiRoot .pair.ok{border-color:var(--good);background:var(--good-soft);opacity:.5;cursor:default}
+#senseiRoot .pair.ko{border-color:var(--bad);background:var(--bad-soft);animation:sn-shake .35s}
+@keyframes sn-shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+@media (prefers-reduced-motion: reduce){#senseiRoot .pair.ko{animation:none}}
+#senseiRoot .pairs-list{display:flex;flex-direction:column;gap:8px}
+#senseiRoot .pairs-list p{margin:0}
+#senseiRoot .sentence{font-size:1.25rem;line-height:1.9}
+#senseiRoot .blank{display:inline-block;min-width:5em;border-bottom:3px solid var(--accent);text-align:center;font-weight:700;padding:0 6px;color:var(--accent)}
+#senseiRoot .blank.ok{border-color:var(--good);color:var(--good)} #senseiRoot .blank.ko{border-color:var(--bad);color:var(--bad)}
+#senseiRoot .labels{display:flex;flex-direction:column;gap:10px}
+#senseiRoot .lab{border:2px solid var(--line);border-radius:8px;padding:10px 12px;display:flex;flex-direction:column;gap:8px}
+#senseiRoot .lab.active{border-color:var(--accent)}
+#senseiRoot .lab.ok{border-color:var(--good);background:var(--good-soft)}
+#senseiRoot .lab.ko{border-color:var(--bad);background:var(--bad-soft)}
+#senseiRoot .lab-head{display:flex;gap:8px;align-items:center;min-width:0}
+#senseiRoot .num{flex:none;width:22px;height:22px;border-radius:999px;background:var(--amber);color:#3A2800;font-weight:800;font-size:.75rem;display:grid;place-items:center}
+#senseiRoot .lab-head code{overflow-wrap:anywhere}
+#senseiRoot .choices{display:flex;flex-wrap:wrap;gap:6px}
+#senseiRoot .choice{border:2px solid var(--line);border-bottom-width:3px;background:var(--surface);border-radius:999px;padding:5px 12px;font-size:.9rem;font-weight:700}
+#senseiRoot .choice.sel{background:var(--accent);border-color:var(--accent-deep);color:var(--accent-ink)}
+#senseiRoot .choice[disabled]{cursor:default}
+#senseiRoot .tray{min-height:62px;border-bottom:2px solid var(--line);padding:8px 0;display:flex;flex-wrap:wrap;gap:8px;align-content:flex-start}
+#senseiRoot .tray.ok{border-color:var(--good)} #senseiRoot .tray.ko{border-color:var(--bad)}
+#senseiRoot .bank{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;padding-top:6px}
+#senseiRoot .tile{border:2px solid var(--line);border-bottom-width:4px;background:var(--surface);border-radius:8px;padding:8px 12px;font-weight:700}
+#senseiRoot .tile:hover:not([disabled]){border-color:var(--accent)}
+#senseiRoot .tile:active:not([disabled]){transform:translateY(2px);border-bottom-width:2px}
+#senseiRoot .tile.ph{visibility:hidden}
+#senseiRoot .field{width:100%;font:inherit;font-family:var(--f-mono);font-size:1.05rem;padding:12px 14px;border:2px solid var(--line);border-radius:8px;background:var(--surface);color:var(--ink)}
+#senseiRoot .field:focus{border-color:var(--accent);outline:none}
+#senseiRoot textarea.field{font-family:var(--f-body);min-height:130px;resize:vertical;line-height:1.5}
+#senseiRoot .trace-wrap{overflow-x:auto;border:2px solid var(--line);border-radius:8px}
+#senseiRoot table.trace{border-collapse:collapse;width:100%;font-variant-numeric:tabular-nums;font-family:var(--f-mono);font-size:.92rem}
+#senseiRoot .trace th{background:var(--sunk);text-align:left;padding:8px 10px;font-weight:600;white-space:nowrap;border-bottom:1px solid var(--line)}
+#senseiRoot .trace td{padding:6px 10px;border-bottom:1px solid var(--line);white-space:nowrap;vertical-align:middle}
+#senseiRoot .trace tr:last-child td{border-bottom:0}
+#senseiRoot .trace tr.cur td{background:color-mix(in srgb, var(--amber) 20%, transparent)}
+#senseiRoot .trace tr.future td{color:var(--muted)}
+#senseiRoot .trace input{width:6.5em;font:inherit;padding:6px 8px;border:2px solid var(--line);border-radius:8px;background:var(--surface);color:var(--ink)}
+#senseiRoot .trace input.ko,#senseiRoot .yn.ko{border-color:var(--bad)}
+#senseiRoot .trace .filled{font-weight:600;color:var(--good)}
+#senseiRoot .yn{display:inline-flex;border:2px solid var(--line);border-radius:10px;overflow:hidden}
+#senseiRoot .yn button{border:0;background:var(--surface);padding:5px 10px;font-family:var(--f-body);font-weight:700}
+#senseiRoot .yn button + button{border-left:1px solid var(--line)}
+#senseiRoot .yn button.sel{background:var(--accent);color:var(--accent-ink)}
+#senseiRoot .note{border-radius:8px;padding:12px 14px;display:flex;flex-direction:column;gap:6px;background:var(--sunk)}
+#senseiRoot .note.good{background:var(--good-soft)} #senseiRoot .note.bad{background:var(--bad-soft)}
+#senseiRoot .note h4{font-size:1.05rem}
+#senseiRoot .kw{display:flex;flex-wrap:wrap;gap:6px}
+#senseiRoot .kw span{font-size:.85rem;border-radius:999px;padding:3px 11px;border:2px solid var(--line);font-weight:700}
+#senseiRoot .kw span.hit{background:var(--good-soft);border-color:var(--good);color:var(--good)}
+#senseiRoot .ai ul{margin:0;padding-left:1.1em;display:flex;flex-direction:column;gap:4px}
+#senseiRoot .fix{border:2px solid var(--line);border-radius:8px;padding:10px 12px;display:flex;flex-direction:column;gap:2px;background:var(--surface)}
+#senseiRoot .quote{border-left:4px solid var(--amber);padding:4px 0 4px 12px}
+#senseiRoot .quote b{display:block;font-size:.75rem;letter-spacing:.09em;text-transform:uppercase;color:var(--muted)}
+
+/* Barre d'action et retour, en bas de l'écran */
+#senseiRoot .sheet{position:fixed;left:0;right:0;bottom:0;z-index:20;background:var(--surface);border-top:2px solid var(--line);padding-top:14px;padding-bottom:calc(14px + env(safe-area-inset-bottom, 0px));padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px));max-height:62vh;overflow-y:auto}
+#senseiRoot .sheet.good{background:var(--good-soft);border-top-color:transparent}
+#senseiRoot .sheet.bad{background:var(--bad-soft);border-top-color:transparent}
+#senseiRoot .sheet.skip{background:var(--amber-soft);border-top-color:transparent}
+#senseiRoot .sheet.in{animation:sn-rise .28s ease-out}
+@keyframes sn-rise{from{transform:translateY(100%)}to{transform:translateY(0)}}
+@media (prefers-reduced-motion: reduce){#senseiRoot .sheet.in{animation:none}}
+#senseiRoot .sheet-in{max-width:640px;margin:0 auto;display:flex;flex-direction:column;gap:12px}
+#senseiRoot .sheet-fb{display:flex;gap:12px;align-items:flex-start}
+#senseiRoot .sheet-fb h4{font-size:1.25rem}
+#senseiRoot .sheet.good h4{color:var(--good)} #senseiRoot .sheet.bad h4{color:var(--bad)} #senseiRoot .sheet.skip h4{color:var(--amber-ink)}
+#senseiRoot .sheet-fb .txt{display:flex;flex-direction:column;gap:4px;min-width:0}
+
+/* Révision, lexique, fin */
+#senseiRoot .flash{min-height:200px;justify-content:center;text-align:center;align-items:center}
+#senseiRoot .lex{display:flex;flex-direction:column;gap:10px}
+#senseiRoot .lex-item{background:var(--surface);border:2px solid var(--line);border-radius:8px;padding:12px 14px;display:flex;flex-direction:column;gap:4px;min-width:0}
+#senseiRoot .lex-item.locked{opacity:.6}
+#senseiRoot .lex-item h3{font-size:1.1rem}
+#senseiRoot .boxes{display:inline-flex;gap:3px}
+#senseiRoot .boxes i{width:10px;height:10px;border-radius:3px;background:var(--line)}
+#senseiRoot .boxes i.on{background:var(--good)}
+#senseiRoot .center{text-align:center;display:flex;flex-direction:column;gap:12px;align-items:center}
+#senseiRoot .done-title{font-size:2rem}
+#senseiRoot .stat{display:inline-flex;flex-direction:column;align-items:center;gap:2px;background:var(--amber-soft);color:var(--amber-ink);border-radius:var(--r);padding:12px 22px}
+#senseiRoot .stat b{font-family:var(--f-display);font-size:2.4rem;line-height:1}
+#senseiRoot .stat .icon{width:28px;height:28px;color:var(--amber)}
+#senseiRoot .results{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px;width:100%;text-align:left}
+#senseiRoot .results li{display:flex;justify-content:space-between;gap:10px;border-bottom:1px solid var(--line);padding:6px 0}
+#senseiRoot .illu{width:120px;height:auto;color:var(--accent)}
