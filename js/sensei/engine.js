@@ -1,11 +1,14 @@
-// Sensei : apprendre a parler du code comme un dev senior (onglet 03 Vocabulaire).
-// Parcours de lecons, revision espacee, lexique, test de positionnement et
-// exercices de vocabulaire generes a partir des mots (paires, mot a ecrire...).
+// Onglet 03 Vocabulaire : la Chambre d'Enrichissement Lexical.
+// Apprendre a parler du code comme un dev senior : chambres de test (lecons),
+// revision espacee, lexique, test de positionnement et exercices generes a
+// partir des mots (paires, terme a ecrire...). La voix est celle du Centre
+// d'Enrichissement, portee par l'Unite d'evaluation 03 (IA de labo originale).
 // Charge en lazy au premier clic sur l'onglet, comme le labo.
 /* ============ OUTILS ============ */
 import { CHAPTERS, PLACEMENT } from '../../data/sensei/index.js';
 import { registerScreen, showScreen, getCurrentScreen } from '../screens.js';
 import { setTabsVisible, setActiveTab } from '../ui/tabs.js';
+import { playSuccess, playFail, playComplete, toggleMuted, muteButtonLabel } from '../labo/sounds.js';
 
 const app = document.getElementById('senseiRoot');
 const $ = s => app.querySelector(s);
@@ -28,54 +31,35 @@ function norm(s){
 function shuffle(a){ a=a.slice(); for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];} return a; }
 const rand = a => a[Math.floor(Math.random()*a.length)];
 
-/* ============ SENSEI, LE MENTOR ============ */
+/* ============ UNITE D'EVALUATION 03 ============ */
+// IA de labo originale : console murale blanche, ecran sombre, deux yeux
+// lumineux. L'expression ne change que par les yeux affiches a l'ecran.
 let svgId=0;
-function sensei(mood, size, extra){
-  mood=mood||"calme"; size=size||64; const id="sc"+(++svgId);
-  const happy = mood==="content"||mood==="fier";
-  const eyes = happy
-    ? `<path d="M47 58 q4 -5 8 0" stroke="#2B2F45" stroke-width="2.4" fill="none" stroke-linecap="round"/><path d="M65 58 q4 -5 8 0" stroke="#2B2F45" stroke-width="2.4" fill="none" stroke-linecap="round"/>`
-    : mood==="pensif"
-    ? `<circle cx="52.5" cy="55.5" r="2.3" fill="#2B2F45"/><circle cx="70.5" cy="55.5" r="2.3" fill="#2B2F45"/>`
-    : `<circle cx="51" cy="57" r="2.3" fill="#2B2F45"/><circle cx="69" cy="57" r="2.3" fill="#2B2F45"/>`;
-  const brows = mood==="pensif"
-    ? `<path d="M44 47 l10 -1"/><path d="M64 43 l10 3"/>`
-    : happy ? `<path d="M44 46 q5 -4 10 0"/><path d="M64 46 q5 -4 10 0"/>` : `<path d="M44 47.5 h10"/><path d="M64 47.5 h10"/>`;
-  const mouth = mood==="fier" ? `<path d="M52 70 q8 9 16 0 z" fill="#FFFFFF" stroke="#2B2F45" stroke-width="2" stroke-linejoin="round"/>`
-    : mood==="content" ? `<path d="M53 71 q7 6 14 0" stroke="#2B2F45" stroke-width="2.4" fill="none" stroke-linecap="round"/>`
-    : mood==="pensif" ? `<ellipse cx="63" cy="72" rx="2.6" ry="2.1" fill="#2B2F45"/>`
-    : `<path d="M54 72 q6 2.5 12 0" stroke="#2B2F45" stroke-width="2.4" fill="none" stroke-linecap="round"/>`;
-  return `<svg class="sensei ${extra||""}" width="${size}" height="${size}" viewBox="0 0 120 120" role="img" aria-label="Sensei, ton mentor">
-    <defs><clipPath id="${id}"><circle cx="60" cy="60" r="58"/></clipPath></defs>
-    <circle cx="60" cy="60" r="58" fill="#EEF1F4"/>
-    <g clip-path="url(#${id})">
-      <path d="M75 38 C95 38 101 60 96 80 C94 89 86 91 85 84 C90 70 88 54 75 49 Z" fill="#A6AAB3"/>
-      <path d="M86 60 C89 68 89 76 87 82" stroke="#8A8E98" stroke-width="1.6" fill="none"/>
-      <rect x="77" y="38" width="8" height="10" rx="2.5" fill="#0098FF" transform="rotate(-18 81 43)"/>
-      <path d="M20 124 C22 97 39 86 60 86 C81 86 98 97 100 124 Z" fill="#FF6700"/>
-      <path d="M43 88 C48 99 72 99 77 88" stroke="#CC5200" stroke-width="3.5" fill="none" stroke-linecap="round"/>
-      <path d="M54 95 v11 M66 95 v11" stroke="#FFE0CC" stroke-width="2.2" stroke-linecap="round"/>
-      <rect x="52" y="76" width="16" height="12" rx="4" fill="#E8B892"/>
-      <circle cx="39" cy="60" r="4.5" fill="#E8B892"/><circle cx="81" cy="60" r="4.5" fill="#E8B892"/>
-      <ellipse cx="60" cy="58" rx="21" ry="24" fill="#F2C9A4"/>
-      <path d="M38.5 58 C35 37 47 30 60 30 C74 30 86 38 81.5 58 C79 47 72 41 60 41 C49 41 42 47 38.5 58 Z" fill="#A6AAB3"/>
-      <path d="M48 37 C53 34 60 33 66 34 M45 42 C50 38 57 37 64 38" stroke="#C9CCD2" stroke-width="1.6" fill="none" stroke-linecap="round"/>
-      <path d="M39 62 C40 79 50 88 60 88 C70 88 80 79 81 62 C77 71 70 77 60 77 C50 77 43 71 39 62 Z" fill="#B7BAC1"/>
-      <path d="M52 69 q8 -4.5 16 0 q-8 2.2 -16 0 z" fill="#B7BAC1"/>
-      ${eyes}
-      <g stroke="#2B2F45" stroke-width="2.6" fill="none" stroke-linecap="round">${brows}</g>
-      <g stroke="#2B2F45" stroke-width="2.2" fill="#FFFFFF" fill-opacity=".28"><circle cx="51" cy="57" r="8"/><circle cx="69" cy="57" r="8"/></g>
-      <path d="M59 56.5 h2 M43 56 l-4 -1.5 M77 56 l4 -1.5" stroke="#2B2F45" stroke-width="2.2" stroke-linecap="round"/>
-      ${mouth}
-      <g transform="translate(12 92)"><path d="M21 6 q7 0 7 6 q0 6 -7 6" stroke="#2B2F45" stroke-width="2.4" fill="none"/><rect x="0" y="0" width="22" height="24" rx="4" fill="#FFFFFF" stroke="#2B2F45" stroke-width="2.4"/><text x="11" y="16" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="9" font-weight="700" fill="#FF6700">{ }</text></g>
-    </g>
+function unit(mood, size, extra){
+  mood=mood||"calme"; size=size||64; const id="u"+(++svgId);
+  const B="#0098FF";
+  const arcs = `<path d="M38 58 q8 -12 16 0" stroke="${B}" stroke-width="5" fill="none" stroke-linecap="round"/><path d="M66 58 q8 -12 16 0" stroke="${B}" stroke-width="5" fill="none" stroke-linecap="round"/>`;
+  const eyes = mood==="content" ? arcs
+    : mood==="fier" ? arcs + `<path d="M86 32 l2 5 5 2 -5 2 -2 5 -2 -5 -5 -2 5 -2 z" fill="#FF6700"/>`
+    : mood==="pensif" ? `<rect x="44" y="38" width="12" height="13" rx="3" fill="${B}"/><rect x="70" y="38" width="12" height="13" rx="3" fill="${B}"/>
+        <g class="dots" fill="${B}"><circle cx="50" cy="64" r="2.6"/><circle cx="60" cy="64" r="2.6"/><circle cx="70" cy="64" r="2.6"/></g>`
+    : `<rect x="39" y="40" width="13" height="18" rx="3" fill="${B}"/><rect x="68" y="40" width="13" height="18" rx="3" fill="${B}"/>`;
+  return `<svg class="unit ${extra||""}" width="${size}" height="${size}" viewBox="0 0 120 120" role="img" aria-label="Unité d'évaluation 03">
+    <defs><pattern id="${id}" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="4" height="8" fill="#FF6700"/></pattern></defs>
+    <path d="M60 17 V8" stroke="#959da5" stroke-width="3" stroke-linecap="round"/><circle cx="60" cy="7" r="3.6" fill="#FF6700"/>
+    <path d="M47 95 H73 L79 106 H41 Z" fill="#e1e4e8"/><rect x="33" y="105" width="54" height="6" rx="3" fill="#d1d5da"/>
+    <rect x="13" y="17" width="94" height="80" rx="14" fill="#ffffff" stroke="#d1d5da" stroke-width="3"/>
+    <rect x="22" y="25" width="76" height="52" rx="8" fill="#24292e"/>
+    ${eyes}
+    <rect x="22" y="83" width="54" height="6" rx="1.5" fill="url(#${id})"/>
+    <circle cx="91" cy="86" r="3.6" fill="#FF6700"/>
   </svg>`;
 }
-const say = (mood, html, size, bob) => `<div class="say-row">${sensei(mood, size||64, bob?"bob":"")}<div class="bubble">${html}</div></div>`;
+const say = (mood, html, size, bob) => `<div class="say-row">${unit(mood, size||56, bob?"bob":"")}<div class="bubble"><span class="unit-name">Unité 03</span>${html}</div></div>`;
 const LINES = {
-  good:["Bien vu.","Exactement le mot que j'aurais utilisé.","Propre.","Rien à redire.","C'est ça. Tu vois que tu sais.","Parfait, on continue."],
-  bad:["Presque. Classique, même les seniors se font avoir.","Pas tout à fait. Regarde la nuance :","Pas grave, c'est comme ça qu'on apprend.","Bonne tentative. Voilà la différence :"],
-  skip:["Bon réflexe de le dire. Voilà comment je le formule :","Aucun souci, je te montre :","Dire « je ne sais pas », c'est très senior. Regarde :"]
+  good:["Réponse conforme. Résultat consigné.","Correct. Le Centre d'Enrichissement prend note.","Exact. Vous pouvez poursuivre le protocole.","Conforme. Votre vocabulaire progresse de façon mesurable.","Correct. Le Centre retire une ligne de son rapport d'inquiétude."],
+  bad:["Réponse non conforme. Ce n'est pas un échec, c'est une donnée.","Écart détecté. Voici la valeur attendue :","Non conforme. Le Centre a vu bien pire, et l'a corrigé.","Résultat inattendu. Analysez la différence :"],
+  skip:["Aveu d'ignorance enregistré. C'est une donnée utile.","Le Centre apprécie l'honnêteté de ses sujets. Voici la réponse :","Abstention consignée. Observez la réponse attendue :"]
 };
 function line(kind){ const st=L.st; if(st.lineKind!==kind){ st.lineKind=kind; st.line=rand(LINES[kind]); } return st.line; }
 const ICON = {
@@ -85,7 +69,6 @@ const ICON = {
   close:`<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>`,
   star:`<svg class="icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 3l2.6 5.6 6.1.7-4.5 4.2 1.2 6L12 16.6 6.6 19.5l1.2-6L3.3 9.3l6.1-.7z"/></svg>`
 };
-const MUG = `<svg class="illu" viewBox="0 0 120 100" aria-hidden="true"><path d="M30 14 q6 -8 0 -14 M48 14 q6 -8 0 -14 M66 14 q6 -8 0 -14" stroke="currentColor" stroke-width="4" fill="none" stroke-linecap="round" opacity=".5" transform="translate(0 6)"/><rect x="18" y="26" width="64" height="62" rx="12" fill="var(--accent-soft)" stroke="currentColor" stroke-width="4"/><path d="M82 40 q20 0 20 18 q0 18 -20 18" stroke="currentColor" stroke-width="4" fill="none"/><text x="50" y="66" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="22" font-weight="700" fill="currentColor">{ }</text></svg>`;
 
 /* Un champ peut être une valeur, ou {js, py, rs} selon le langage choisi */
 const isVar = v => v && typeof v==="object" && !Array.isArray(v) && Object.keys(v).length>0 && Object.keys(v).every(k=>LANGS.includes(k));
@@ -168,10 +151,13 @@ const langSwitch = () => `<span class="lang" role="group" aria-label="Langage de
 function header(){
   const due=dueIds().length;
   return `<header class="top">
-    <div class="brand"><span class="brand-dot" aria-hidden="true"></span>Sensei</div>
+    <div class="hub-head">
+      <h2>Chambre d'Enrichissement Lexical</h2>
+      <p class="labo-subtitle">Vocabulaire technique : lire, nommer et expliquer du code comme un développeur senior.</p>
+    </div>
     <div class="chips">
-      <span class="chip streak" title="Jours d'affilée">${ICON.flame}${streakNow()}</span>
-      <span class="chip" title="Mots revus au moins 3 fois avec succès">${ICON.star}${masteredCount()}</span>
+      <span class="labo-counter" title="Jours consécutifs de protocole">Série : ${streakNow()} j</span>
+      <span class="labo-counter" title="Mots revus au moins 3 fois avec succès">Mots calibrés : ${masteredCount()}</span>
       ${langSwitch()}
     </div>
   </header>
@@ -185,51 +171,53 @@ const footerSync = () => "";
 
 function greeting(rec){
   const started=Object.keys(P.done).length>0, n=streakNow(), due=dueIds().length;
-  if(!started && !P.placement) return {mood:"content", html:`Salut, moi c'est <strong>Sensei</strong>. Je suis là pour t'apprendre à parler du code comme un senior.<span class="sub">On commence par un petit test pour voir où tu en es ? Ou on attaque directement.</span>`,
-    actions:`<button class="btn" data-act="placement">Faire le test</button>${rec?`<button class="btn ghost" data-start="${rec.gi}">Commencer directement</button>`:""}`};
-  let html = n>1 ? `${n} jours d'affilée. Respect.` : started ? "Content de te revoir." : "Salut.";
-  if(rec) html += ` On reprend : <strong>${esc(rec.title)}</strong>.`; else html += " Tu as fini toutes les leçons. Chapeau.";
-  if(due) html += `<span class="sub">Et tu as ${due} mot${due>1?"s":""} à réviser aujourd'hui.</span>`;
-  return {mood:n>2?"fier":"calme", html, actions: rec?`<button class="btn" data-start="${rec.gi}">C'est parti</button>${due?`<button class="btn ghost" data-go="review">Réviser d'abord</button>`:""}`:(due?`<button class="btn" data-go="review">Réviser</button>`:"")};
+  if(!started && !P.placement) return {mood:"content", html:`Bienvenue dans la <strong>Chambre d'Enrichissement Lexical</strong>, sujet de test. Ce protocole va vous apprendre à parler du code comme un développeur senior.<span class="sub">Un test de positionnement est recommandé pour calibrer votre niveau de départ. Vous pouvez aussi commencer directement.</span>`,
+    actions:`<button class="btn" data-act="placement">Lancer le test de positionnement</button>${rec?`<button class="btn ghost" data-start="${rec.gi}">Commencer directement</button>`:""}`};
+  let html = n>1 ? `${n} jours consécutifs de protocole. Le Centre est satisfait.` : started ? "Bon retour, sujet de test." : "Bonjour, sujet de test.";
+  if(rec) html += ` Prochaine chambre : <strong>${esc(rec.title)}</strong>.`; else html += " Toutes les chambres sont calibrées. Le Centre n'avait pas prévu ce cas.";
+  if(due) html += `<span class="sub">${due} mot${due>1?"s":""} en attente de recalibration aujourd'hui.</span>`;
+  return {mood:n>2?"fier":"calme", html, actions: rec?`<button class="btn" data-start="${rec.gi}">Entrer dans la chambre</button>${due?`<button class="btn ghost" data-go="review">Réviser d'abord</button>`:""}`:(due?`<button class="btn" data-go="review">Réviser</button>`:"")};
 }
-const OFFSETS=[0,44,64,44,0,-44,-64,-44];
+/* Couleur de chaque chapitre : meme palette que les modules du quiz (css/modules.css) */
+const CH_COLOR = {lire:"#3572A5", parler:"#009688", senior:"#6f42c1", objets:"#E67E22", uml:"#3498DB", propre:"#27AE60", secu:"#E74C3C", devsecops:"#2496ED", agile:"#9B59B6", rust:"#CE422B"};
+const chamberNum = gi => String(gi+1).padStart(2,"0");
 function renderPath(){
   const rec=recommended(), g=greeting(rec);
   const ws=weakSteps();
   const units = CHAPTERS.map((ch,ci)=>{
     const p=chapterProgress(ci), lv=P.placement&&P.placement.levels?P.placement.levels[ch.id]:undefined;
-    const nodes = ch.lessons.map((l0,k)=>{ const l=LESSON[l0.id], gl=LESSONS[l.gi]||l; const lesson=LESSONS.find(x=>x.id===l0.id);
+    const pct=Math.round(p.done/p.total*100);
+    const rows = ch.lessons.map((l0,k)=>{ const lesson=LESSONS.find(x=>x.id===l0.id);
       const done=isDone(lesson.id), op=unlocked(lesson), next=rec&&rec.id===lesson.id, sel=view.sel===lesson.gi;
-      const cls=done?"done":next?"next":op?"":"locked";
-      const inner=done?ICON.check:op?String(k+1):ICON.lock;
+      const chip = done?"labo-chip-ok":next?"labo-chip-current":"";
+      const state = done?"Calibrée":next?"Recommandée":op?"":"Verrouillée";
       const nW=lesson.steps.filter(s=>s.type==="concept").length;
       const pop = sel ? `<div class="pop">
-          <span class="eyebrow">Leçon ${k+1} · ${lesson.steps.length} étapes · ${nW} mots</span>
+          <span class="eyebrow">Chambre de test ${chamberNum(lesson.gi)} · ${lesson.steps.length} étapes · ${nW} mots</span>
           <h3>${esc(lesson.title)}</h3><p class="small muted">${esc(lesson.sub)}</p>
-          ${op?`<div class="actions"><button class="btn full" data-start="${lesson.gi}">${done?"Refaire la leçon":"Commencer"}</button></div>`:`<p class="small">Termine d'abord : <strong>${esc(ch.lessons[k-1].title)}</strong>.</p>`}
+          ${op?`<div class="actions"><button class="btn" data-start="${lesson.gi}">${done?"Refaire la chambre":"Entrer dans la chambre"}</button></div>`:`<p class="small">Accès refusé. Terminez d'abord : <strong>${esc(ch.lessons[k-1].title)}</strong>.</p>`}
         </div>` : "";
-      return `<li><div class="node-wrap${next?" has-here":""}" style="transform:translateX(${OFFSETS[k%OFFSETS.length]}px)">
-          ${next?`<span class="here">Ici</span>`:""}
-          <button class="node ${cls}" data-node="${lesson.gi}" aria-label="${esc(lesson.title)}${done?", terminée":op?"":", verrouillée"}" aria-expanded="${sel}">${inner}</button>
-          <span class="node-label">${esc(lesson.title)}</span>
-        </div>${pop}</li>`; }).join("");
-    return `<section class="unit" aria-label="${esc(ch.title)}">
-      <div class="banner p${ci%5+1}">
-        <div class="spread"><span class="eyebrow">Chapitre ${ci+1}</span>${lv===2?`<span class="pill done">Acquis au test</span>`:lv===1?`<span class="pill">En partie au test</span>`:""}</div>
-        <h2>${esc(ch.title)}</h2>
-        <p class="small">${esc(ch.goal)}</p>
-        <div class="row"><span class="meter" aria-hidden="true"><i style="width:${Math.round(p.done/p.total*100)}%"></i></span><span class="small"><strong>${p.done}/${p.total}</strong></span></div>
-      </div>
-      <ol class="path">${nodes}</ol>
+      return `<li><button class="chamber ${op?"":"locked"} ${next?"next":""}" data-node="${lesson.gi}" aria-expanded="${sel}" aria-label="Chambre de test ${chamberNum(lesson.gi)} : ${esc(lesson.title)}${state?", "+state.toLowerCase():""}">
+          <span class="labo-chip ${chip}" aria-hidden="true">${done?ICON.check:op?chamberNum(lesson.gi):ICON.lock}</span>
+          <span class="chamber-title"><span class="chamber-num">Chambre de test ${chamberNum(lesson.gi)}</span>${esc(lesson.title)}</span>
+          ${state?`<span class="chamber-state">${state}</span>`:""}
+        </button>${pop}</li>`; }).join("");
+    return `<section class="module-card chapter" style="--module-color:${CH_COLOR[ch.id]||"#FF6700"}" aria-label="${esc(ch.title)}">
+      <div class="spread"><span class="eyebrow">Chapitre ${String(ci+1).padStart(2,"0")}</span>${lv===2?`<span class="pill done">Acquis au test</span>`:lv===1?`<span class="pill">En partie au test</span>`:""}</div>
+      <h3>${esc(ch.title)}</h3>
+      <p>${esc(ch.goal)}</p>
+      <div class="labo-progress-track"><div class="labo-progress-fill" style="width:${pct}%;background:var(--module-color)"></div></div>
+      <p class="labo-progress-label">${p.done}/${p.total} chambres calibrées${pct===100?" · protocole terminé":""}</p>
+      <ol class="chambers">${rows}</ol>
     </section>`;
   }).join("");
   return `${header()}
-  <section class="hero">${sensei(g.mood,96)}<div class="bubble">${g.html}${g.actions?`<div class="actions" style="margin-top:12px">${g.actions}</div>`:""}</div></section>
-  ${vocabPool().length>=4?`<section class="panel"><div class="spread"><h2>Entraînement vocabulaire</h2><span class="pill">${vocabPool().length} mots</span></div><p class="small">10 exercices rapides sur les mots que tu as déjà appris : paires, mot qui manque, mot à écrire. Ceux à revoir passent en premier.</p><div class="actions"><button class="btn small" data-act="vocab">S'entraîner</button></div></section>`:""}
-  ${ws.length?`<section class="panel soft"><div class="spread"><h2>Tes points faibles</h2><span class="pill warn">${ws.length}</span></div><p class="small">Les exercices où tu as hésité. Les refaire, c'est là qu'on progresse le plus.</p><div class="actions"><button class="btn small" data-act="weak">Les revoir</button></div></section>`:""}
-  ${units}
-  <section class="panel"><span class="eyebrow">Ta semaine idéale</span>
-    <p class="small"><strong>Chaque jour, 15 min</strong> de Sensei. <strong>3 fois par semaine</strong>, 30 min de code sans tutoriel (Rustlings, Exercism).</p>
+  <section class="hero">${unit(g.mood,88)}<div class="bubble"><span class="unit-name">Unité 03</span>${g.html}${g.actions?`<div class="actions" style="margin-top:12px">${g.actions}</div>`:""}</div></section>
+  ${vocabPool().length>=4?`<section class="panel"><div class="spread"><h3>Entraînement vocabulaire</h3><span class="pill">${vocabPool().length} mots</span></div><p class="small">10 exercices rapides sur les mots déjà appris : paires, mot manquant, terme à écrire. Les mots à recalibrer passent en premier.</p><div class="actions"><button class="btn small" data-act="vocab">Lancer l'entraînement</button></div></section>`:""}
+  ${ws.length?`<section class="panel warn"><div class="spread"><h3>Anomalies détectées</h3><span class="pill warn">${ws.length}</span></div><p class="small">Les exercices où vous avez hésité. Les refaire est le moyen le plus efficace de progresser.</p><div class="actions"><button class="btn small" data-act="weak">Traiter les anomalies</button></div></section>`:""}
+  <div class="chapters">${units}</div>
+  <section class="panel"><span class="eyebrow">Protocole recommandé</span>
+    <p class="small"><strong>Chaque jour, 15 min</strong> dans cette chambre. <strong>3 fois par semaine</strong>, 30 min de code sans tutoriel (Rustlings, Exercism).</p>
     ${P.placement?`<div class="actions"><button class="btn ghost small" data-act="placement">Refaire le test de positionnement</button></div>`:""}
   </section>
   ${footerSync()}`;
@@ -269,7 +257,7 @@ const defLine = t => mapVar(t.def, x=>`**${t.term}** : ${x}`);
 const VX = {
   /* Quel est le mot ? (définition → mot) */
   word(t){ const d=distractors(t,3); if(d.length<3) return null;
-    return {type:"qcm", vocab:"word", terms:[t.id], q:mapVar(t.def, x=>"Quel est le mot pour ça ? « "+maskAll(x,t)+" »"),
+    return {type:"qcm", vocab:"word", terms:[t.id], q:mapVar(t.def, x=>"Quel terme correspond à cette définition ? « "+maskAll(x,t)+" »"),
       options:[t.term, ...d.map(x=>x.term)], correct:0, explain:defLine(t)}; },
   /* Le mot qui manque dans une phrase de senior */
   cloze(t){ const i=fold(t.phrase).indexOf(fold(t.term)); if(i<0) return null; const d=distractors(t,2); if(d.length<2) return null;
@@ -280,11 +268,11 @@ const VX = {
   /* Écris le mot, sans aide */
   type(t){ if(/[\/,]/.test(t.term) || t.term.length>28) return null; const core=coreTerm(t); if(core.length<3) return null;
     const words=core.split(/\s+/).length;
-    return {type:"predict", vocab:"type", terms:[t.id], q:mapVar(t.def, x=>"Écris le mot qui correspond : « "+maskAll(x,t)+" »"),
-      label:"Le mot :", answers:[t.term, core], hint:`Il commence par « ${core.slice(0,2)}… »${words>1?` (${words} mots)`:""}.`, explain:defLine(t)}; },
+    return {type:"predict", vocab:"type", terms:[t.id], q:mapVar(t.def, x=>"Écrivez le terme qui correspond : « "+maskAll(x,t)+" »"),
+      label:"Le terme :", answers:[t.term, core], hint:`Il commence par « ${core.slice(0,2)}… »${words>1?` (${words} mots)`:""}.`, explain:defLine(t)}; },
   /* Débutant → senior */
   senior(t){ if(!t.beginner) return null; const d=distractors(t,3); if(d.length<3) return null;
-    return {type:"qcm", vocab:"senior", terms:[t.id], q:"Un débutant dirait : « "+maskAll(t.beginner,t)+" ». Quel mot un senior utiliserait ?",
+    return {type:"qcm", vocab:"senior", terms:[t.id], q:"Un débutant dirait : « "+maskAll(t.beginner,t)+" ». Quel terme un senior utiliserait-il ?",
       options:[t.term, ...d.map(x=>x.term)], correct:0, explain:`Le senior dit : « ${t.phrase} »`}; }
 };
 function oneFor(t, pref){
@@ -324,9 +312,11 @@ function demote(ids){ ids.forEach(id=>{ const c=P.cards[id]; if(c){ c.box=1; c.d
 /* ---- Moteur de leçon ---- */
 function startRun(opts){ L={...opts, i:0, st:{}, mistakes:0, results:[]}; view={name:"lesson"}; render(); window.scrollTo(0,0); }
 function startLesson(gi){ const l=LESSONS[gi]; startRun({mode:"lesson", title:l.title, lessonId:l.id, steps:l.steps.map((s,i)=>({step:s, lessonId:l.id, idx:i})).concat(lessonVocab(l).map(s=>({step:s, lessonId:l.id, idx:null})))}); }
-function startWeak(){ const ws=shuffle(weakSteps()).slice(0,12); if(!ws.length) return; startRun({mode:"weak", title:"Points faibles", steps:ws}); }
+function startWeak(){ const ws=shuffle(weakSteps()).slice(0,12); if(!ws.length) return; startRun({mode:"weak", title:"Anomalies détectées", steps:ws}); }
 function startPlacement(){ startRun({mode:"placement", title:"Test de positionnement", steps:PLACEMENT.map(p=>({step:p.step, ch:p.ch}))}); }
-function erred(){ if(!L.st.erred){ L.st.erred=true; L.mistakes++; } }
+// Une erreur par etape au plus. La voix d'echec (1 fois sur 3, voir sounds.js) ne
+// joue pas sur "Je ne sais pas" ni pendant le test de positionnement.
+function erred(){ if(!L.st.erred){ L.st.erred=true; L.mistakes++; if(!L.st.skip && L.mode!=="placement") playFail(); } }
 function nextStep(){
   const c=cur(), ok=!L.st.erred, scored=!["concept","explain","senior"].includes(c.step.type);
   if(L.mode==="lesson" && scored && !ok && c.idx!=null) addWeak(c.lessonId,c.idx);
@@ -350,12 +340,15 @@ function finishRun(){
     P.placement={date:today(), levels, score:L.results.filter(r=>r.ok).length, total:L.results.length};
   }
   const missed=[...new Set(L.missedTerms||[])]; demote(missed);
+  const scored=L.steps.filter(c=>!["concept","explain","senior"].includes(c.step.type)).length;
+  const chapterDone = L.mode==="lesson" && CHAPTERS[LESSON[L.lessonId].chIdx].lessons.every(l=>isDone(l.id));
+  if(L.mode!=="placement"){ if(L.mistakes===0 || chapterDone) playComplete(); else playSuccess(); }
   bumpStreak(); save();
-  view={name:"done", mode:L.mode, added, mistakes:L.mistakes, title:L.title, levels, total:L.steps.length, missed:missed.map(id=>TERM[id].term)};
+  view={name:"done", mode:L.mode, added, mistakes:L.mistakes, title:L.title, levels, total:L.steps.length, scored, ok:Math.max(0,scored-L.mistakes), chapterDone, missed:missed.map(id=>TERM[id].term)};
   L=null; render(); window.scrollTo(0,0);
 }
 
-/* Chaque étape renvoie : bulle de Sensei, humeur, contenu, et barre du bas */
+/* Chaque étape renvoie : message de l'Unité 03, humeur, contenu, et barre du bas */
 const btn = (act, label, cls, dis) => `<button class="btn ${cls||""}" data-act="${act}" ${dis?"disabled":""}>${label}</button>`;
 const contBtn = kind => `<button class="btn full ${kind==="good"?"good":kind==="bad"?"bad":""}" data-act="next">Continuer</button>`;
 function checkSheet(canCheck, checkAct, skipAct){ return {kind:"idle", actions:btn(checkAct,"Vérifier","full",!canCheck)+btn(skipAct,"Je ne sais pas","ghost")}; }
@@ -363,8 +356,8 @@ function resultSheet(ok, skip, text){ const kind=ok?"good":skip?"skip":"bad"; re
 
 function stepConcept(s){
   const before=s.beginner?`<div class="versus"><div class="vs before"><b>Le débutant dit</b><span>« ${esc(s.beginner)} »</span></div><div class="vs after"><b>Le senior dit</b><span>« ${esc(s.phrase)} »</span></div></div>`
-    :`<div class="quote"><b>Pour en parler</b>« ${esc(s.phrase)} »</div>`;
-  return {mood:"calme", bubble: s.beginner?"Celui-là, tu vas l'entendre souvent en équipe :":"Nouveau mot. Retiens bien celui-là :",
+    :`<div class="quote"><b>En contexte</b>« ${esc(s.phrase)} »</div>`;
+  return {mood:"calme", bubble: s.beginner?"Terme fréquent en équipe. À mémoriser :":"Nouveau terme. À mémoriser :",
     body:`<article class="card">
       <div class="term"><mark>${esc(s.term)}</mark></div>
       <p class="def">${md(pick(s.def))}</p>
@@ -398,7 +391,7 @@ function stepCloze(s){
     else text=`${st.sel!=null&&why[st.sel]?`<p><strong>Pourquoi pas « ${md(opts[st.sel])} » :</strong> ${md(why[st.sel])}</p>`:""}<p>Le mot juste : <strong>${md(opts[correct])}</strong>.</p>`;
     if(s.explain) text+=`<p>${md(pick(s.explain))}</p>`;
   }
-  return {mood:"calme", bubble:"Quel mot va dans le trou ?",
+  return {mood:"calme", bubble:"Quel mot complète la phrase ?",
     body:`<article class="card"><p class="sentence">${sentence}</p>${optionsHtml(opts,correct,st)}</article>`,
     sheet: st.answered ? resultSheet(st.ok, st.skip, text) : checkSheet(st.sel!=null,"check-qcm","skip-qcm")};
 }
@@ -431,9 +424,9 @@ function stepLabel(s){
     </div>`;
   }).join("");
   const all=marks.every((m,i)=>st.sel[i]);
-  return {mood:"pensif", bubble:md(pick(s.intro)||"Touche chaque morceau surligné et dis-moi ce que c'est."),
+  return {mood:"pensif", bubble:md(pick(s.intro)||"Touchez chaque morceau surligné et nommez-le."),
     body:`<article class="card">${codeView(s.code, marksFn)}<div class="labels">${rows}</div></article>`,
-    sheet: checked ? resultSheet(st.allOk, st.skip, st.allOk?"Tu as mis le bon mot sur chaque morceau.":"Relis les explications sous chaque morceau : ce sont les mots à retenir.") : checkSheet(all,"check-label","skip-label")};
+    sheet: checked ? resultSheet(st.allOk, st.skip, st.allOk?"Chaque morceau porte le bon nom.":"Relisez les explications sous chaque morceau : ce sont les mots à retenir.") : checkSheet(all,"check-label","skip-label")};
 }
 function stepBuild(s){
   const st=L.st, answer=pick(s.answer), dis=pick(s.distractors)||[];
@@ -441,24 +434,24 @@ function stepBuild(s){
   const done=st.final;
   const tray=st.picked.map((ti,k)=>`<button class="tile" data-unpick="${k}" ${done?"disabled":""}>${esc(st.tiles[ti])}</button>`).join("");
   const bank=st.tiles.map((t,ti)=>{ const used=st.picked.includes(ti); return `<button class="tile ${used?"ph":""}" data-pick="${ti}" ${done||used?"disabled":""} ${used?'aria-hidden="true" tabindex="-1"':""}>${esc(t)}</button>`; }).join("");
-  const hint = !done&&st.tries ? `<div class="note bad"><p class="small">Les ${st.goodPrefix} premières étiquettes sont bien placées. Retire les autres et réessaie.</p></div>` : "";
+  const hint = !done&&st.tries ? `<div class="note bad"><p class="small">Les ${st.goodPrefix} premières étiquettes sont bien placées. Retirez les autres et réessayez.</p></div>` : "";
   const text = st.ok ? md(pick(s.explain)||"La phrase est parfaite.") : `<p>« ${esc(answer.join(" "))} »</p>${s.explain?`<p>${md(pick(s.explain))}</p>`:""}`;
-  return {mood:"calme", bubble:md(pick(s.intro)||"Remets les étiquettes dans l'ordre."),
+  return {mood:"calme", bubble:md(pick(s.intro)||"Remettez les étiquettes dans l'ordre."),
     body:`<article class="card">${s.code?codeView(s.code):""}
-      <div class="tray ${done?(st.ok?"ok":"ko"):""}" aria-label="Ta phrase">${tray||`<span class="small muted">Touche les étiquettes ci-dessous.</span>`}</div>
+      <div class="tray ${done?(st.ok?"ok":"ko"):""}" aria-label="Votre phrase">${tray||`<span class="small muted">Touchez les étiquettes ci-dessous.</span>`}</div>
       <div class="bank" aria-label="Étiquettes">${bank}</div>${hint}</article>`,
     sheet: done ? resultSheet(st.ok, st.skip, text) : checkSheet(st.picked.length>0,"check-build","skip-build")};
 }
 function stepPredict(s){
   const st=L.st;
   const nearT = !st.final&&st.near ? TERM[st.near] : null, target = s.vocab ? TERM[s.terms[0]] : null;
-  const near = nearT ? `<div class="note"><h4>Presque : « ${esc(nearT.term)} » est un mot proche</h4><p>${kindOf(nearT,target) ? `« ${esc(nearT.term)} » est un <strong>cas particulier</strong>. Ici, on cherche le mot plus général.` : kindOf(target,nearT) ? `« ${esc(nearT.term)} » est <strong>plus général</strong>. Ici, on cherche un mot plus précis.` : `Les deux vont ensemble, mais ce n'est pas le même mot.`}</p><p class="small"><strong>${esc(nearT.term)}</strong> : ${md(shortDef(pick(nearT.def)))}</p><p class="small muted">Ça ne compte pas comme une erreur. Réessaie.</p></div>` : "";
+  const near = nearT ? `<div class="note"><h4>Presque : « ${esc(nearT.term)} » est un mot proche</h4><p>${kindOf(nearT,target) ? `« ${esc(nearT.term)} » est un <strong>cas particulier</strong>. Ici, on cherche le mot plus général.` : kindOf(target,nearT) ? `« ${esc(nearT.term)} » est <strong>plus général</strong>. Ici, on cherche un mot plus précis.` : `Les deux vont ensemble, mais ce n'est pas le même mot.`}</p><p class="small"><strong>${esc(nearT.term)}</strong> : ${md(shortDef(pick(nearT.def)))}</p><p class="small muted">Ce n'est pas compté comme une erreur. Réessayez.</p></div>` : "";
   const hint = near || (!st.final&&st.tries ? `<div class="note bad"><p><strong>Indice :</strong> ${md(pick(s.hint))}</p></div>` : "");
   return {mood:"pensif", bubble:md(pick(s.q)),
     body:`<article class="card">${codeView(s.code)}
       <label class="small muted" for="pred">${esc(s.label||"Ce qui s'affiche :")}</label>
       <input class="field" id="pred" autocomplete="off" autocapitalize="off" spellcheck="false" value="${esc(st.val||"")}" ${st.final?"disabled":""}>${hint}</article>`,
-    sheet: st.final ? resultSheet(st.ok, st.skip, md(pick(s.explain)) + (!st.ok&&st.other&&TERM[st.other] ? `<p>Tu as écrit « ${esc(TERM[st.other].term)} » : ${md(shortDef(pick(TERM[st.other].def)))}</p>` : "")) : {kind:"idle", actions:btn("check-pred","Vérifier","full")+btn("skip-pred","Je ne sais pas","ghost")}};
+    sheet: st.final ? resultSheet(st.ok, st.skip, md(pick(s.explain)) + (!st.ok&&st.other&&TERM[st.other] ? `<p>Vous avez écrit « ${esc(TERM[st.other].term)} » : ${md(shortDef(pick(TERM[st.other].def)))}</p>` : "")) : {kind:"idle", actions:btn("check-pred","Vérifier","full")+btn("skip-pred","Je ne sais pas","ghost")}};
 }
 function firstOpenRow(s){ const st=L.st; if(st.row===undefined) st.row=s.rows.findIndex(r=>r.c.some(c=>typeof c==="object")); return st.row; }
 function stepTrace(s){
@@ -477,11 +470,11 @@ function stepTrace(s){
     }).join("");
     return `<tr class="${state==="cur"?"cur":state==="future"?"future":""}">${tds}</tr>`;
   }).join("");
-  const hint = !finished&&st.showHint ? `<div class="note ${st.reveal?"":"bad"}"><h4>${st.reveal?"Voici la ligne":"Regarde bien"}</h4><p>${md(s.rows[cr].hint||"")}</p></div>` : "";
+  const hint = !finished&&st.showHint ? `<div class="note ${st.reveal?"":"bad"}"><h4>${st.reveal?"Voici la ligne":"Regardez bien"}</h4><p>${md(s.rows[cr].hint||"")}</p></div>` : "";
   return {mood:"pensif", bubble:md(pick(s.intro)),
     body:`<article class="card">${codeView(s.code)}
       <div class="trace-wrap"><table class="trace"><thead><tr>${s.cols.map(c=>`<th scope="col">${esc(c)}</th>`).join("")}</tr></thead><tbody>${rows}</tbody></table></div>${hint}</article>`,
-    sheet: finished ? {kind:"good", title:line("good"), text:md(s.after), actions:contBtn("good")} : {kind:"idle", actions:btn("check-row","Vérifier la ligne","full")+btn("reveal-row","Montre-moi","ghost")}};
+    sheet: finished ? {kind:"good", title:line("good"), text:md(s.after), actions:contBtn("good")} : {kind:"idle", actions:btn("check-row","Vérifier la ligne","full")+btn("reveal-row","Montrez-moi","ghost")}};
 }
 function stepExplain(s){
   const st=L.st, model=pick(s.model);
@@ -490,15 +483,15 @@ function stepExplain(s){
     const txt=fold(st.text||"");
     const kws=s.keywords.map(k=>`<span class="${txt.includes(fold(k))?"hit":""}">${esc(k)}</span>`).join("");
     res=`
-      <div class="note"><h4>Les mots attendus</h4><p class="small muted">En vert : ceux que tu as utilisés.</p><div class="kw">${kws}</div></div>
-      <div class="quote"><b>Comment je le dirais</b>${md(model)}</div>`;
+      <div class="note"><h4>Les mots attendus</h4><p class="small muted">En vert : ceux que vous avez utilisés.</p><div class="kw">${kws}</div></div>
+      <div class="quote"><b>Formulation de référence</b>${md(model)}</div>`;
   }
-  const sheet = st.result ? {kind:"good", title:"Compare avec ta réponse.", text:"Repère les mots en vert et ceux qui te manquent, puis redis ma phrase à voix haute.", actions:contBtn("good")}
-    : {kind:"idle", actions:btn("model-check","Voir comment je le dirais","full")};
+  const sheet = st.result ? {kind:"good", title:"Comparez avec votre réponse.", text:"Repérez les mots en vert et ceux qui manquent, puis répétez la formulation de référence à voix haute.", actions:contBtn("good")}
+    : {kind:"idle", actions:btn("model-check","Voir la formulation de référence","full")};
   return {mood:st.result?"content":"calme",
-    bubble:`${md(pick(s.q))}<span class="sub">Dis-le d'abord à voix haute, puis écris-le. Quoi, comment, pourquoi.</span>`,
+    bubble:`${md(pick(s.q))}<span class="sub">Dites-le d'abord à voix haute, puis écrivez-le. Quoi, comment, pourquoi.</span>`,
     body:`<article class="card">${s.code?codeView(s.code):""}
-      <label class="small muted" for="expl">Ta réponse :</label>
+      <label class="small muted" for="expl">Votre réponse :</label>
       <textarea class="field" id="expl" ${st.result?"disabled":""}>${esc(st.text||"")}</textarea>${res}</article>`,
     sheet};
 }
@@ -507,14 +500,14 @@ function stepSenior(s){
   const qs=s.questions, qi=st.qi, q=qs[qi], f=st.fb[qi], last=qi===qs.length-1;
   let res="";
   if(f){
-    res = `<div class="quote"><b>Comment je le dirais</b>${md(pick(q.model))}</div>`;
+    res = `<div class="quote"><b>Formulation de référence</b>${md(pick(q.model))}</div>`;
   }
-  const sheet = f ? {kind:"good", title:"Compare avec ta réponse.", actions: last?contBtn("good"):btn("senior-next","Question suivante","full good")}
-    : {kind:"idle", actions:btn("senior-model","Voir ma réponse","full")};
+  const sheet = f ? {kind:"good", title:"Comparez avec votre réponse.", actions: last?contBtn("good"):btn("senior-next","Question suivante","full good")}
+    : {kind:"idle", actions:btn("senior-model","Voir la réponse de référence","full")};
   return {mood:f?"content":"pensif",
-    bubble:`<span class="sub" style="margin:0 0 4px">Question ${qi+1}/${qs.length} · je relis ton code</span>« ${md(pick(q.q))} »`,
+    bubble:`<span class="sub" style="margin:0 0 4px">Question ${qi+1}/${qs.length} · revue de code</span>« ${md(pick(q.q))} »`,
     body:`<article class="card">${codeView(s.code)}
-      <label class="small muted" for="senior">Ta réponse, comme si tu parlais à un collègue :</label>
+      <label class="small muted" for="senior">Votre réponse, comme à un collègue :</label>
       <textarea class="field" id="senior" ${f?"disabled":""}>${esc(st.ans[qi]||"")}</textarea>${res}</article>`,
     sheet};
 }
@@ -525,13 +518,13 @@ function stepPairs(s){
   if(finished){
     const list=ids.map(id=>{ const t=TERM[id]; return `<p><strong>${esc(t.term)}</strong> : ${md(shortDef(pick(t.def)))}</p>`; }).join("");
     const missed=[...new Set(st.bad)].map(id=>TERM[id].term);
-    const text = st.skip ? "Relis les 4 paires : je te les redemande bientôt." : missed.length ? `Tu as hésité sur : <strong>${missed.map(esc).join(", ")}</strong>. Je te le redemande plus tôt en révision.` : "Les 4 paires sont justes.";
+    const text = st.skip ? "Relisez les 4 paires : elles reviendront bientôt." : missed.length ? `Hésitation sur : <strong>${missed.map(esc).join(", ")}</strong>. Ces mots reviendront plus tôt en révision.` : "Les 4 paires sont justes.";
     return {mood:st.erred?"calme":"content", bubble:"Les paires :", body:`<article class="card"><div class="pairs-list">${list}</div></article>`, sheet:resultSheet(!st.erred, st.skip, text)};
   }
   const cell=(side,id)=>{ const t=TERM[id], done=st.done.includes(id), sel=st.pick&&st.pick.side===side&&st.pick.id===id, ko=st.flash&&st.flash[side]===id;
     const txt = side==="L" ? esc(t.term) : md(maskAll(shortDef(pick(t.def)),t));
     return `<button class="pair ${side==="L"?"pair-term":""} ${done?"ok":sel?"sel":ko?"ko":""}" data-pair="${side}:${id}" ${done?"disabled":""} aria-pressed="${!!sel}">${txt}</button>`; };
-  return {mood:"pensif", bubble:`Relie chaque mot à sa définition.<span class="sub">Touche un mot, puis la définition qui va avec.</span>`,
+  return {mood:"pensif", bubble:`Reliez chaque terme à sa définition.<span class="sub">Touchez un terme, puis la définition correspondante.</span>`,
     body:`<article class="card"><div class="pair-terms" role="group" aria-label="Les mots">${st.L.map(id=>cell("L",id)).join("")}</div>
       <div class="pair-defs" role="group" aria-label="Les définitions">${st.R.map(id=>cell("R",id)).join("")}</div></article>`,
     sheet:{kind:"idle", actions:btn("skip-pairs","Je ne sais pas","ghost")}};
@@ -544,15 +537,18 @@ function renderLesson(){
   const sh=r.sheet||{kind:"idle",actions:""};
   const anim = sh.kind!=="idle" && lastSheetKind==="idle";
   lastSheetKind=sh.kind;
-  const origin = L.mode==="weak" ? `<p class="origin">Leçon : ${esc(LESSON[c.lessonId].title)}</p>` : L.mode==="placement" ? `<p class="origin">Test de positionnement · ${esc(CHAPTERS[chIndex(c.ch)].title)}</p>` : "";
-  const fb = sh.kind!=="idle" ? `<div class="sheet-fb">${sensei(sh.kind==="good"?"content":"calme",48,sh.kind==="good"&&anim?"bob":"")}<div class="txt"><h4>${esc(sh.title||"")}</h4>${sh.text?`<div class="small">${sh.text}</div>`:""}</div></div>` : "";
+  const origin = L.mode==="weak" ? `<p class="origin">Chambre : ${esc(LESSON[c.lessonId].title)}</p>` : L.mode==="placement" ? `<p class="origin">Test de positionnement · ${esc(CHAPTERS[chIndex(c.ch)].title)}</p>` : "";
+  const fb = sh.kind!=="idle" ? `<div class="sheet-fb">${unit(sh.kind==="good"?"content":sh.kind==="bad"?"pensif":"calme",44,sh.kind==="good"&&anim?"bob":"")}<div class="txt"><h4>« ${esc(sh.title||"")} »</h4>${sh.text?`<div class="small">${sh.text}</div>`:""}</div></div>` : "";
+  const tag = L.mode==="lesson" ? "Chambre de test "+chamberNum(LESSON[L.lessonId].gi) : L.mode==="vocab" ? "Entraînement" : L.mode==="weak" ? "Anomalies" : "Positionnement";
   return `<div class="lesson-top">
-      <button class="quit" data-act="quit" aria-label="Quitter la leçon">${ICON.close}</button>
-      <div class="bar" role="progressbar" aria-label="Progression" aria-valuenow="${pct}" aria-valuemin="0" aria-valuemax="100"><i style="width:${Math.max(pct,3)}%"></i></div>
+      <button class="quit" data-act="quit" aria-label="Quitter la chambre">${ICON.close}</button>
+      <span class="step-num" role="progressbar" aria-label="Progression" aria-valuenow="${pct}" aria-valuemin="0" aria-valuemax="100">Étape ${L.i+1}/${n}</span>
+      <span class="step-tag">${esc(tag)}</span>
+      <button class="mute" data-act="mute">${muteButtonLabel()}</button>
       ${langSwitch()}
     </div>
     ${origin}
-    ${say(r.mood, r.bubble, 60)}
+    ${say(r.mood, r.bubble, 48)}
     ${r.body}
     <div class="sheet ${sh.kind} ${anim?"in":""}" role="region" aria-label="Actions" aria-live="polite"><div class="sheet-in">${fb}<div class="actions">${sh.actions}</div></div></div>`;
 }
@@ -561,28 +557,38 @@ function renderDone(){
   const v=view;
   if(v.mode==="placement"){
     const lv=v.levels||{};
-    const rows=CHAPTERS.map(c=>{ const n=lv[c.id]||0; return `<li><span>${esc(c.title)}</span><span class="pill ${n===2?"done":""}">${n===2?"Acquis":n===1?"En partie":"À découvrir"}</span></li>`; }).join("");
+    const rows=CHAPTERS.map(c=>{ const n=lv[c.id]||0; return `<div class="stat-item"><span class="module-name">${esc(c.title)}</span><span class="module-score ${n===2?"good":n===1?"medium":""}">${n===2?"Acquis":n===1?"En partie":"À découvrir"}</span></div>`; }).join("");
     const rec=recommended();
     return `${header()}
-      ${say("fier", `Test terminé : <strong>${P.placement.score} / ${P.placement.total}</strong>.<span class="sub">Ce n'est pas une note, c'est ta carte de départ. Je t'ai préparé la suite.</span>`, 96, true)}
-      <section class="panel"><ul class="results">${rows}</ul></section>
+      ${say("fier", `Test terminé : <strong>${P.placement.score} / ${P.placement.total}</strong>.<span class="sub">Ce n'est pas une note : c'est votre carte de départ. La suite du protocole a été préparée.</span>`, 88, true)}
+      <div class="module-stats">${rows}</div>
       <div class="actions">${rec?`<button class="btn full" data-start="${rec.gi}">Commencer : ${esc(rec.title)}</button>`:""}<button class="btn ghost" data-go="path">Voir le parcours</button></div>`;
   }
   const n=streakNow();
-  const msg = v.mistakes===0 ? "Sans une seule erreur. Là, tu parles comme un senior."
-    : v.mode==="weak" ? "Ce qui reste difficile reviendra la prochaine fois. Petit à petit."
-    : v.mode==="vocab" ? `Tu as hésité sur ${v.missed.length} mot${v.missed.length>1?"s":""}. Ils reviennent dès demain dans ta révision.`
-    : `Tu as hésité sur ${v.mistakes} point${v.mistakes>1?"s":""}. Je les garde de côté dans « Points faibles ».`;
+  const quote = v.mistakes===0 ? (v.mode==="vocab"?"Entraînement terminé sans anomalie. Le Centre vérifie ses instruments.":"Chambre de test terminée sans anomalie. Le Centre est presque inquiet.")
+    : v.chapterDone ? "Chapitre entièrement calibré. Une nouvelle série de chambres vous attend."
+    : v.mode==="weak" ? "Les anomalies restantes reviendront lors du prochain protocole. Petit à petit."
+    : v.mode==="vocab" ? `Hésitation sur ${v.missed.length} mot${v.missed.length>1?"s":""}. Ils reviendront dès demain en révision.`
+    : `Hésitation sur ${v.mistakes} point${v.mistakes>1?"s":""}. Ils ont été placés dans « Anomalies détectées ».`;
+  const title = v.mode==="weak"?"Anomalies traitées":v.mode==="vocab"?"Entraînement terminé":"Chambre de test terminée";
   return `${header()}
   <section class="center">
-    ${sensei("fier",130,"bob")}
-    <h2 class="done-title">${v.mode==="weak"?"Points faibles revus":v.mode==="vocab"?"Entraînement terminé":"Leçon bouclée"}</h2>
+    ${unit(v.mistakes===0?"fier":"content",104,"bob")}
+    <h2 class="done-title">${title}</h2>
     <p class="muted">${esc(v.title)}</p>
-    <div class="stat">${ICON.flame}<b>${n}</b><span class="small">jour${n>1?"s":""} de série</span></div>
-    <p>${esc(msg)}</p>
   </section>
-  ${v.added.length?`<section class="panel"><span class="eyebrow">${v.added.length} mot${v.added.length>1?"s":""} de plus dans ton vocabulaire</span><div class="kw">${v.added.map(t=>`<span class="hit">${esc(t)}</span>`).join("")}</div><p class="small muted">Je te les redemande demain, puis de moins en moins souvent.</p></section>`:""}
-  ${v.missed&&v.missed.length?`<section class="panel"><span class="eyebrow">À revoir demain</span><div class="kw">${v.missed.map(t=>`<span>${esc(t)}</span>`).join("")}</div></section>`:""}
+  <div class="score-display">
+    <div class="score">${v.ok}/${v.scored}</div>
+    <div class="total">exercices réussis du premier coup</div>
+    <div class="labo-recap-glados">"${esc(quote)}"</div>
+  </div>
+  <div class="module-stats">
+    <div class="stat-item"><span class="module-name">Série de protocole</span><span class="module-score">${n} jour${n>1?"s":""}</span></div>
+    ${v.mode==="lesson"?`<div class="stat-item"><span class="module-name">Mots ajoutés au vocabulaire</span><span class="module-score good">${v.added.length}</span></div>`:""}
+    ${v.missed&&v.missed.length?`<div class="stat-item"><span class="module-name">Mots à recalibrer demain</span><span class="module-score bad">${v.missed.length}</span></div>`:""}
+  </div>
+  ${v.added.length?`<section class="panel"><span class="eyebrow">${v.added.length} mot${v.added.length>1?"s":""} ajouté${v.added.length>1?"s":""} à votre vocabulaire</span><div class="kw">${v.added.map(t=>`<span class="hit">${esc(t)}</span>`).join("")}</div><p class="small muted">Ils vous seront redemandés demain, puis de moins en moins souvent.</p></section>`:""}
+  ${v.missed&&v.missed.length?`<section class="panel"><span class="eyebrow">À recalibrer demain</span><div class="kw">${v.missed.map(t=>`<span>${esc(t)}</span>`).join("")}</div></section>`:""}
   <div class="actions"><button class="btn full" data-go="path">Continuer</button>${v.mode==="vocab"?`<button class="btn ghost" data-act="vocab">Encore 10</button>`:""}</div>`;
 }
 
@@ -594,23 +600,23 @@ function renderReview(){
   const v=view;
   if(!v.q || !v.q.length){
     const has=Object.keys(P.cards).length, nextDue=Object.values(P.cards).map(c=>c.due).sort()[0];
-    return `${header()}<section class="center">${MUG}
-      ${say("calme", has?`Rien à réviser pour l'instant.<span class="sub">Prochaine révision : ${nextDue===addDays(today(),1)?"demain":frDate(nextDue)}. Une petite leçon en attendant ?</span>`:`Pas encore de mots à réviser.<span class="sub">Termine ta première leçon : ses mots arriveront ici.</span>`, 64)}
+    return `${header()}<section class="center">
+      ${say("calme", has?`Aucun mot à recalibrer pour l'instant.<span class="sub">Prochaine révision : ${nextDue===addDays(today(),1)?"demain":frDate(nextDue)}. Une chambre de test en attendant ?</span>`:`Aucun mot à réviser.<span class="sub">Terminez votre première chambre de test : ses mots arriveront ici.</span>`, 64)}
       <button class="btn" data-go="path">Aller au parcours</button></section>${footerSync()}`;
   }
-  if(v.i>=v.q.length) return `${header()}<section class="center">${sensei("fier",120,"bob")}<h2 class="done-title">${v.known} / ${v.total}</h2><p class="muted">mots retrouvés du premier coup</p></section><div class="actions"><button class="btn full" data-go="path">Continuer</button></div>`;
+  if(v.i>=v.q.length) return `${header()}<section class="center">${unit("fier",104,"bob")}<h2 class="done-title">${v.known} / ${v.total}</h2><p class="muted">mots retrouvés du premier coup</p></section><div class="actions"><button class="btn full" data-go="path">Continuer</button></div>`;
   const t=TERM[v.q[v.i]], c=P.cards[t.id];
-  const ask = v.mode==="term" ? "Tu te souviens de ce que veut dire ce mot ?" : v.mode==="def" ? "Quel est le mot pour ça ?" : "Quel mot manque dans ma phrase ?";
+  const ask = v.mode==="term" ? "Que signifie ce terme ?" : v.mode==="def" ? "Quel terme correspond à cette définition ?" : "Quel mot manque dans cette phrase ?";
   const front = v.mode==="term" ? `<div class="term"><mark>${esc(t.term)}</mark></div>`
     : v.mode==="def" ? `<p class="def">${md(pick(t.def))}</p>` : `<p class="sentence">« ${esc(blankPhrase(t))} »</p>`;
   const back = v.revealed ? `<hr style="width:100%;border:0;border-top:2px dashed var(--line)">
       ${v.mode==="term"?`<p class="def">${md(pick(t.def))}</p>`:`<div class="term"><mark>${esc(t.term)}</mark></div>`}
       ${v.mode==="ctx"?`<p class="small">${md(pick(t.def))}</p>`:""}
       ${t.code?`<div style="width:100%;text-align:left">${codeView(t.code)}</div>`:""}
-      <div class="quote" style="text-align:left;width:100%"><b>${t.beginner?"Le senior dit":"Pour en parler"}</b>« ${esc(t.phrase)} »</div>` : "";
+      <div class="quote" style="text-align:left;width:100%"><b>${t.beginner?"Le senior dit":"En contexte"}</b>« ${esc(t.phrase)} »</div>` : "";
   return `${header()}
   <p class="small muted" style="text-align:center">Carte ${v.i+1} sur ${v.q.length} · <span class="boxes" aria-label="Niveau ${c.box} sur 6">${[1,2,3,4,5,6].map(b=>`<i class="${b<=c.box?"on":""}"></i>`).join("")}</span></p>
-  ${say(v.revealed?"content":"pensif", ask+(v.revealed?"":`<span class="sub">Dis la réponse à voix haute avant de retourner la carte.</span>`), 60)}
+  ${say(v.revealed?"content":"pensif", ask+(v.revealed?"":`<span class="sub">Dites la réponse à voix haute avant de retourner la carte.</span>`), 60)}
   <section class="card flash">${front}${back}</section>
   <div class="actions">${v.revealed?`<button class="btn bad full" data-act="again">À revoir</button><button class="btn good full" data-act="know">Je savais</button>`:`<button class="btn full" data-act="reveal">Voir la réponse</button>`}</div>`;
 }
@@ -631,20 +637,20 @@ function lexItems(){
       <div class="spread"><h3>${esc(t.term)}</h3>${c?`<span class="boxes" aria-label="Niveau ${c.box} sur 6">${[1,2,3,4,5,6].map(b=>`<i class="${b<=c.box?"on":""}"></i>`).join("")}</span>`:`<span class="pill">${esc(l.title)}</span>`}</div>
       <p class="small">${md(pick(t.def))}</p>
       ${c?`<p class="small muted"><em>« ${esc(t.phrase)} »</em></p>`:""}
-    </div>`; }).join("") || `<p class="muted">Aucun mot ne correspond.</p>`;
+    </div>`; }).join("") || `<p class="muted">Aucun terme ne correspond.</p>`;
 }
 function renderLexicon(){
   return `${header()}
-  ${say("calme", `Ton dictionnaire de senior : <strong>${TERMS.length} mots</strong>. Ceux que tu as déjà vus sont en clair.`, 56)}
+  ${say("calme", `Dictionnaire technique du Centre : <strong>${TERMS.length} termes</strong>. Ceux que vous avez déjà rencontrés sont en clair.`, 56)}
   ${vocabPool().length>=4?`<div class="actions"><button class="btn small" data-act="vocab">S'entraîner sur mes ${vocabPool().length} mots</button></div>`:""}
-  <label class="small muted" for="lexq">Chercher un mot</label>
+  <label class="small muted" for="lexq">Chercher un terme</label>
   <input class="field" id="lexq" value="${esc(view.filter||"")}" placeholder="callback, race condition, ownership…" autocomplete="off" style="font-family:var(--f-body)">
   <div class="lex" id="lexlist">${lexItems()}</div>
   ${footerSync()}`;
 }
 
 function render(){
-  if(!CHAPTERS.length){ app.innerHTML=`<p>Le contenu du programme n'a pas pu être chargé. Recharge la page.</p>`; return; }
+  if(!CHAPTERS.length){ app.innerHTML=`<p>Le contenu du programme n'a pas pu être chargé. Rechargez la page.</p>`; return; }
   app.className = "wrap" + (view.name==="lesson" ? " has-sheet" : "");
   setTabsVisible(view.name!=="lesson");
   const pb=document.getElementById('progressBar');
@@ -661,7 +667,8 @@ function render(){
 function readCells(){ app.querySelectorAll("[data-cell]").forEach(i=>{ L.st.vals[i.dataset.cell]=i.value; }); }
 function checkRow(reveal){
   const s=cur().step, st=L.st, ri=st.row, r=s.rows[ri];
-  readCells();
+  // "Montrez-moi" vient de remplir st.vals : relire les cases (encore vides) l'effacerait
+  if(!reveal) readCells();
   let allOk=true; st.bad={};
   r.c.forEach((c,ci)=>{ if(typeof c==="object"){ const key=ri+"-"+ci; if(norm(st.vals[key]||"")!==norm(c.a)){ allOk=false; st.bad[key]=1; } } });
   if(reveal){ erred(); st.reveal=true; st.showHint=true; st.bad={}; render(); return; }
@@ -703,6 +710,7 @@ app.addEventListener("click", e=>{
   if(act==="placement"){ startPlacement(); return; }
   if(act==="weak"){ startWeak(); return; }
   if(act==="vocab"){ startVocab(); return; }
+  if(act==="mute"){ toggleMuted(); b.textContent=muteButtonLabel(); return; }
   if(view.name==="review"){
     if(act==="reveal"){ view.revealed=true; render(); }
     else if(act==="know") grade(true);
@@ -741,7 +749,7 @@ app.addEventListener("click", e=>{
       render(); if(!st.final) $("#pred").focus(); break; }
     case "skip-pred": st.val=$("#pred").value; st.final=true; st.skip=true; st.ok=false; erred(); render(); break;
     case "check-row": checkRow(false); break;
-    case "reveal-row": { const r=s.rows[st.row]; r.c.forEach((c,ci)=>{ if(typeof c==="object") st.vals[st.row+"-"+ci]=c.a; }); checkRow(true); break; }
+    case "reveal-row": { readCells(); const r=s.rows[st.row]; r.c.forEach((c,ci)=>{ if(typeof c==="object") st.vals[st.row+"-"+ci]=c.a; }); checkRow(true); break; }
     case "model-check": st.text=($("#expl").value||"").trim(); st.result=true; render(); break;
     case "senior-model": st.ans[st.qi]=($("#senior").value||"").trim(); st.fb[st.qi]={}; render(); break;
     case "senior-next": st.qi++; render(); break;
