@@ -146,7 +146,7 @@ export default {
         },
         {
           type: "qcm",
-          q: "En review, tu vois `const API_KEY = \"abc123\";` dans le code. Quel commentaire est le plus senior ?",
+          q: "En review, vous voyez `const API_KEY = \"abc123\";` dans le code. Quel commentaire est le plus senior ?",
           options: [
             "« C'est nul. »",
             "« La clé API est hardcodée : il faudrait la sortir dans une variable d'environnement, sinon elle finit dans Git. »",
@@ -201,14 +201,14 @@ export default {
         {
           type: "concept",
           term: "Breaking change",
-          def: "Une modification qui **casse** le code de ceux qui t'utilisent : on renomme une fonction publique, on change le format d'une réponse d'API.",
+          def: "Une modification qui **casse** le code de ceux qui vous utilisent : on renomme une fonction publique, on change le format d'une réponse d'API.",
           beginner: "J'ai changé un truc et l'appli des autres marche plus.",
           phrase: "Renommer ce champ est un breaking change pour le front."
         },
         {
           type: "concept",
           term: "Rétrocompatible",
-          def: "Une nouvelle version qui **marche encore avec l'ancien code** de ceux qui t'utilisent. C'est l'inverse d'un breaking change.",
+          def: "Une nouvelle version qui **marche encore avec l'ancien code** de ceux qui vous utilisent. C'est l'inverse d'un breaking change.",
           phrase: "On ajoute le nouveau champ sans supprimer l'ancien, pour rester rétrocompatible."
         },
         {
@@ -249,7 +249,7 @@ export default {
         },
         {
           type: "qcm",
-          q: "Tu renommes `user_name` en `username` dans la réponse de ton API. Le front utilisait `user_name`. C'est…",
+          q: "Vous renommez `user_name` en `username` dans la réponse de votre API. Le front utilisait `user_name`. C'est…",
           options: ["un hotfix", "un breaking change", "un rollback"],
           correct: 1,
           explain: "Le front attend `user_name` et ne le trouve plus : il casse. C'est un **breaking change**."
@@ -267,7 +267,7 @@ export default {
         },
         {
           type: "build",
-          intro: "Explique ton choix comme un senior.",
+          intro: "Expliquez votre choix comme un senior.",
           answer: ["On garde l'ancien champ", "pour rester rétrocompatible", "pendant la migration"],
           distractors: ["on fait un breaking change", "vite fait"]
         },
@@ -293,7 +293,7 @@ export default {
         {
           type: "concept",
           term: "YAGNI",
-          def: "You Aren't Gonna Need It : **ne code pas aujourd'hui ce dont tu n'as pas besoin aujourd'hui**. Ça évite la sur-ingénierie.",
+          def: "You Aren't Gonna Need It : **ne codez pas aujourd'hui ce dont vous n'avez pas besoin aujourd'hui**. Ça évite la sur-ingénierie.",
           beginner: "On sait jamais, ça pourra servir.",
           phrase: "Le multi-langue ? YAGNI pour l'instant."
         },
@@ -323,7 +323,7 @@ export default {
         },
         {
           type: "qcm",
-          q: "Ton collègue veut prévoir 5 moyens de paiement alors que le client n'en demande qu'un. Quelle réponse est la plus senior ?",
+          q: "Votre collègue veut prévoir 5 moyens de paiement alors que le client n'en demande qu'un. Quelle réponse est la plus senior ?",
           options: [
             "« Bonne idée, on sait jamais. »",
             "« YAGNI : on fait la carte bancaire, et on rendra le code extensible quand un deuxième moyen arrivera. »",
@@ -362,7 +362,7 @@ export default {
         },
         {
           type: "explain",
-          q: "Défends ce choix comme un senior, avec « parce que » et un compromis : tu as choisi une simple fonction plutôt qu'un design pattern compliqué.",
+          q: "Défendez ce choix comme un senior, avec « parce que » et un compromis : vous avez choisi une simple fonction plutôt qu'un design pattern compliqué.",
           keywords: ["parce que", "simple", "en revanche", "besoin"],
           model: "J'ai choisi une simple fonction parce que le besoin actuel est simple : c'est plus lisible et plus facile à tester. En revanche, si on ajoute d'autres cas plus tard, on pourra la refactoriser vers un pattern Strategy. YAGNI pour l'instant."
         }

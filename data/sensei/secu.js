@@ -47,7 +47,7 @@ if (!tris.includes(choix)) throw new Error("Tri invalide");`,
             "Non, un attaquant peut envoyer la requête directement au serveur"
           ],
           correct: 1,
-          explain: "Un attaquant peut envoyer une requête HTTP **sans passer par ton formulaire**. Il faut **aussi** valider côté serveur."
+          explain: "Un attaquant peut envoyer une requête HTTP **sans passer par votre formulaire**. Il faut **aussi** valider côté serveur."
         },
         {
           type: "cloze",
@@ -141,14 +141,14 @@ div.textContent = commentaire;`,
         {
           type: "concept",
           term: "Authentification",
-          def: "Vérifier **qui tu es**. Login + mot de passe, empreinte digitale… C'est la question « Tu es bien Alice ? ».",
+          def: "Vérifier **qui vous êtes**. Login + mot de passe, empreinte digitale… C'est la question « Êtes-vous bien Alice ? ».",
           phrase: "L'utilisateur s'authentifie avec son mot de passe."
         },
         {
           type: "concept",
           term: "Autorisation",
-          def: "Vérifier **ce que tu as le droit de faire**, une fois qu'on sait qui tu es. C'est la question « Alice a-t-elle le droit de supprimer ce compte ? ».",
-          rule: "**Authentification** = qui es-tu ? (401 si raté). **Autorisation** = as-tu le droit ? (403 si refusé).",
+          def: "Vérifier **ce que vous avez le droit de faire**, une fois qu'on sait qui vous êtes. C'est la question « Alice a-t-elle le droit de supprimer ce compte ? ».",
+          rule: "**Authentification** = qui êtes-vous ? (401 si raté). **Autorisation** = avez-vous le droit ? (403 si refusé).",
           phrase: "Il est authentifié, mais pas autorisé à accéder à cette page."
         },
         {
@@ -173,7 +173,7 @@ div.textContent = commentaire;`,
         },
         {
           type: "cloze",
-          sentence: "Vérifier qui tu es, c'est l'___. Vérifier ce que tu as le droit de faire, c'est l'autorisation.",
+          sentence: "Vérifier qui vous êtes, c'est l'___. Vérifier ce que vous avez le droit de faire, c'est l'autorisation.",
           options: ["authentification", "encapsulation", "abstraction"],
           correct: 0,
           why: ["", "L'encapsulation protège les données d'un objet.", "L'abstraction cache des détails."]
@@ -228,7 +228,7 @@ const API_KEY = process.env.API_KEY;`,
         },
         {
           type: "qcm",
-          q: "Ton API a 40 routes, dont 15 ne servent plus. Que dirait un dev sécurité ?",
+          q: "Votre API a 40 routes, dont 15 ne servent plus. Que dirait un dev sécurité ?",
           options: [
             "« Ça ne pose aucun problème. »",
             "« Supprimons-les pour réduire la surface d'attaque. »",
@@ -280,7 +280,7 @@ const API_KEY = process.env.API_KEY;`,
         },
         {
           type: "qcm",
-          q: "Ton application se connecte à la base avec le compte `root`. Quel principe est violé ?",
+          q: "Votre application se connecte à la base avec le compte `root`. Quel principe est violé ?",
           options: ["Moindre privilège", "Ouvert / fermé", "Idempotence"],
           correct: 0,
           explain: "Le compte a beaucoup plus de droits que nécessaire. Si l'appli est piratée, l'attaquant a tout : le **moindre privilège** n'est pas respecté."

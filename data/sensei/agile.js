@@ -104,7 +104,7 @@ alors il voit le numéro de suivi.`,
         },
         {
           type: "explain",
-          q: "Écris une user story pour une fonctionnalité de Muaddib (ou d'une appli de ton choix), avec un critère d'acceptation.",
+          q: "Écrivez une user story pour une fonctionnalité de Muaddib (ou d'une appli de votre choix), avec un critère d'acceptation.",
           keywords: ["en tant que", "je veux", "afin de", "étant donné", "quand", "alors"],
           model: "En tant que développeur, je veux analyser les dépendances de mon projet afin de repérer les paquets suspects. Étant donné un projet avec un package.json, quand je lance l'analyse, alors je vois la liste des dépendances à risque avec leur niveau de gravité."
         }

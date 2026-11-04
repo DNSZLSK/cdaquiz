@@ -38,7 +38,7 @@ let nom: String = String::from("Bob");`
         {
           type: "concept",
           term: "Compilateur",
-          def: "Le programme qui **transforme ton code en exécutable**. En Rust, il vérifie énormément de choses avant : beaucoup de bugs sont trouvés **avant** de lancer le programme.",
+          def: "Le programme qui **transforme votre code en exécutable**. En Rust, il vérifie énormément de choses avant : beaucoup de bugs sont trouvés **avant** de lancer le programme.",
           phrase: "Le compilateur refuse le code : il y a une erreur de type."
         },
         {
@@ -54,7 +54,7 @@ total = total + 5;`
         },
         {
           type: "label",
-          intro: "Nomme chaque morceau.",
+          intro: "Nommez chaque morceau.",
           code: {rs:"let mut score: i32 = 10;"},
           options: ["mot-clé de déclaration", "rend modifiable", "type", "valeur"],
           marks: [
@@ -153,7 +153,7 @@ println!("{} {}", a, b);   // ✅ les deux existent`
         },
         {
           type: "build",
-          intro: "Explique le move.",
+          intro: "Expliquez le move.",
           answer: ["La valeur", "est déplacée", "dans b", "donc a n'est plus utilisable"],
           distractors: ["est copiée", "b est une constante"]
         }
@@ -255,7 +255,7 @@ r1.push('b');`
         {
           type: "concept",
           term: "match",
-          def: "Un **aiguillage** qui teste tous les cas possibles. Le compilateur vérifie que tu n'en oublies **aucun**.",
+          def: "Un **aiguillage** qui teste tous les cas possibles. Le compilateur vérifie que vous n'en oubliez **aucun**.",
           code: {
             rs: `match trouver(2) {
     Some(nom) => println!("Trouvé : {}", nom),
@@ -302,7 +302,7 @@ r1.push('b');`
         },
         {
           type: "label",
-          intro: "Nomme chaque morceau.",
+          intro: "Nommez chaque morceau.",
           code: {
             rs: `match trouver(2) {
     Some(nom) => println!("{}", nom),
@@ -345,7 +345,7 @@ cargo run`
         {
           type: "concept",
           term: "Cargo.toml / Cargo.lock",
-          def: "**Cargo.toml** : la liste des dépendances que tu demandes (comme package.json). **Cargo.lock** : les versions exactes installées (comme package-lock.json).",
+          def: "**Cargo.toml** : la liste des dépendances que vous demandez (comme package.json). **Cargo.lock** : les versions exactes installées (comme package-lock.json).",
           code: `[dependencies]
 serde = "1.0"`,
           phrase: "La version exacte est figée dans Cargo.lock."
@@ -353,7 +353,7 @@ serde = "1.0"`,
         {
           type: "concept",
           term: "cargo audit",
-          def: "Un outil de **SCA** pour Rust : il compare tes dépendances à une base de vulnérabilités connues (RustSec).",
+          def: "Un outil de **SCA** pour Rust : il compare vos dépendances à une base de vulnérabilités connues (RustSec).",
           code: `cargo install cargo-audit
 cargo audit`,
           phrase: "cargo audit signale une crate vulnérable."
@@ -365,8 +365,8 @@ cargo audit`,
           correct: 0,
           why: [
             "",
-            "Cargo.toml liste ce que tu **demandes**. Les versions exactes sont dans le lock.",
-            "main.rs contient ton code."
+            "Cargo.toml liste ce que vous **demandez**. Les versions exactes sont dans le lock.",
+            "main.rs contient votre code."
           ]
         },
         {

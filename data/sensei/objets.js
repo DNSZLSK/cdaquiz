@@ -54,7 +54,7 @@ b.increment();   // dans increment, this = b`,
         },
         {
           type: "trace",
-          intro: "Suis la valeur de `c.value`.",
+          intro: "Suivez la valeur de `c.value`.",
           code: `const c = new Counter();
 c.increment();
 c.increment();
@@ -101,7 +101,7 @@ console.log(c.value);`,
         },
         {
           type: "build",
-          intro: "Décris `const c = new Counter();`",
+          intro: "Décrivez `const c = new Counter();`",
           answer: ["On crée", "une instance", "de la classe Counter"],
           distractors: ["une méthode", "qui hérite"]
         },
@@ -150,8 +150,8 @@ compte.#solde = 1000000;`,
         {
           type: "concept",
           term: "Abstraction",
-          def: "Utiliser quelque chose **sans connaître ses détails**. Tu conduis une voiture sans savoir comment marche le moteur.",
-          code: `[3, 1, 2].sort();   // tu sais CE QUE ça fait (trier)
+          def: "Utiliser quelque chose **sans connaître ses détails**. On conduit une voiture sans savoir comment marche le moteur.",
+          code: `[3, 1, 2].sort();   // on sait CE QUE ça fait (trier)
                     // pas COMMENT c'est codé`,
           phrase: "Cette méthode fournit une abstraction : on n'a pas besoin de connaître l'algorithme de tri."
         },
@@ -276,7 +276,7 @@ console.log(animaux.map(a => a.parler()));`,
         {
           type: "concept",
           term: "Factory",
-          def: "Une fonction (ou méthode) dont le travail est de **fabriquer des objets** à ta place, prêts à l'emploi.",
+          def: "Une fonction (ou méthode) dont le travail est de **fabriquer des objets** à votre place, prêts à l'emploi.",
           code: `function createUser(name) {
   return { name: name, role: "user", active: true };
 }
@@ -374,7 +374,7 @@ produits.sort(parPrix);   // on choisit la stratégie de tri`,
         },
         {
           type: "qcm",
-          q: "Pour ajouter un nouveau type de remise, tu dois modifier une fonction de 200 lignes pleine de if. Quel principe est violé ?",
+          q: "Pour ajouter un nouveau type de remise, vous devez modifier une fonction de 200 lignes pleine de if. Quel principe est violé ?",
           options: ["S : responsabilité unique", "O : ouvert / fermé", "L : Liskov"],
           correct: 1,
           explain: "Ajouter un cas oblige à **modifier** le code existant : le principe **ouvert/fermé** n'est pas respecté."
@@ -392,7 +392,7 @@ produits.sort(parPrix);   // on choisit la stratégie de tri`,
         },
         {
           type: "build",
-          intro: "Explique le principe D.",
+          intro: "Expliquez le principe D.",
           answer: ["Le code métier", "dépend d'une abstraction", "et non", "d'une implémentation précise"],
           distractors: ["hérite de Gmail", "d'une constante"]
         }
@@ -463,7 +463,7 @@ const addAvecLog = avecLog(add);`,
         },
         {
           type: "qcm",
-          q: "Tu dois utiliser une bibliothèque dont les méthodes n'ont pas les noms que ton code attend. Quel pattern ?",
+          q: "Vous devez utiliser une bibliothèque dont les méthodes n'ont pas les noms que votre code attend. Quel pattern ?",
           options: ["Singleton", "Adapter", "Observer"],
           correct: 1,
           explain: "Faire parler deux interfaces différentes : **Adapter**."
@@ -477,7 +477,7 @@ const addAvecLog = avecLog(add);`,
         },
         {
           type: "explain",
-          q: "Explique ce code en nommant le pattern. Essaie d'utiliser : pattern, decorator, fonction, comportement.",
+          q: "Expliquez ce code en nommant le pattern. Essayez d'utiliser : pattern, decorator, fonction, comportement.",
           code: `function avecLog(fn) {
   return (...args) => {
     console.log("appel avec", args);

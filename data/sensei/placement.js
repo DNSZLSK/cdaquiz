@@ -53,7 +53,7 @@ println!("{}", x);`
       sentence: "« J'ai ___ une application qui analyse les dépendances. »",
       options: ["développé", "fait", "eu"],
       correct: 0,
-      why: ["", "« Fait » est vague : on ne sait pas ce que tu as fait.", "« Eu » ne veut rien dire ici."]
+      why: ["", "« Fait » est vague : on ne sait pas ce que vous avez fait.", "« Eu » ne veut rien dire ici."]
     }
   },
   {

@@ -117,13 +117,13 @@ def create_order():
         },
         {
           type: "build",
-          intro: "Décris le rôle du contrôleur.",
+          intro: "Décrivez le rôle du contrôleur.",
           answer: ["Le contrôleur", "reçoit la requête", "puis appelle", "le modèle"],
           distractors: ["la vue stocke", "les données"]
         },
         {
           type: "explain",
-          q: "Décris ce que fait ce code. Essaie d'utiliser : contrôleur, modèle, vue, requête.",
+          q: "Décrivez ce que fait ce code. Essayez d'utiliser : contrôleur, modèle, vue, requête.",
           code: {
             js: `router.post("/orders", (req, res) => {
   const order = Order.create(req.body);
@@ -182,7 +182,7 @@ def create_order():
         },
         {
           type: "label",
-          intro: "Nomme chaque morceau de ce diagramme.",
+          intro: "Nommez chaque morceau de ce diagramme.",
           code: `┌──────────────────────┐
 │ Compte               │
 ├──────────────────────┤
@@ -242,13 +242,13 @@ def create_order():
         },
         {
           type: "build",
-          intro: "Décris le diagramme Compte.",
+          intro: "Décrivez le diagramme Compte.",
           answer: ["La classe Compte", "a un attribut privé solde", "et une méthode publique deposer"],
           distractors: ["un attribut public solde", "une classe privée"]
         },
         {
           type: "explain",
-          q: "Décris ce diagramme comme un dev. Essaie d'utiliser : classe, attribut, privé, méthode, publique.",
+          q: "Décrivez ce diagramme comme un dev. Essayez d'utiliser : classe, attribut, privé, méthode, publique.",
           code: `┌──────────────────────────────┐
 │ Utilisateur                  │
 ├──────────────────────────────┤
@@ -321,7 +321,7 @@ def create_order():
         },
         {
           type: "label",
-          intro: "Nomme chaque symbole.",
+          intro: "Nommez chaque symbole.",
           code: `Client 1 ──────── 0..* Commande
 Commande ◆──────── 1..* LigneDeCommande
 Chien ──────▷ Animal`,
@@ -350,14 +350,14 @@ Chien ──────▷ Animal`,
         },
         {
           type: "build",
-          intro: "Lis la première ligne du schéma à voix haute.",
+          intro: "Lisez la première ligne du schéma à voix haute.",
           code: "Client 1 ──────── 0..* Commande",
           answer: ["Un client", "passe", "zéro ou plusieurs", "commandes"],
           distractors: ["exactement une", "hérite de"]
         },
         {
           type: "explain",
-          q: "Décris cette relation. Essaie d'utiliser : composition, au moins une, disparaissent.",
+          q: "Décrivez cette relation. Essayez d'utiliser : composition, au moins une, disparaissent.",
           code: "Commande ◆──────── 1..* LigneDeCommande",
           keywords: ["composition", "commande", "ligne", "au moins une"],
           model: "Une commande est composée d'au moins une ligne de commande. C'est une composition (losange plein) : si on supprime la commande, ses lignes disparaissent avec elle."
@@ -431,7 +431,7 @@ Admin ──┼── (Gérer le catalogue)  │
         },
         {
           type: "label",
-          intro: "Nomme chaque morceau du diagramme.",
+          intro: "Nommez chaque morceau du diagramme.",
           code: `Client         API           BDD
   │  POST /login  │             │
   │──────────────▶│   SELECT    │
@@ -458,13 +458,13 @@ Admin ──┼── (Gérer le catalogue)  │
         },
         {
           type: "build",
-          intro: "Raconte le diagramme de séquence.",
+          intro: "Racontez le diagramme de séquence.",
           answer: ["Le client", "envoie une requête", "à l'API", "qui interroge", "la base de données"],
           distractors: ["hérite de", "la vue"]
         },
         {
           type: "explain",
-          q: "Raconte ce diagramme. Essaie d'utiliser : client, requête, API, base de données, réponse.",
+          q: "Racontez ce diagramme. Essayez d'utiliser : client, requête, API, base de données, réponse.",
           code: `Client         API           BDD
   │  POST /login  │             │
   │──────────────▶│   SELECT    │

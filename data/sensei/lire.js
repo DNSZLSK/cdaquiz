@@ -3,7 +3,7 @@
 export default {
   id: "lire",
   title: "Lire et décrire le code",
-  goal: "Faire tourner le code dans ta tête et nommer chaque morceau.",
+  goal: "Faire tourner le code dans sa tête et nommer chaque morceau.",
   lessons: [
     {
       id: "affect",
@@ -37,12 +37,12 @@ x = x + 1   # la boîte x contient maintenant 6`,
             rs: `let mut x = 5;   // mut : la boîte peut changer
 x = x + 1;       // la boîte x contient maintenant 6`
           },
-          rule: "Lis `x = x + 1` comme « x **devient** x + 1 ». L'ordinateur fait 2 choses, dans cet ordre : **1.** il calcule la droite avec ce qu'il y a dans la boîte : `5 + 1` = 6. **2.** il met 6 dans la boîte x. Le 5 est effacé.",
+          rule: "Lisez `x = x + 1` comme « x **devient** x + 1 ». L'ordinateur fait 2 choses, dans cet ordre : **1.** il calcule la droite avec ce qu'il y a dans la boîte : `5 + 1` = 6. **2.** il met 6 dans la boîte x. Le 5 est effacé.",
           phrase: "On affecte 6 à x. (Affecter = donner une valeur à une variable.)"
         },
         {
           type: "label",
-          intro: "Touche le bon nom pour chaque morceau surligné.",
+          intro: "Touchez le bon nom pour chaque morceau surligné.",
           code: {
             js: `let prix = 10;
 prix = prix * 2;`,
@@ -88,7 +88,7 @@ a = a + 2;`
         },
         {
           type: "trace",
-          intro: "Note ce que contient la boîte `x` après chaque ligne.",
+          intro: "Notez ce que contient la boîte `x` après chaque ligne.",
           code: {
             js: `let x = 3;
 x = x * 2;
@@ -145,7 +145,7 @@ x = 6;   // ❌ erreur : x n'est pas mut`
         },
         {
           type: "build",
-          intro: "Remets les étiquettes dans l'ordre pour décrire ce code comme un dev.",
+          intro: "Remettez les étiquettes dans l'ordre pour décrire ce code comme un dev.",
           code: {js:"let total = 0;", py:"total = 0", rs:"let mut total = 0;"},
           answer: ["On déclare", "une variable", "total", "initialisée à", "0"],
           distractors: ["une fonction", "égale à"],
@@ -174,7 +174,7 @@ println!("{}", n);`
         },
         {
           type: "explain",
-          q: "Décris ce code avec tes mots. Essaie d'utiliser : variable, affecte, valeur, affiche.",
+          q: "Décrivez ce code avec vos mots. Essayez d'utiliser : variable, affecte, valeur, affiche.",
           code: {
             js: `let prix = 10;
 prix = prix * 2;
@@ -260,7 +260,7 @@ for i in 1..3 {    // 1 et 2 : le 3 est EXCLU`
         },
         {
           type: "label",
-          intro: "Nomme chaque partie de la boucle.",
+          intro: "Nommez chaque partie de la boucle.",
           code: {
             js: `for (let i = 1; i <= 3; i++) {
   total = total + i;
@@ -338,7 +338,7 @@ for i in 1..3 {    // 1 et 2 : le 3 est EXCLU`
         },
         {
           type: "trace",
-          intro: "Remplis une ligne par tour. Attention : le test regarde `i`, pas `total`.",
+          intro: "Remplissez une ligne par tour. Attention : le test regarde `i`, pas `total`.",
           code: `let total = 0;
 for (let i = 1; i <= 3; i++) {
   total = total + i;
@@ -462,7 +462,7 @@ console.log(x);`,
         },
         {
           type: "build",
-          intro: "Décris la boucle `total` comme un dev.",
+          intro: "Décrivez la boucle `total` comme un dev.",
           code: {
             js: `for (let i = 1; i <= 3; i++) {
   total = total + i;
@@ -496,12 +496,12 @@ for i in 0..5 {
 println!("{}", count);`
           },
           answers: ["10"],
-          hint: "Compte d'abord les tours (i = 0, 1, 2, 3, 4), puis ajoute 2 à chaque tour.",
+          hint: "Comptez d'abord les tours (i = 0, 1, 2, 3, 4), puis ajoutez 2 à chaque tour.",
           explain: "5 tours, +2 à chaque fois : 2, 4, 6, 8, **10**."
         },
         {
           type: "explain",
-          q: "Décris ce code avec tes mots. Essaie d'utiliser : variable, boucle, itération, affiche.",
+          q: "Décrivez ce code avec vos mots. Essayez d'utiliser : variable, boucle, itération, affiche.",
           code: {
             js: `let total = 0;
 for (let i = 1; i <= 3; i++) {
@@ -607,7 +607,7 @@ double(10);  // 20`
         },
         {
           type: "label",
-          intro: "Nomme chaque morceau de la fonction.",
+          intro: "Nommez chaque morceau de la fonction.",
           code: {
             js: `function greet(name) {
   return "Salut " + name;
@@ -781,7 +781,7 @@ println!("{}", add(2, add(1, 1)));`
         },
         {
           type: "build",
-          intro: "Décris la fonction double comme un dev.",
+          intro: "Décrivez la fonction double comme un dev.",
           code: {
             js: `function double(n) {
   return n * 2;
@@ -798,7 +798,7 @@ println!("{}", add(2, add(1, 1)));`
         },
         {
           type: "explain",
-          q: "Décris ce code avec tes mots. Essaie d'utiliser : fonction, paramètre, retourne.",
+          q: "Décrivez ce code avec vos mots. Essayez d'utiliser : fonction, paramètre, retourne.",
           code: {
             js: `function calculatePrice(price, tax) {
   return price + price * tax;
@@ -814,7 +814,7 @@ println!("{}", add(2, add(1, 1)));`
         },
         {
           type: "senior",
-          intro: "Un dev senior relit ta fonction et te pose deux questions.",
+          intro: "Un dev senior relit votre fonction et vous pose deux questions.",
           code: {
             js: `function calculatePrice(price, tax) {
   return price + price * tax;
@@ -891,7 +891,7 @@ user.name   // "Bob"`
         },
         {
           type: "label",
-          intro: "Nomme chaque morceau.",
+          intro: "Nommez chaque morceau.",
           code: {
             js: `const user = { name: "Bob", age: 34 };
 console.log(user.age);`,
@@ -1027,7 +1027,7 @@ println!("{}", a);`
         },
         {
           type: "build",
-          intro: "Décris la situation comme un dev.",
+          intro: "Décrivez la situation comme un dev.",
           code: {
             js: `const a = { count: 1 };
 const b = a;`,
@@ -1041,7 +1041,7 @@ let b = &mut a;`
         },
         {
           type: "explain",
-          q: "Décris ce code. Essaie d'utiliser : objet, propriété, référence.",
+          q: "Décrivez ce code. Essayez d'utiliser : objet, propriété, référence.",
           code: {
             js: `const panier = { total: 0 };
 const p = panier;
@@ -1246,7 +1246,7 @@ let big: Vec<i32> = nums.into_iter().filter(|n| *n > 5).collect();`
         },
         {
           type: "label",
-          intro: "Nomme chaque morceau.",
+          intro: "Nommez chaque morceau.",
           code: {
             js: "const big = nums.filter(n => n > 5);",
             py: "big = [n for n in nums if n > 5]",
@@ -1307,7 +1307,7 @@ println!("{:?}", big);`
         },
         {
           type: "build",
-          intro: "Décris ce code comme un dev.",
+          intro: "Décrivez ce code comme un dev.",
           code: {
             js: "const big = nums.filter(n => n > 5);",
             py: "big = [n for n in nums if n > 5]",
@@ -1318,7 +1318,7 @@ println!("{:?}", big);`
         },
         {
           type: "explain",
-          q: "Décris ce code comme un dev. Essaie d'utiliser : tableau, objet, paramètre, callback, retourne.",
+          q: "Décrivez ce code comme un dev. Essayez d'utiliser : tableau, objet, paramètre, callback, retourne.",
           code: {
             js: `const users = [
   { name: "Alice", age: 28 },
@@ -1343,7 +1343,7 @@ def get_adults(users):
         },
         {
           type: "senior",
-          intro: "Un dev senior relit getAdults et te pose deux questions.",
+          intro: "Un dev senior relit getAdults et vous pose deux questions.",
           code: {
             js: `function getAdults(users) {
   return users.filter(user => user.age >= 18);
@@ -1457,7 +1457,7 @@ nums.push(5);      // push aussi`
           def: {
             js: "`undefined` : la boîte est **vide parce que personne n'a rien mis**. `null` : la boîte est **vide exprès**, le dev l'a voulu.",
             py: "En Python, il n'y a qu'une seule valeur « vide » : `None`. Elle remplace à la fois `null` et `undefined` de JavaScript.",
-            rs: "Rust n'a **pas** de null. Une valeur qui peut manquer s'écrit `Option` : `Some(valeur)` ou `None`. Le compilateur t'oblige à traiter les deux cas."
+            rs: "Rust n'a **pas** de null. Une valeur qui peut manquer s'écrit `Option` : `Some(valeur)` ou `None`. Le compilateur vous oblige à traiter les deux cas."
           },
           code: {
             js: `let a;          // undefined : rien n'a été mis

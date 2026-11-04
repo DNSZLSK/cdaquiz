@@ -27,7 +27,7 @@ git commit -m "Corrige la validation de l'email"`,
         {
           type: "concept",
           term: "Branche",
-          def: "Une **ligne de travail parallèle**. Tu travailles sur ta branche sans toucher à la branche principale (`main`).",
+          def: "Une **ligne de travail parallèle**. Vous travaillez sur votre branche sans toucher à la branche principale (`main`).",
           code: "git checkout -b fix-login   # crée la branche fix-login",
           phrase: "Je travaille sur une branche fix-login."
         },
@@ -40,13 +40,13 @@ git commit -m "Corrige la validation de l'email"`,
         {
           type: "concept",
           term: "Pull request",
-          def: "Une **demande de fusion**. Tu proposes ta branche, les collègues relisent ton code (la **code review**), puis on merge.",
+          def: "Une **demande de fusion**. Vous proposez votre branche, les collègues relisent votre code (la **code review**), puis on merge.",
           phrase: "J'ai ouvert une pull request, tu peux la relire ?"
         },
         {
           type: "concept",
           term: "Conflit",
-          def: "Deux personnes ont modifié **la même ligne** différemment. Git ne sait pas laquelle garder : c'est à toi de choisir.",
+          def: "Deux personnes ont modifié **la même ligne** différemment. Git ne sait pas laquelle garder : c'est à vous de choisir.",
           phrase: "Il y a un conflit de merge sur app.js."
         },
         {
@@ -58,7 +58,7 @@ git commit -m "Corrige la validation de l'email"`,
         },
         {
           type: "qcm",
-          q: "Tu veux corriger un bug sans risquer de casser `main`. Tu fais quoi d'abord ?",
+          q: "Vous voulez corriger un bug sans risquer de casser `main`. Que faites-vous d'abord ?",
           options: ["Je modifie directement main", "Je crée une branche", "Je supprime le dépôt"],
           correct: 1,
           explain: "On crée une **branche**, on corrige, puis on ouvre une **pull request** pour la relecture."
@@ -133,7 +133,7 @@ jobs:
         {
           type: "concept",
           term: "Conteneur",
-          def: "Une **boîte isolée** qui contient ton application et tout ce dont elle a besoin pour tourner. Elle marche pareil sur ton PC et sur le serveur.",
+          def: "Une **boîte isolée** qui contient votre application et tout ce dont elle a besoin pour tourner. Elle marche pareil sur votre PC et sur le serveur.",
           phrase: "L'application tourne dans un conteneur."
         },
         {
@@ -162,7 +162,7 @@ CMD ["node", "server.js"]   # commande de démarrage`,
         },
         {
           type: "qcm",
-          q: "Tu lances 3 fois la même application avec Docker. Tu as…",
+          q: "Vous lancez 3 fois la même application avec Docker. Vous avez…",
           options: ["3 images, 1 conteneur", "1 image, 3 conteneurs", "3 Dockerfiles"],
           correct: 1,
           explain: "Un seul moule (**1 image**), trois gâteaux qui tournent (**3 conteneurs**)."
@@ -188,13 +188,13 @@ CMD ["node", "server.js"]   # commande de démarrage`,
         {
           type: "concept",
           term: "Supply chain logicielle",
-          def: "**Tout ce qui entre** dans ton logiciel sans que tu l'aies écrit : dépendances, outils de build, images Docker. Si un maillon est piégé, ton logiciel l'est aussi.",
+          def: "**Tout ce qui entre** dans votre logiciel sans que vous l'ayez écrit : dépendances, outils de build, images Docker. Si un maillon est piégé, votre logiciel l'est aussi.",
           phrase: "L'attaque est passée par la supply chain, via une dépendance compromise."
         },
         {
           type: "concept",
           term: "Dépendance transitive",
-          def: "Les **dépendances de tes dépendances**. Tu installes 1 paquet, il en apporte 50 autres que tu n'as jamais choisis.",
+          def: "Les **dépendances de vos dépendances**. Vous installez 1 paquet, il en apporte 50 autres que vous n'avez jamais choisis.",
           phrase: "La faille vient d'une dépendance transitive."
         },
         {
@@ -214,7 +214,7 @@ npm install express   # ✅ le vrai`,
         {
           type: "concept",
           term: "SCA",
-          def: "Software Composition Analysis : analyser **tes dépendances** pour trouver celles qui ont des vulnérabilités connues (CVE).",
+          def: "Software Composition Analysis : analyser **vos dépendances** pour trouver celles qui ont des vulnérabilités connues (CVE).",
           code: "npm audit",
           phrase: "L'outil de SCA signale une dépendance vulnérable."
         },
@@ -233,14 +233,14 @@ npm install express   # ✅ le vrai`,
         },
         {
           type: "qcm",
-          q: "Un outil lit ton code et repère une concaténation SQL dangereuse, sans lancer l'application. C'est…",
+          q: "Un outil lit votre code et repère une concaténation SQL dangereuse, sans lancer l'application. C'est…",
           options: ["Du SAST", "Du DAST", "Un SBOM"],
           correct: 0,
           explain: "Il lit le code sans l'exécuter : analyse **statique**, donc **SAST**."
         },
         {
           type: "qcm",
-          q: "Tu veux savoir si une de tes 300 dépendances a une CVE connue. Quel type d'outil ?",
+          q: "Vous voulez savoir si une de vos 300 dépendances a une CVE connue. Quel type d'outil ?",
           options: ["DAST", "SCA", "Un Dockerfile"],
           correct: 1,
           explain: "Analyser les dépendances : c'est la **SCA** (exemple : `npm audit`)."

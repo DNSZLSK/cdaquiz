@@ -31,7 +31,7 @@ function ajouter(prix) {
         },
         {
           type: "explain",
-          q: "Décris ce code en 3 temps (quoi, comment, pourquoi/limite). Essaie d'utiliser : paramètre, effet de bord.",
+          q: "Décrivez ce code en 3 temps (quoi, comment, pourquoi/limite). Essayez d'utiliser : paramètre, effet de bord.",
           code: `let total = 0;
 
 function ajouter(prix) {
@@ -104,7 +104,7 @@ Observé : sum([5, 1, 2]) retourne 3.`,
         {
           type: "concept",
           term: "Connecteurs logiques",
-          def: "Les petits mots qui **relient** tes idées et montrent ton raisonnement : **parce que** (cause), **donc** (conséquence), **en revanche** (opposition), **par exemple** (illustration).",
+          def: "Les petits mots qui **relient** vos idées et montrent votre raisonnement : **parce que** (cause), **donc** (conséquence), **en revanche** (opposition), **par exemple** (illustration).",
           code: `J'ai utilisé une requête paramétrée PARCE QUE le nom vient de l'utilisateur.
 DONC aucune injection SQL n'est possible.`,
           phrase: "J'ai choisi X parce que…, donc…"
@@ -119,14 +119,14 @@ EN REVANCHE ils sont plus complexes à déployer.`,
         },
         {
           type: "qcm",
-          q: "Complète : « J'ai extrait ce calcul dans une fonction ___ il était copié à trois endroits. »",
+          q: "Complétez : « J'ai extrait ce calcul dans une fonction ___ il était copié à trois endroits. »",
           options: ["donc", "parce qu'", "en revanche"],
           correct: 1,
-          explain: "Tu donnes la **cause** de ton choix : **parce qu'**il était copié à trois endroits."
+          explain: "Vous donnez la **cause** de votre choix : **parce qu'**il était copié à trois endroits."
         },
         {
           type: "qcm",
-          q: "Quelle réponse sonne le plus « senior » quand on te demande pourquoi tu as choisi SQL ?",
+          q: "Quelle réponse sonne le plus « senior » quand on vous demande pourquoi vous avez choisi SQL ?",
           options: [
             "« Parce que c'est bien. »",
             "« Nos données sont très liées entre elles, donc les tables et les jointures SQL sont adaptées. En revanche, le schéma est moins souple. »",
@@ -137,7 +137,7 @@ EN REVANCHE ils sont plus complexes à déployer.`,
         },
         {
           type: "explain",
-          q: "Explique à un collègue pourquoi ce code est mieux que la concaténation. Utilise au moins « parce que » et « donc ».",
+          q: "Expliquez à un collègue pourquoi ce code est mieux que la concaténation. Utilisez au moins « parce que » et « donc ».",
           code: "db.query(\"SELECT * FROM users WHERE name = ?\", [name]);",
           keywords: ["parce que", "donc", "injection", "requête paramétrée", "entrée"],
           model: "On utilise une requête paramétrée parce que name vient de l'utilisateur : c'est une entrée non fiable. La base reçoit la requête et la donnée séparément, donc le contenu de name ne peut jamais être exécuté comme du SQL. On se protège ainsi contre l'injection SQL."
@@ -152,7 +152,7 @@ EN REVANCHE ils sont plus complexes à déployer.`,
         {
           type: "concept",
           term: "Remplacer « faire »",
-          def: "« Faire » est un mot vague. Choisis le verbe qui dit **exactement** l'action : **réaliser**, **développer**, **préparer**, **effectuer**, **organiser**, **corriger**…",
+          def: "« Faire » est un mot vague. Choisissez le verbe qui dit **exactement** l'action : **réaliser**, **développer**, **préparer**, **effectuer**, **organiser**, **corriger**…",
           code: `J'ai fait un site       → J'ai développé un site.
 J'ai fait les courses   → J'ai acheté de quoi manger pour la semaine.
 J'ai fait une erreur    → Je me suis trompé.`,
@@ -202,10 +202,10 @@ Ce truc-là dans le code → Cette fonction / ce paramètre.`,
         },
         {
           type: "qcm",
-          q: "En cours, le prof utilise un mot que tu ne connais pas. Quelle réaction montre le plus d'assurance ?",
+          q: "En cours, le prof utilise un mot que vous ne connaissez pas. Quelle réaction montre le plus d'assurance ?",
           options: ["Ne rien dire et faire semblant", "« Je ne connais pas ce terme, vous pouvez le définir ? »", "Partir"],
           correct: 1,
-          explain: "Poser la question calmement montre que tu es **sûr de toi**. Et souvent, d'autres personnes ne le savaient pas non plus."
+          explain: "Poser la question calmement montre que vous êtes **sûr de vous**. Et souvent, d'autres personnes ne le savaient pas non plus."
         }
       ]
     }

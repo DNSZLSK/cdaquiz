@@ -63,7 +63,7 @@ if (age >= 18 || avecParent) {
         },
         {
           type: "trace",
-          intro: "On compte les nombres pairs. Remplis chaque tour.",
+          intro: "On compte les nombres pairs. Remplissez chaque tour.",
           code: `let count = 0;
 for (let i = 1; i <= 4; i++) {
   if (i % 2 === 0) {
@@ -166,7 +166,7 @@ while (i < 5) {
         },
         {
           type: "trace",
-          intro: "Remplis chaque tour. Le test se fait **avant** de modifier n.",
+          intro: "Remplissez chaque tour. Le test se fait **avant** de modifier n.",
           code: `let n = 1;
 let steps = 0;
 while (n < 20) {
@@ -305,7 +305,7 @@ console.log(salut("Kevin"));`,
           code: `TypeError: Cannot read properties of undefined (reading 'name')
     at afficher (app.js:12:20)    ← ici : ligne 12
     at main (app.js:30:3)         ← appelée depuis la ligne 30`,
-          rule: "Lis une erreur en 3 temps : **1.** le type (TypeError…) **2.** le message **3.** la première ligne de la stack trace qui pointe vers **ton** fichier.",
+          rule: "Lisez une erreur en 3 temps : **1.** le type (TypeError…) **2.** le message **3.** la première ligne de la stack trace qui pointe vers **votre** fichier.",
           phrase: "D'après la stack trace, l'erreur vient de la ligne 12 de app.js."
         },
         {
@@ -356,7 +356,7 @@ console.log(salut("Kevin"));`,
         {
           type: "concept",
           term: "Breakpoint",
-          def: "Un **point d'arrêt** : le programme se met en pause sur une ligne. Tu peux alors regarder le contenu de chaque boîte (variable).",
+          def: "Un **point d'arrêt** : le programme se met en pause sur une ligne. Vous pouvez alors regarder le contenu de chaque boîte (variable).",
           rule: "Dans VS Code : clic à gauche du numéro de ligne (un point rouge apparaît), puis F5.",
           phrase: "Je pose un breakpoint dans la boucle pour inspecter i."
         },
@@ -380,7 +380,7 @@ console.log(salut("Kevin"));`,
 }
 sum([5, 1, 2]);`,
           answers: ["3"],
-          hint: "Regarde la valeur de départ de `i`. Quel élément est oublié ?",
+          hint: "Regardez la valeur de départ de `i`. Quel élément est oublié ?",
           explain: "i part de 1 : on additionne `nums[1]` (1) et `nums[2]` (2). Le 5 (index 0) est oublié → **3**."
         },
         {
@@ -408,7 +408,7 @@ sum([5, 1, 2]);`,
         },
         {
           type: "qcm",
-          q: "Face à un bug, que fais-tu en premier ?",
+          q: "Face à un bug, que faites-vous en premier ?",
           options: [
             "Je demande directement la correction à une IA",
             "Je lis le message d'erreur et je regarde quelle ligne pose problème",
@@ -513,7 +513,7 @@ if (age >= MAJORITY_AGE) {} // ✅ clair`,
         {
           type: "concept",
           term: "Duplication",
-          def: "Le même code **copié-collé** à plusieurs endroits. Si on doit le corriger, il faut penser à tous les endroits. Le principe **DRY** (Don't Repeat Yourself) dit : évite de te répéter.",
+          def: "Le même code **copié-collé** à plusieurs endroits. Si on doit le corriger, il faut penser à tous les endroits. Le principe **DRY** (Don't Repeat Yourself) dit : évitez de vous répéter.",
           code: `const prixA = 100 + 100 * 0.2;
 const prixB = 50 + 50 * 0.2;    // même calcul copié`,
           phrase: "Il y a de la duplication : appliquons DRY."
@@ -548,7 +548,7 @@ function total(a, b) { return a + b + 1; }`,
         },
         {
           type: "qcm",
-          q: "Ton collègue copie-colle 5 fois le même calcul pour aller plus vite. Quel mot décrit le mieux le problème ?",
+          q: "Votre collègue copie-colle 5 fois le même calcul pour aller plus vite. Quel mot décrit le mieux le problème ?",
           options: ["De la dette technique", "Une boucle infinie", "Une fonction pure"],
           correct: 0,
           explain: "Il gagne du temps aujourd'hui, mais chaque correction future devra être faite 5 fois : c'est de la **dette technique**."
@@ -680,7 +680,7 @@ average(null)   // pas de tableau du tout ?`,
         },
         {
           type: "trace",
-          intro: "Calcule le nombre d'opérations pour chaque taille de tableau.",
+          intro: "Calculez le nombre d'opérations pour chaque taille de tableau.",
           code: `// O(n)  : une boucle         → n opérations
 // O(n²) : boucle dans boucle → n × n opérations`,
           cols: ["n éléments", "O(n)", "O(n²)"],
