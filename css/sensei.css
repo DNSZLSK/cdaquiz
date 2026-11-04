@@ -86,18 +86,29 @@
 #senseiRoot .module-card.chapter h3{margin:0}
 #senseiRoot .module-card.chapter .labo-progress-track{margin-top:8px}
 #senseiRoot .module-card.chapter .labo-progress-label{margin-top:2px}
-#senseiRoot .chambers{list-style:none;margin:10px 0 0;padding:0;display:flex;flex-direction:column;gap:8px}
-#senseiRoot .chamber{width:100%;display:flex;align-items:center;gap:12px;text-align:left;padding:8px 12px;border:1px solid var(--line);border-radius:6px;background:var(--raised)}
-#senseiRoot .chamber:hover{border-color:var(--module-color);background:var(--surface)}
-#senseiRoot .chamber.next{border-color:var(--module-color);background:var(--surface);box-shadow:inset 3px 0 0 var(--module-color)}
-#senseiRoot .chamber.locked{opacity:.55}
-#senseiRoot .chamber .labo-chip{display:grid;place-items:center;flex:none}
-#senseiRoot .chamber .labo-chip .icon{width:16px;height:16px}
-#senseiRoot .chamber-title{flex:1;min-width:0;font-weight:600;font-size:.95em}
-#senseiRoot .chamber-num{display:block;font-size:.68em;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--subtle)}
-#senseiRoot .chamber-state{font-size:.7em;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--subtle);white-space:nowrap}
-#senseiRoot .chamber.next .chamber-state{color:var(--module-color)}
-#senseiRoot .pop{margin-top:8px;border:1px solid var(--module-color);border-radius:6px;padding:14px 16px;background:var(--surface);display:flex;flex-direction:column;gap:8px}
+/* Parcours qui descend : chaque chambre de test est un hublot numerote, comme les
+   numeros de chambre des onglets (chiffres fins), relie par un rail en pointilles */
+#senseiRoot .unit-block{display:flex;flex-direction:column;gap:6px}
+#senseiRoot .path{list-style:none;margin:0;padding:18px 0 8px;display:flex;flex-direction:column;align-items:center;gap:16px;position:relative}
+#senseiRoot .path::before{content:'';position:absolute;top:0;bottom:0;left:50%;border-left:2px dashed var(--line-strong);transform:translateX(-1px)}
+#senseiRoot .path li{position:relative;display:flex;flex-direction:column;align-items:center;gap:8px;width:100%}
+#senseiRoot .node-wrap{position:relative;display:flex;flex-direction:column;align-items:center;gap:6px}
+#senseiRoot .node{width:68px;height:68px;border-radius:50%;display:grid;place-items:center;background:var(--surface);color:var(--muted);border:3px solid var(--line-strong);box-shadow:0 0 0 5px var(--surface), 0 4px 0 5px var(--line)}
+#senseiRoot .node:hover{border-color:var(--module-color);color:var(--ink)}
+#senseiRoot .node:active{transform:translateY(2px)}
+#senseiRoot .node-num{font-size:1.45em;font-weight:300;letter-spacing:0;font-variant-numeric:tabular-nums}
+#senseiRoot .node .icon{width:26px;height:26px}
+#senseiRoot .node.done{background:var(--ok);border-color:#1e7e34;color:#fff}
+#senseiRoot .node.next{width:80px;height:80px;border-color:var(--orange);color:var(--orange);box-shadow:0 0 0 5px var(--surface), 0 0 0 9px rgba(255,103,0,.18), 0 5px 0 9px rgba(255,103,0,.10)}
+#senseiRoot .node.next .node-num{font-size:1.8em}
+#senseiRoot .node.locked{background:var(--sunk);border-style:dashed;color:var(--subtle)}
+/* Signaletique "Vous etes ici" : panneau orange avec fleche */
+#senseiRoot .here{position:absolute;top:-34px;white-space:nowrap;background:var(--orange);color:#fff;font-size:.62em;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:4px 10px;border-radius:4px}
+#senseiRoot .here::after{content:'';position:absolute;left:50%;bottom:-5px;width:10px;height:10px;background:var(--orange);transform:translateX(-50%) rotate(45deg)}
+#senseiRoot .node-wrap.has-here{margin-top:30px}
+#senseiRoot .node-label{font-weight:600;font-size:.88em;text-align:center;max-width:13em;background:#fafbfc;padding:0 4px;line-height:1.3}
+#senseiRoot .chamber-num{display:block;font-size:.72em;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--subtle)}
+#senseiRoot .pop{position:relative;z-index:1;width:100%;margin-top:4px;border:1px solid var(--module-color);border-radius:6px;padding:14px 16px;background:var(--surface);display:flex;flex-direction:column;gap:8px;box-shadow:0 3px 12px rgba(0,0,0,.08)}
 
 /* Lecon : barre du haut comme l'en-tete d'une question du quiz */
 #senseiRoot .lesson-top{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding-bottom:16px;border-bottom:1px solid var(--line)}

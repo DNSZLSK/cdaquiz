@@ -181,6 +181,7 @@ function greeting(rec){
 /* Couleur de chaque chapitre : meme palette que les modules du quiz (css/modules.css) */
 const CH_COLOR = {lire:"#3572A5", parler:"#009688", senior:"#6f42c1", objets:"#E67E22", uml:"#3498DB", propre:"#27AE60", secu:"#E74C3C", devsecops:"#2496ED", agile:"#9B59B6", rust:"#CE422B"};
 const chamberNum = gi => String(gi+1).padStart(2,"0");
+const OFFSETS=[0,44,64,44,0,-44,-64,-44];
 function renderPath(){
   const rec=recommended(), g=greeting(rec);
   const ws=weakSteps();
@@ -189,7 +190,7 @@ function renderPath(){
     const pct=Math.round(p.done/p.total*100);
     const rows = ch.lessons.map((l0,k)=>{ const lesson=LESSONS.find(x=>x.id===l0.id);
       const done=isDone(lesson.id), op=unlocked(lesson), next=rec&&rec.id===lesson.id, sel=view.sel===lesson.gi;
-      const chip = done?"labo-chip-ok":next?"labo-chip-current":"";
+      const cls = done?"done":next?"next":op?"":"locked";
       const state = done?"Calibrée":next?"Recommandée":op?"":"Verrouillée";
       const nW=lesson.steps.filter(s=>s.type==="concept").length;
       const pop = sel ? `<div class="pop">
@@ -197,18 +198,21 @@ function renderPath(){
           <h3>${esc(lesson.title)}</h3><p class="small muted">${esc(lesson.sub)}</p>
           ${op?`<div class="actions"><button class="btn" data-start="${lesson.gi}">${done?"Refaire la chambre":"Entrer dans la chambre"}</button></div>`:`<p class="small">Accès refusé. Terminez d'abord : <strong>${esc(ch.lessons[k-1].title)}</strong>.</p>`}
         </div>` : "";
-      return `<li><button class="chamber ${op?"":"locked"} ${next?"next":""}" data-node="${lesson.gi}" aria-expanded="${sel}" aria-label="Chambre de test ${chamberNum(lesson.gi)} : ${esc(lesson.title)}${state?", "+state.toLowerCase():""}">
-          <span class="labo-chip ${chip}" aria-hidden="true">${done?ICON.check:op?chamberNum(lesson.gi):ICON.lock}</span>
-          <span class="chamber-title"><span class="chamber-num">Chambre de test ${chamberNum(lesson.gi)}</span>${esc(lesson.title)}</span>
-          ${state?`<span class="chamber-state">${state}</span>`:""}
-        </button>${pop}</li>`; }).join("");
-    return `<section class="module-card chapter" style="--module-color:${CH_COLOR[ch.id]||"#FF6700"}" aria-label="${esc(ch.title)}">
-      <div class="spread"><span class="eyebrow">Chapitre ${String(ci+1).padStart(2,"0")}</span>${lv===2?`<span class="pill done">Acquis au test</span>`:lv===1?`<span class="pill">En partie au test</span>`:""}</div>
-      <h3>${esc(ch.title)}</h3>
-      <p>${esc(ch.goal)}</p>
-      <div class="labo-progress-track"><div class="labo-progress-fill" style="width:${pct}%;background:var(--module-color)"></div></div>
-      <p class="labo-progress-label">${p.done}/${p.total} chambres calibrées${pct===100?" · protocole terminé":""}</p>
-      <ol class="chambers">${rows}</ol>
+      // Parcours qui descend en zigzag : chaque chambre de test est un hublot numerote
+      return `<li><div class="node-wrap${next?" has-here":""}" style="transform:translateX(${OFFSETS[k%OFFSETS.length]}px)">
+          ${next?`<span class="here">Vous êtes ici</span>`:""}
+          <button class="node ${cls}" data-node="${lesson.gi}" aria-expanded="${sel}" aria-label="Chambre de test ${chamberNum(lesson.gi)} : ${esc(lesson.title)}${state?", "+state.toLowerCase():""}">${done?ICON.check:op?`<span class="node-num">${chamberNum(lesson.gi)}</span>`:ICON.lock}</button>
+          <span class="node-label"><span class="chamber-num">Chambre ${chamberNum(lesson.gi)}</span>${esc(lesson.title)}</span>
+        </div>${pop}</li>`; }).join("");
+    return `<section class="unit-block" style="--module-color:${CH_COLOR[ch.id]||"#FF6700"}" aria-label="${esc(ch.title)}">
+      <div class="module-card chapter">
+        <div class="spread"><span class="eyebrow">Chapitre ${String(ci+1).padStart(2,"0")}</span>${lv===2?`<span class="pill done">Acquis au test</span>`:lv===1?`<span class="pill">En partie au test</span>`:""}</div>
+        <h3>${esc(ch.title)}</h3>
+        <p>${esc(ch.goal)}</p>
+        <div class="labo-progress-track"><div class="labo-progress-fill" style="width:${pct}%;background:var(--module-color)"></div></div>
+        <p class="labo-progress-label">${p.done}/${p.total} chambres calibrées${pct===100?" · protocole terminé":""}</p>
+      </div>
+      <ol class="path">${rows}</ol>
     </section>`;
   }).join("");
   return `${header()}
