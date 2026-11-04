@@ -89,7 +89,7 @@ async function doLink() {
         renderBadge();
         refreshModal();
         document.getElementById('cloudStatus').textContent = report?.existed
-            ? `Liaison établie : dossier existant récupéré (${report.labo} exercice(s), ${report.quiz} module(s), ${report.scores} score(s) fusionnés).`
+            ? `Liaison établie : dossier existant récupéré (${report.labo} exercice(s), ${report.quiz} module(s), ${report.scores} score(s) fusionnés${report.sensei ? ', vocabulaire inclus' : ''}).`
             : 'Liaison établie : NOUVEAU dossier créé pour ce couple pseudo+PIN. Si vous vouliez retrouver une progression existante, rompez la liaison et vérifiez le pseudo et le PIN utilisés sur l\'autre appareil.';
     } catch (e) {
         unlink();
@@ -105,7 +105,7 @@ async function doSync() {
         const report = await syncNow();
         refreshModal();
         document.getElementById('cloudStatus').textContent =
-            `Synchronisé : ${report.labo} exercice(s), ${report.quiz} module(s), ${report.scores} score(s) mis à jour.`;
+            `Synchronisé : ${report.labo} exercice(s), ${report.quiz} module(s), ${report.scores} score(s)${report.sensei ? ' et le vocabulaire' : ''} mis à jour.`;
     } catch (e) {
         status.textContent = 'Échec : ' + e.message + ' (la progression locale reste intacte)';
     }

@@ -25,6 +25,7 @@
 /* Les deux portails : QUIZ = bleu, LABO = orange */
 .mode-tabs-buttons button[data-tab="quiz"] { --tab-color: #0098FF; }
 .mode-tabs-buttons button[data-tab="labo"] { --tab-color: #FF6700; }
+.mode-tabs-buttons button[data-tab="sensei"] { --tab-color: #28a745; }
 
 .mode-tabs-buttons button {
     position: relative;

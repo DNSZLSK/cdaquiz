@@ -50,12 +50,16 @@ registerScreen('results', {
 function initApp() {
     initQuizScreen();
 
-    // Onglets QUIZ | LABO (le hub labo se charge en lazy au premier clic)
+    // Onglets QUIZ | LABO | VOCABULAIRE (labo et sensei se chargent en lazy au premier clic)
     initTabs({
         onQuiz: () => showScreen('menu'),
         onLabo: async () => {
             const hub = await import('./labo/hub.js');
             hub.openHub();
+        },
+        onSensei: async () => {
+            const sensei = await import('./sensei/engine.js');
+            sensei.openSensei();
         }
     });
 

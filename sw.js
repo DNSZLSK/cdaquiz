@@ -1,7 +1,7 @@
 // Service worker CDA Quiz — strategie network-first : en ligne on sert
 // toujours la version fraiche (les mises a jour arrivent toutes seules),
 // le cache ne sert que de filet hors-ligne.
-const CACHE = 'cdaquiz-v4'; // incremente quand ASSETS change : force le re-pre-cache complet
+const CACHE = 'cdaquiz-v5'; // incremente quand ASSETS change : force le re-pre-cache complet
 
 const ASSETS = [
     '.',
@@ -14,6 +14,7 @@ const ASSETS = [
     'css/labo.css',
     'css/main.css',
     'css/modules.css',
+    'css/sensei.css',
     'data/catalog.js',
     'data/modules.js',
     'data/questions.js',
@@ -33,6 +34,18 @@ const ASSETS = [
     'data/exercises/sql.js',
     'data/exercises/tests-junit.js',
     'data/exercises/uml-archi.js',
+    'data/sensei/agile.js',
+    'data/sensei/devsecops.js',
+    'data/sensei/index.js',
+    'data/sensei/lire.js',
+    'data/sensei/objets.js',
+    'data/sensei/parler.js',
+    'data/sensei/placement.js',
+    'data/sensei/propre.js',
+    'data/sensei/rust.js',
+    'data/sensei/secu.js',
+    'data/sensei/senior.js',
+    'data/sensei/uml.js',
     'js/app.js',
     'js/audio.js',
     'js/quiz-session.js',
@@ -56,6 +69,7 @@ const ASSETS = [
     'js/labo/cloud.js',
     'js/labo/cloud-config.js',
     'js/labo/merge.js',
+    'js/sensei/engine.js',
     'js/ui/identity.js',
     'js/ui/menu.js',
     'js/ui/quiz.js',

@@ -53,7 +53,7 @@ export function syncNow() {
         const res = await fetch(nodeUrl(l));
         if (!res.ok) throw new Error('Lecture cloud impossible (HTTP ' + res.status + ')');
         const remote = await res.json(); // null tant que rien n'a ete pousse
-        const report = remote ? mergeAll(remote) : { quiz: 0, labo: 0, scores: 0 };
+        const report = remote ? mergeAll(remote) : { quiz: 0, labo: 0, scores: 0, sensei: 0 };
         const put = await fetch(nodeUrl(l), {
             method: 'PUT',
             body: JSON.stringify({ ...snapshotAll(), t: Date.now() })
@@ -61,7 +61,7 @@ export function syncNow() {
         if (!put.ok) throw new Error('Écriture cloud impossible (HTTP ' + put.status + ')');
         localStorage.setItem(LINK_KEY, JSON.stringify({ ...l, lastSync: Date.now() }));
         // La fusion a apporte du nouveau : les ecrans visibles se rafraichissent
-        if (report.quiz + report.labo + report.scores > 0) {
+        if (report.quiz + report.labo + report.scores + report.sensei > 0) {
             window.dispatchEvent(new CustomEvent('cdaquiz:synced'));
         }
         // existed : permet a l'UI de distinguer "dossier existant recupere" de

@@ -1,8 +1,8 @@
-// Onglets QUIZ | LABO affiches en tete des ecrans menu et hub labo.
-let handlers = { quiz: null, labo: null };
+// Onglets QUIZ | LABO | VOCABULAIRE affiches en tete des ecrans menu, hub labo et sensei.
+let handlers = { quiz: null, labo: null, sensei: null };
 
-export function initTabs({ onQuiz, onLabo }) {
-    handlers = { quiz: onQuiz, labo: onLabo };
+export function initTabs({ onQuiz, onLabo, onSensei }) {
+    handlers = { quiz: onQuiz, labo: onLabo, sensei: onSensei };
     document.getElementById('modeTabs').addEventListener('click', (e) => {
         const tab = e.target.closest('[data-tab]');
         if (!tab || tab.classList.contains('active')) return;

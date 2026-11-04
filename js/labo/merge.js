@@ -1,8 +1,9 @@
-// Moteur de fusion de progression (quiz + labo + classement), IDEMPOTENT :
+// Moteur de fusion de progression (quiz + labo + classement + vocabulaire), IDEMPOTENT :
 // rejouer la meme fusion ne change rien. Utilise par la synchro cloud.
 const QUIZ_PROGRESS_KEY = 'cdaquiz_progress';
 const LABO_PROGRESS_KEY = 'cdaquiz_labo_progress';
 const LEADERBOARD_KEY = 'cdaquiz_leaderboard';
+const SENSEI_PROGRESS_KEY = 'cdaquiz_sensei';
 
 function readJson(key, fallback) {
     try { return JSON.parse(localStorage.getItem(key)) || fallback; }
@@ -13,8 +14,32 @@ export function snapshotAll() {
     return {
         p: readJson(QUIZ_PROGRESS_KEY, {}),
         l: readJson(LABO_PROGRESS_KEY, { v: 1 }),
-        b: readJson(LEADERBOARD_KEY, [])
+        b: readJson(LEADERBOARD_KEY, []),
+        s: readJson(SENSEI_PROGRESS_KEY, null)
     };
+}
+
+// Progression Sensei (onglet Vocabulaire). Regles, toutes idempotentes :
+// - lecons faites : union (la date la plus ancienne est gardee) ;
+// - cartes de revision : par mot, la version modifiee le plus recemment (champ t) ;
+// - serie de jours : celle dont le dernier jour est le plus recent ;
+// - le reste (points faibles, test, langage) : l'objet modifie le plus recemment.
+function mergeSensei(a, b) {
+    if (!b || typeof b !== 'object') return a;
+    if (!a || typeof a !== 'object') return b;
+    const newer = (b.updatedAt || 0) > (a.updatedAt || 0) ? b : a;
+    const done = { ...(a.done || {}) };
+    for (const [id, day] of Object.entries(b.done || {})) {
+        if (!done[id] || day < done[id]) done[id] = day;
+    }
+    const cards = { ...(a.cards || {}) };
+    for (const [id, card] of Object.entries(b.cards || {})) {
+        const cur = cards[id];
+        if (!cur || (card.t || 0) > (cur.t || 0)) cards[id] = card;
+    }
+    const sa = a.streak || {}, sb = b.streak || {};
+    const streak = (sb.last || '') > (sa.last || '') || ((sb.last || '') === (sa.last || '') && (sb.n || 0) > (sa.n || 0)) ? sb : sa;
+    return { ...newer, done, cards, streak, updatedAt: Math.max(a.updatedAt || 0, b.updatedAt || 0) };
 }
 
 // ok est definitif ; sinon l'entree la plus recente decide du statut et de la
@@ -35,7 +60,7 @@ function mergeLaboEntry(a, b) {
 
 // Fusionne un instantane distant {p, l, b} dans le localStorage local.
 export function mergeAll(incoming) {
-    const report = { quiz: 0, labo: 0, scores: 0 };
+    const report = { quiz: 0, labo: 0, scores: 0, sensei: 0 };
     if (!incoming || typeof incoming !== 'object') return report;
 
     // Progression quiz : meilleur pourcentage par module
@@ -77,6 +102,16 @@ export function mergeAll(incoming) {
     }
     localB.sort((x, y) => y.pct - x.pct || x.timeSec - y.timeSec);
     localStorage.setItem(LEADERBOARD_KEY, JSON.stringify(localB.slice(0, 50)));
+
+    // Vocabulaire (Sensei)
+    if (incoming.s && typeof incoming.s === 'object') {
+        const localS = readJson(SENSEI_PROGRESS_KEY, null);
+        const mergedS = mergeSensei(localS, incoming.s);
+        if (JSON.stringify(mergedS) !== JSON.stringify(localS)) {
+            localStorage.setItem(SENSEI_PROGRESS_KEY, JSON.stringify(mergedS));
+            report.sensei++;
+        }
+    }
 
     return report;
 }
