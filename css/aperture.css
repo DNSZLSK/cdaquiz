@@ -1,0 +1,274 @@
+/* =====================================================================
+   CDAquiz : direction "chambre de test Aperture", minimaliste et clinique.
+   Panneaux blancs, beaucoup de vide, typographie sobre, grands numeros en
+   chiffres fins, pictogrammes monochromes. L'orange et le bleu ne servent
+   qu'aux etats : selection, en cours, recommande. Vert / rouge = juste / faux.
+   Pas de lisere, pas d'ombre 3D, pas de grille de fond.
+   Charge en dernier. Tous les dessins sont originaux.
+   ===================================================================== */
+
+@font-face { font-family: 'Barlow'; font-weight: 200; font-style: normal; font-display: swap; src: url('../assets/fonts/barlow-200.woff2') format('woff2'); }
+@font-face { font-family: 'Barlow'; font-weight: 400; font-style: normal; font-display: swap; src: url('../assets/fonts/barlow-400.woff2') format('woff2'); }
+@font-face { font-family: 'Barlow'; font-weight: 500; font-style: normal; font-display: swap; src: url('../assets/fonts/barlow-500.woff2') format('woff2'); }
+@font-face { font-family: 'Barlow'; font-weight: 600; font-style: normal; font-display: swap; src: url('../assets/fonts/barlow-600.woff2') format('woff2'); }
+@font-face { font-family: 'Barlow'; font-weight: 700; font-style: normal; font-display: swap; src: url('../assets/fonts/barlow-700.woff2') format('woff2'); }
+@font-face { font-family: 'Barlow'; font-weight: 800; font-style: normal; font-display: swap; src: url('../assets/fonts/barlow-800.woff2') format('woff2'); }
+
+:root {
+    --ap-blue: #0098FF;   --ap-blue-deep: #0079CC;   --ap-blue-soft: #E3F3FF;
+    --ap-orange: #FF6700; --ap-orange-deep: #CC5200; --ap-orange-soft: #FFEEE2;
+    --ap-ok: #58CC02;     --ap-ok-deep: #46A302;     --ap-ok-soft: #E5F8D3;
+    --ap-ko: #FF4B4B;     --ap-ko-deep: #D33131;     --ap-ko-soft: #FFE3E3;
+    --ap-ink: #1B1F24;    --ap-muted: #5E6670;       --ap-subtle: #9AA1A9;
+    --ap-bg: #F4F5F6;     --ap-panel: #FFFFFF;       --ap-hair: #E6E8EB;
+    --ap-tile-line: #E6E8EB; --ap-white: #FFFFFF;
+    --ap-font: 'Barlow', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+    --ap-r: 4px; --ap-r-tile: 4px; --ap-r-btn: 4px;
+    --ap-t: .15s;
+}
+
+/* ---------- Fond : gris tres clair, uni ---------- */
+body { font-family: var(--ap-font); color: var(--ap-ink); background: var(--ap-bg); font-size: 17px; }
+.container { max-width: 1120px; background: transparent; box-shadow: none; }
+.content { background: transparent; padding: 24px 40px 56px; }
+
+/* ---------- En-tete : mot-symbole sobre ---------- */
+.header { background: transparent; border: 0; padding: 22px 40px 18px; }
+.header-content { display: flex; align-items: center; gap: 14px; }
+.header-content h1 { font-size: 1.15em; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; margin: 0; color: var(--ap-ink); }
+.header-content p { font-size: .7em; font-weight: 500; letter-spacing: .24em; text-transform: uppercase; color: var(--ap-subtle); }
+.aperture-header-logo { width: 40px; opacity: .55; }
+.link-badge { font-family: var(--ap-font); border-radius: var(--ap-r); box-shadow: none; }
+.progress-bar { height: 3px; background: transparent; margin: 0 40px; }
+.progress-fill { background: var(--ap-blue); }
+
+/* ---------- Boutons de l'accueil : plats, nets ---------- */
+.ap-btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    padding: 13px 24px; border: 1px solid transparent; border-radius: var(--ap-r);
+    font-family: var(--ap-font); font-weight: 600; font-size: .9em; letter-spacing: .12em; text-transform: uppercase;
+    text-decoration: none; cursor: pointer; box-shadow: none;
+    transition: background var(--ap-t), color var(--ap-t), border-color var(--ap-t);
+}
+.ap-btn:active { transform: none; box-shadow: none; }
+.ap-btn.ap-btn-primary { background: var(--ap-ink); color: #fff; }
+.ap-btn.ap-btn-primary:hover:not(:disabled) { background: var(--ap-orange); border-color: var(--ap-orange); }
+.ap-btn.ap-btn-quiet { background: transparent; color: var(--ap-ink); border-color: #C9CED4; }
+.ap-btn.ap-btn-quiet:hover { border-color: var(--ap-ink); }
+
+/* ---------- Heros : panneau de chambre de test ---------- */
+.ap-hero {
+    position: relative; display: grid; grid-template-columns: 190px 1fr auto; align-items: center; gap: 48px;
+    padding: 48px 52px; margin-bottom: 40px; background: var(--ap-panel); border-radius: var(--ap-r);
+}
+.ap-hero-sign { display: flex; flex-direction: column; gap: 14px; }
+.ap-hero-num { font-size: 7.5rem; font-weight: 200; line-height: .8; letter-spacing: -.04em; color: var(--ap-ink); }
+.ap-hero-rule { height: 1px; background: var(--ap-ink); }
+.ap-hero-picto { display: flex; gap: 8px; }
+.ap-hero-picto svg { width: 26px; height: 26px; padding: 5px; background: var(--ap-ink); color: #fff; border-radius: 2px; box-sizing: content-box; }
+.ap-eyebrow { display: block; font-size: .72em; font-weight: 600; letter-spacing: .26em; text-transform: uppercase; color: var(--ap-subtle); margin-bottom: 14px; }
+.ap-title { font-size: clamp(2rem, 4.2vw, 3rem); font-weight: 400; line-height: 1.05; letter-spacing: -.01em; color: var(--ap-ink); margin: 0 0 16px; }
+.ap-lead { font-size: 1.08em; font-weight: 400; color: var(--ap-muted); line-height: 1.5; max-width: 34em; margin-bottom: 28px; }
+.ap-hero-actions { display: flex; flex-wrap: wrap; gap: 12px; }
+.ap-hero-unit .unit { display: block; }
+
+/* ---------- Choix du protocole : trois panneaux numerotes ---------- */
+.mode-tabs { margin: 0 0 40px; }
+.mode-tabs-label { font-size: .72em; font-weight: 600; letter-spacing: .26em; color: var(--ap-subtle); margin-bottom: 14px; }
+.mode-tabs-buttons { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; background: var(--ap-hair); border-radius: var(--ap-r); overflow: hidden; }
+.mode-tabs-buttons button {
+    position: relative; display: flex; align-items: center; gap: 18px; padding: 22px 24px; text-align: left;
+    border: 0; border-radius: 0; background: var(--ap-panel); box-shadow: none; color: var(--ap-ink);
+    text-transform: none; letter-spacing: 0; font-size: 1em; overflow: visible;
+}
+.mode-tabs-buttons button::after { content: ''; display: block; position: absolute; left: 0; right: 0; bottom: 0; height: 3px; background: var(--ap-orange); opacity: 0; transition: opacity var(--ap-t); }
+.mode-tabs-buttons button:hover { background: #FAFAFB; border: 0; color: var(--ap-ink); transform: none; box-shadow: none; }
+.mode-tabs-buttons button:active { transform: none; }
+.mode-tabs-buttons button.active { background: var(--ap-panel); border: 0; box-shadow: none; }
+.mode-tabs-buttons button.active::after { opacity: 1; }
+.tab-icon { flex: none; width: 30px; height: 30px; display: grid; place-items: center; color: var(--ap-ink); background: none; box-shadow: none; order: 2; margin-left: auto; }
+.tab-icon svg { width: 26px; height: 26px; stroke-width: 1.8; }
+/* numero a gauche sur deux lignes, nom et sous-titre empiles a droite */
+.tab-text { display: grid; grid-template-columns: auto 1fr; grid-template-rows: auto auto; column-gap: 14px; align-items: center; min-width: 0; }
+.tab-text .tab-num { grid-row: 1 / 3; }
+.tab-text b, .tab-text small { grid-column: 2; }
+.mode-tabs-buttons .tab-num { font-size: 2.4em; font-weight: 200; letter-spacing: -.02em; line-height: 1; color: var(--ap-subtle); transition: color var(--ap-t); }
+.mode-tabs-buttons button.active .tab-num { color: var(--ap-orange); }
+.tab-text b { font-size: 1.1em; font-weight: 600; display: block; }
+.tab-text small { display: block; font-size: .82em; font-weight: 400; color: var(--ap-muted); }
+
+/* ---------- Modules : panneaux de chambre de test ---------- */
+.ap-section-title, .menu h2 { font-size: .72em; font-weight: 600; letter-spacing: .26em; text-transform: uppercase; color: var(--ap-subtle); margin: 0 0 14px; }
+/* les joints de 2px laissent voir le fond : plus de case grise vide en fin de grille */
+.module-grid { grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 2px; background: transparent; margin-bottom: 26px; }
+.module-card {
+    position: relative; display: flex; flex-direction: column; gap: 6px;
+    padding: 22px 24px 26px; border: 0; border-radius: 0; background: var(--ap-panel); box-shadow: none; min-height: 210px;
+    transition: background var(--ap-t);
+}
+.module-card::before { display: none; }
+.module-card:hover { transform: none; box-shadow: none; background: #FAFAFB; }
+.module-card:hover .tile-num { color: var(--ap-orange); }
+.tile-head { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 14px; }
+.tile-num { font-size: 3.2em; font-weight: 200; line-height: .85; letter-spacing: -.03em; color: var(--ap-ink); font-variant-numeric: tabular-nums; transition: color var(--ap-t); }
+.tile-picto svg { width: 22px; height: 22px; padding: 5px; box-sizing: content-box; background: var(--ap-ink); color: #fff; border-radius: 2px; }
+.module-card h3 { font-size: 1.12em; font-weight: 600; margin: 0; color: var(--ap-ink); }
+.module-card p { font-size: .9em; font-weight: 400; color: var(--ap-muted); line-height: 1.4; }
+.tile-foot { margin-top: auto; padding-top: 14px; display: flex; flex-direction: column; gap: 4px; font-size: .7em; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; white-space: nowrap; }
+.tile-meta { color: var(--ap-subtle); }
+.tile-cal { color: var(--ap-blue-deep); }
+.tile-cal.is-empty { color: var(--ap-subtle); }
+.tile-bar { position: absolute; left: 0; right: 0; bottom: 0; height: 3px; background: transparent; }
+.tile-bar i { display: block; height: 100%; background: var(--ap-blue); }
+.labo-reset { font-family: var(--ap-font); font-weight: 500; letter-spacing: .04em; color: var(--ap-subtle); box-shadow: none; }
+
+/* ---------- Boutons des autres ecrans (inchanges en attendant leur refonte) ---------- */
+button {
+    font-family: var(--ap-font);
+    font-weight: 700;
+    border: 2px solid #DDE3EA;
+    border-radius: 14px;
+    background: var(--ap-white);
+    color: var(--ap-ink);
+    box-shadow: 0 4px 0 #DDE3EA;
+    transition: transform var(--ap-t), box-shadow var(--ap-t), background var(--ap-t), border-color var(--ap-t);
+}
+button:hover:not(:disabled) { background: #F7F9FB; border-color: #CBD4DE; }
+button:active:not(:disabled) { transform: translateY(4px); box-shadow: 0 0 0 transparent; }
+button:disabled { opacity: .45; }
+.btn-primary {
+    background: var(--ap-blue); border-color: var(--ap-blue); color: #fff;
+    box-shadow: 0 4px 0 var(--ap-blue-deep);
+    text-transform: uppercase; letter-spacing: .08em; font-weight: 800;
+}
+.btn-primary:hover:not(:disabled) { background: #1AA3FF; border-color: #1AA3FF; }
+.ap-btn-ghost { color: var(--ap-blue-deep); }
+/* l'accueil n'a ni bouton 3D ni ombre : ses boutons sont reecrits plus haut */
+.mode-tabs-buttons button, .module-card, .ap-btn, .link-badge, .labo-reset { box-shadow: none; }
+
+/* ---------- Question du quiz : ecran de lecon ---------- */
+.ap-lesson { padding-bottom: 170px; max-width: 760px; margin: 0 auto; }
+.ap-lesson-top { display: flex; align-items: center; gap: 16px; margin-bottom: 26px; }
+.ap-x { width: 46px; height: 46px; padding: 0; display: grid; place-items: center; border: 0; background: transparent; box-shadow: none; color: var(--ap-subtle); }
+.ap-x:hover:not(:disabled) { background: rgba(27, 34, 48, .06); border: 0; }
+.ap-x svg { width: 24px; height: 24px; }
+.ap-progress { flex: 1; height: 18px; border-radius: 99px; background: #D9E0E8; overflow: hidden; }
+.ap-progress i { position: relative; display: block; height: 100%; width: 0; border-radius: 99px; background: var(--ap-orange); transition: width .35s ease; }
+.ap-progress i::after { content: ''; position: absolute; left: 10px; right: 10px; top: 4px; height: 4px; border-radius: 99px; background: rgba(255, 255, 255, .45); }
+.ap-count { font-weight: 800; color: var(--ap-subtle); font-variant-numeric: tabular-nums; }
+.ap-chip { display: inline-block; font-size: .74em; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; color: var(--ap-blue-deep); background: var(--ap-blue-soft); border-radius: 99px; padding: 6px 14px; }
+
+.question-text { font-size: clamp(1.4rem, 3.2vw, 1.9rem); font-weight: 800; line-height: 1.22; color: var(--ap-ink); margin: 16px 0 24px; }
+.answer-hint { border: 0; padding: 0; margin-bottom: 14px; font-size: .74em; font-weight: 800; letter-spacing: .16em; color: var(--ap-subtle); }
+.options { gap: 14px; }
+.option {
+    position: relative; background: var(--ap-white); border: 2px solid var(--ap-tile-line); border-radius: var(--ap-r-tile);
+    padding: 16px 18px; gap: 16px; box-shadow: 0 4px 0 var(--ap-tile-line);
+    transition: transform var(--ap-t), box-shadow var(--ap-t), border-color var(--ap-t), background var(--ap-t);
+}
+.option:hover { background: #F6FAFF; border-color: #B5DCFF; box-shadow: 0 4px 0 #B5DCFF; }
+.option:active { transform: translateY(3px); box-shadow: 0 1px 0 var(--ap-tile-line); }
+.option:has(input:checked) { background: var(--ap-blue-soft); border-color: var(--ap-blue); box-shadow: 0 4px 0 var(--ap-blue-deep); }
+.option input[type="checkbox"], .option input[type="radio"] {
+    appearance: none; -webkit-appearance: none; flex: none; width: 28px; height: 28px; margin: 0;
+    border: 2px solid #C5CFDA; border-radius: 9px; background: var(--ap-white); cursor: pointer;
+    display: grid; place-items: center;
+}
+.option input[type="radio"] { border-radius: 50%; }
+.option input:checked { background: var(--ap-blue) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12.5l4.5 4.5L19 7.5'/%3E%3C/svg%3E") center / 18px no-repeat; border-color: var(--ap-blue); }
+.option span { font-size: 1.05em; font-weight: 600; color: var(--ap-ink); line-height: 1.4; }
+/* apres validation, juste / faux l'emporte sur "coche" */
+.option.correct, .option.correct:has(input:checked) { background: var(--ap-ok-soft); border-color: var(--ap-ok); box-shadow: 0 4px 0 var(--ap-ok-deep); }
+.option.correct input:checked { background-color: var(--ap-ok); border-color: var(--ap-ok); }
+.option.incorrect, .option.incorrect:has(input:checked) { background: var(--ap-ko-soft); border-color: var(--ap-ko); box-shadow: 0 4px 0 var(--ap-ko-deep); }
+.option.incorrect input:checked { background-color: var(--ap-ko); border-color: var(--ap-ko); }
+/* pendant une question, la grosse barre de la lecon remplace la fine barre du haut */
+body:has(.ap-lesson) .progress-bar { visibility: hidden; }
+.option.disabled { opacity: 1; }
+.explanation { border: 0; border-radius: var(--ap-r-tile); background: var(--ap-white); box-shadow: 0 4px 0 var(--ap-tile-line); padding: 20px 22px; margin-top: 24px; }
+.explanation h4 { color: var(--ap-blue-deep); font-weight: 800; letter-spacing: .16em; font-size: .78em; }
+.explanation p { font-size: 1em; line-height: 1.55; color: var(--ap-ink); }
+
+/* Barre d'action collee en bas : neutre, puis verte ou rouge apres validation */
+.buttons.ap-sheet {
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 30; margin: 0;
+    background: var(--ap-white); border-top: 2px solid var(--ap-tile-line);
+    padding: 18px max(20px, env(safe-area-inset-right, 0px)) calc(18px + env(safe-area-inset-bottom, 0px)) max(20px, env(safe-area-inset-left, 0px));
+    display: block;
+}
+.ap-sheet-in { max-width: 760px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+.ap-sheet-fb { display: flex; align-items: center; gap: 14px; min-width: 0; flex: 1 1 280px; }
+.ap-sheet-fb:empty { display: none; }
+.ap-sheet-fb strong { display: block; font-size: 1.3em; font-weight: 800; }
+.ap-sheet-fb span { display: block; font-weight: 600; }
+.ap-sheet-actions { display: flex; gap: 12px; margin-left: auto; }
+.ap-sheet-actions button { min-width: 150px; padding: 14px 22px; }
+.ap-sheet.is-ok { background: #D7FFB8; border-top-color: transparent; }
+.ap-sheet.is-ok strong, .ap-sheet.is-ok span { color: #3A8700; }
+.ap-sheet.is-ok .btn-primary { background: var(--ap-ok); border-color: var(--ap-ok); box-shadow: 0 4px 0 var(--ap-ok-deep); }
+.ap-sheet.is-ko { background: #FFDFE0; border-top-color: transparent; }
+.ap-sheet.is-ko strong, .ap-sheet.is-ko span { color: #C12A2A; }
+.ap-sheet.is-ko .btn-primary { background: var(--ap-ko); border-color: var(--ap-ko); box-shadow: 0 4px 0 var(--ap-ko-deep); }
+.ap-sheet.is-in { animation: ap-rise .25s ease-out; }
+@keyframes ap-rise { from { transform: translateY(40%); opacity: .4; } to { transform: none; opacity: 1; } }
+.unit { flex: none; display: block; }
+.unit.bob { animation: ap-bob .55s ease-out 1; }
+@keyframes ap-bob { 0% { transform: translateY(0); } 35% { transform: translateY(-8px); } 70% { transform: translateY(1px); } 100% { transform: translateY(0); } }
+.unit .dots circle { animation: ap-blink 1.2s infinite ease-in-out; }
+.unit .dots circle:nth-child(2) { animation-delay: .2s; }
+.unit .dots circle:nth-child(3) { animation-delay: .4s; }
+@keyframes ap-blink { 0%, 100% { opacity: .25; } 50% { opacity: 1; } }
+
+/* ---------- Pied de page ---------- */
+.footer { font-family: var(--ap-font); color: var(--ap-subtle); }
+
+/* les boutons de l'accueil ne s'enfoncent pas (le style 3D global est reserve aux autres ecrans pour l'instant) */
+.ap-btn:active:not(:disabled), .mode-tabs-buttons button:active:not(:disabled) { transform: none; box-shadow: none; }
+.mode-tabs-buttons button:hover:not(:disabled) { background: #FAFAFB; border-color: transparent; }
+
+/* ---------- Moins d'animations si demande ---------- */
+@media (prefers-reduced-motion: reduce) {
+    button, .ap-btn, .module-card, .option, .ap-progress i, .tile-num, .tab-num { transition: none; }
+    .ap-sheet.is-in, .unit.bob, .unit .dots circle { animation: none; }
+}
+
+/* ---------- Tablette ---------- */
+@media (max-width: 980px) {
+    .ap-hero { grid-template-columns: 150px 1fr; gap: 36px; }
+    .ap-hero-num { font-size: 6rem; }
+    .ap-hero-unit { display: none; }
+}
+
+/* ---------- Mobile ---------- */
+@media (max-width: 768px) {
+    body { font-size: 16px; }
+    .header { padding: 16px 18px; }
+    .content { padding: 16px 16px 44px; }
+    .progress-bar { margin: 0 18px; }
+    .ap-hero { grid-template-columns: 1fr; gap: 22px; padding: 28px 22px 30px; margin-bottom: 28px; }
+    .ap-hero-sign { flex-direction: row; align-items: flex-end; gap: 16px; }
+    .ap-hero-num { font-size: 4.4rem; }
+    .ap-hero-rule { display: none; }
+    .ap-hero-picto { margin-bottom: 4px; }
+    .ap-hero-picto svg { width: 20px; height: 20px; padding: 4px; }
+    .ap-hero-actions .ap-btn { flex: 1 1 100%; }
+    .mode-tabs { margin-bottom: 28px; }
+    .mode-tabs-buttons button { flex-direction: column; align-items: flex-start; gap: 10px; padding: 16px 14px; }
+    .tab-icon { order: 0; margin: 0; width: 24px; height: 24px; }
+    .tab-icon svg { width: 22px; height: 22px; }
+    .tab-text { display: flex; flex-direction: column; gap: 4px; }
+    .mode-tabs-buttons .tab-num { font-size: 1.8em; }
+    .tab-text b { font-size: .95em; }
+    .tab-text small { display: none; }
+    .module-grid { grid-template-columns: 1fr 1fr; }
+    .module-card { min-height: 0; padding: 18px 16px 22px; }
+    .tile-num { font-size: 2.4em; }
+    .tile-foot { flex-direction: column; gap: 4px; }
+    .ap-sheet-actions { width: 100%; }
+    .ap-sheet-actions button { flex: 1; min-width: 0; }
+    .ap-sheet-fb .unit { width: 44px; height: 44px; }
+}
+@media (max-width: 420px) {
+    .module-grid { grid-template-columns: 1fr; }
+    .module-card p { font-size: .88em; }
+}

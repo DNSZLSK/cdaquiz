@@ -19,6 +19,7 @@ registerScreen('menu', {
         setTabsVisible(true);
         setActiveTab('quiz');
         renderModuleGrid();
+        document.getElementById('menuHero').style.display = '';
         document.getElementById('menu').classList.add('active');
         document.getElementById('quizContent').style.display = 'block';
         document.getElementById('quizContent').innerHTML = '';
@@ -26,6 +27,7 @@ registerScreen('menu', {
     },
     hide() {
         setTabsVisible(false);
+        document.getElementById('menuHero').style.display = 'none';
         document.getElementById('menu').classList.remove('active');
     }
 });
@@ -63,11 +65,13 @@ function initApp() {
         }
     });
 
-    // Grille de modules : delegation
-    document.getElementById('moduleGrid').addEventListener('click', (e) => {
+    // Grille de modules + bouton du heros : delegation
+    const onModuleClick = (e) => {
         const card = e.target.closest('[data-module]');
         if (card) startQuiz(card.dataset.module);
-    });
+    };
+    document.getElementById('moduleGrid').addEventListener('click', onModuleClick);
+    document.getElementById('menuHero').addEventListener('click', onModuleClick);
 
     // Boutons statiques de l'ecran resultats
     document.getElementById('saveScoreBtn').addEventListener('click', saveScore);

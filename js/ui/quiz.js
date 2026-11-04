@@ -5,6 +5,7 @@ import { getExerciseType } from '../exercises/registry.js';
 import { createQuizSession } from '../quiz-session.js';
 import { showScreen } from '../screens.js';
 import { showResults } from './results.js';
+import { unit } from './mascot.js';
 
 let session = null;
 
@@ -38,29 +39,30 @@ function renderQuestion() {
     const runtime = session.current();
     const question = runtime.question;
 
+    // Ecran plein, facon lecon : croix + barre epaisse en haut, barre d'action collee en bas
     container.innerHTML = `
-        <div class="question-container active">
-            <div class="question-header">
-                <span class="question-number">Question ${session.index + 1}/${session.length()}</span>
-                <span class="module-tag">${getModuleName(question.module)}</span>
+        <div class="question-container active ap-lesson">
+            <div class="ap-lesson-top">
+                <button class="ap-x" data-action="menu" aria-label="Retour au menu">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+                </button>
+                <div class="ap-progress" aria-hidden="true"><i id="lessonBar"></i></div>
+                <span class="ap-count">${session.index + 1}/${session.length()}</span>
             </div>
+            <span class="ap-chip">${getModuleName(question.module)}</span>
 
             <div class="exercise-body"></div>
 
-            <div class="buttons">
-                <div style="display: flex; gap: 12px;">
-                    <button data-action="menu">Menu</button>
-                    <button data-action="prev" ${session.isFirst() ? 'disabled' : ''}>
-                        Précédent
-                    </button>
-                </div>
-                <div style="display: flex; gap: 12px;">
-                    <button class="btn-primary" id="validateBtn" data-action="validate">
-                        Valider
-                    </button>
-                    <button class="btn-primary" id="nextBtn" data-action="next" style="display: none;">
-                        ${session.isLast() ? 'Voir les résultats' : 'Suivant'}
-                    </button>
+            <div class="buttons ap-sheet" id="quizSheet">
+                <div class="ap-sheet-in">
+                    <div class="ap-sheet-fb" id="sheetFb" aria-live="polite"></div>
+                    <div class="ap-sheet-actions">
+                        <button class="ap-btn ap-btn-ghost" data-action="prev" ${session.isFirst() ? 'disabled' : ''}>Précédent</button>
+                        <button class="btn-primary" id="validateBtn" data-action="validate">Valider</button>
+                        <button class="btn-primary" id="nextBtn" data-action="next" style="display: none;">
+                            ${session.isLast() ? 'Voir les résultats' : 'Continuer'}
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -78,7 +80,25 @@ function renderQuestion() {
         handler.showCorrection(runtime, bodyEl, saved.answer, saved.result);
         document.getElementById('validateBtn').style.display = 'none';
         document.getElementById('nextBtn').style.display = 'block';
+        showSheetFeedback(saved.result.correct, false);
     }
+}
+
+// Repliques originales du Centre d'Enrichissement pour la barre du bas
+const SHEET_OK = ["Réponse conforme.", "Correct. Résultat consigné.", "Exact. Le protocole continue."];
+const SHEET_KO = ["Réponse non conforme.", "Écart détecté.", "Résultat inattendu."];
+const pickLine = arr => arr[Math.floor(Math.random() * arr.length)];
+
+// La barre du bas passe au vert ou au rouge, avec l'Unite 03 et une replique
+function showSheetFeedback(correct, animate) {
+    const sheet = document.getElementById('quizSheet');
+    const fb = document.getElementById('sheetFb');
+    if (!sheet || !fb) return;
+    sheet.classList.add(correct ? 'is-ok' : 'is-ko');
+    if (animate) sheet.classList.add('is-in');
+    fb.innerHTML = `${unit(correct ? 'content' : 'pensif', 52, correct && animate ? 'bob' : '')}
+        <div><strong>${pickLine(correct ? SHEET_OK : SHEET_KO)}</strong>
+        <span>${correct ? 'Continuez sur cette lancée.' : "Lisez l'explication avant de continuer."}</span></div>`;
 }
 
 async function validateAnswer() {
@@ -103,6 +123,9 @@ async function validateAnswer() {
 
     document.getElementById('validateBtn').style.display = 'none';
     document.getElementById('nextBtn').style.display = 'block';
+    showSheetFeedback(result.correct, true);
+    const expl = bodyEl.querySelector('.explanation');
+    if (expl) expl.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
 }
 
 export function showEmptyAnswerModal() {
@@ -158,7 +181,10 @@ function previousQuestion() {
 }
 
 function updateProgress() {
-    document.getElementById('progressBar').style.width = session.progressPct() + '%';
+    const pct = session.progressPct() + '%';
+    document.getElementById('progressBar').style.width = pct;
+    const bar = document.getElementById('lessonBar');
+    if (bar) bar.style.width = pct;
 }
 
 export function initQuizScreen() {

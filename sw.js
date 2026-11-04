@@ -1,16 +1,23 @@
 // Service worker CDA Quiz — strategie network-first : en ligne on sert
 // toujours la version fraiche (les mises a jour arrivent toutes seules),
 // le cache ne sert que de filet hors-ligne.
-const CACHE = 'cdaquiz-v6'; // incremente quand ASSETS change : force le re-pre-cache complet
+const CACHE = 'cdaquiz-v7'; // incremente quand ASSETS change : force le re-pre-cache complet
 
 const ASSETS = [
     '.',
     'manifest.json',
     'assets/aperture.png',
+    'assets/fonts/barlow-200.woff2',
+    'assets/fonts/barlow-400.woff2',
+    'assets/fonts/barlow-500.woff2',
+    'assets/fonts/barlow-600.woff2',
+    'assets/fonts/barlow-700.woff2',
+    'assets/fonts/barlow-800.woff2',
     'assets/cake.png',
     'assets/icon-192.png',
     'assets/icon-512.png',
     'assets/icon-maskable-512.png',
+    'css/aperture.css',
     'css/labo.css',
     'css/main.css',
     'css/modules.css',
@@ -71,6 +78,7 @@ const ASSETS = [
     'js/labo/merge.js',
     'js/sensei/engine.js',
     'js/ui/identity.js',
+    'js/ui/mascot.js',
     'js/ui/menu.js',
     'js/ui/quiz.js',
     'js/ui/results.js',
