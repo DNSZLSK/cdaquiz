@@ -712,5 +712,19 @@
     .option span { white-space: pre-line; }
 }
 
+/* Petits ecrans : 3 onglets cote a cote, le numero passe au-dessus du libelle
+   pour que "Vocabulaire" tienne en entier */
+@media (max-width: 480px) {
+    .mode-tabs-buttons { gap: 8px; }
+    .mode-tabs-buttons button {
+        flex-direction: column;
+        gap: 2px;
+        padding: 10px 6px 12px;
+        font-size: 0.75em;
+        letter-spacing: 0.5px;
+        min-width: 0;
+    }
+}
+
 /* Les options avec retours a la ligne (predict multi-lignes) */
 .option span { white-space: pre-line; }

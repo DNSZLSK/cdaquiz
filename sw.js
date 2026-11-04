@@ -1,7 +1,7 @@
 // Service worker CDA Quiz — strategie network-first : en ligne on sert
 // toujours la version fraiche (les mises a jour arrivent toutes seules),
 // le cache ne sert que de filet hors-ligne.
-const CACHE = 'cdaquiz-v5'; // incremente quand ASSETS change : force le re-pre-cache complet
+const CACHE = 'cdaquiz-v6'; // incremente quand ASSETS change : force le re-pre-cache complet
 
 const ASSETS = [
     '.',
@@ -116,7 +116,10 @@ self.addEventListener('fetch', (event) => {
     if (req.method !== 'GET' || new URL(req.url).origin !== self.location.origin) return;
 
     event.respondWith(
-        fetch(req)
+        // no-cache : on revalide toujours aupres du serveur (304 si rien n'a change).
+        // Sans ca, le cache HTTP de GitHub Pages (max-age=600) servait l'ancienne
+        // version des modules pendant 10 minutes apres un push.
+        fetch(req, { cache: 'no-cache' })
             .then(res => {
                 // reponse fraiche : on met le cache a jour au passage
                 const copy = res.clone();
