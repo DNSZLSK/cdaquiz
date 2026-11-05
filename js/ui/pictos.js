@@ -12,12 +12,15 @@ export const PICTO = {
     poo: svg('<path d="M12 3l8 4.5v9L12 21l-8-4.5v-9z"/><path d="M4 7.5l8 4.5 8-4.5M12 12v9"/>'),
     documentation: svg('<path d="M6 3h8.5L19 7.5V21H6z"/><path d="M14 3v5h5M9 12h7M9 16h7"/>'),
     uml: svg('<rect x="3" y="3.5" width="8" height="6" rx="1"/><rect x="13" y="14.5" width="8" height="6" rx="1"/><path d="M7 9.5v4.5h10v.5"/>'),
-    unity: svg('<rect x="2.5" y="7" width="19" height="11" rx="5.5"/><path d="M7.5 10.5v4M5.5 12.5h4"/><circle cx="15.5" cy="11.5" r="1"/><circle cx="18" cy="13.5" r="1"/>'),
     web: svg('<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3.2 3 14.8 0 18M12 3c-3 3.2-3 14.8 0 18"/>'),
     conception: svg('<rect x="3.5" y="4.5" width="17" height="15" rx="1.5"/><path d="M3.5 9h17M9 9v10.5"/>'),
     agile: svg('<path d="M4 12a8 8 0 0 1 13.7-5.6L20 8.5"/><path d="M20 4v4.5h-4.5"/><path d="M20 12a8 8 0 0 1-13.7 5.6L4 15.5"/><path d="M4 20v-4.5h4.5"/>'),
     architecture: svg('<path d="M12 3l9 5-9 5-9-5z"/><path d="M3 12.5l9 5 9-5M3 16.5l9 5 9-5"/>'),
     docker: svg('<rect x="3" y="11" width="18" height="8" rx="1"/><path d="M6 11V8h4v3M10 11V8h4v3M14 11V8h4v3M8 8V5h4v3"/>'),
     lock: svg('<rect x="5" y="11" width="14" height="10" rx="1.5"/><path d="M8 11V8a4 4 0 0 1 8 0v3M12 15v2"/>'),
+    // composant : un bloc decoupe en trois zones (Angular)
+    component: svg('<rect x="3.5" y="3.5" width="17" height="17" rx="1.5"/><path d="M3.5 9h17M10 9v11.5"/><path d="M13 13h4.5M13 16.5h4.5"/>'),
+    // page balisee : une page avec des chevrons (HTML / CSS)
+    markup: svg('<path d="M6 3h8.5L19 7.5V21H6z"/><path d="M14 3v5h5"/><path d="M10 12l-2.2 2.5L10 17M14 12l2.2 2.5L14 17"/>'),
     bdd: svg('<ellipse cx="12" cy="5.5" rx="7.5" ry="2.5"/><path d="M4.5 5.5v13c0 1.4 3.4 2.5 7.5 2.5s7.5-1.1 7.5-2.5v-13M4.5 12c0 1.4 3.4 2.5 7.5 2.5s7.5-1.1 7.5-2.5"/>')
 };

@@ -26,7 +26,7 @@ registerScreen('labo-hub', {
 // Pictogramme de chaque domaine (memes dessins que les modules du quiz)
 const DOMAIN_PICTO = {
     'sql': 'bdd', 'mcd-mld': 'uml', 'oop-java': 'poo', 'tests-junit': 'tests', 'spring-boot': 'architecture',
-    'spring-security': 'lock', 'angular': 'web', 'javascript': 'python', 'html-css': 'web', 'bootstrap': 'conception',
+    'spring-security': 'lock', 'angular': 'component', 'javascript': 'python', 'html-css': 'markup', 'bootstrap': 'conception',
     'python': 'python', 'python-fichiers': 'documentation', 'git': 'git', 'docker': 'docker', 'uml-archi': 'uml'
 };
 
@@ -45,7 +45,8 @@ function renderHub() {
                 <h3>${d.title}</h3>
                 <p>${d.description}</p>
                 <span class="tile-foot">
-                    <span class="tile-cal${stats.ok ? '' : ' is-empty'}">${stats.ok}/${d.count} calibrés${pct === 100 ? ' · protocole terminé' : ''}</span>
+                    <span class="tile-cal${stats.ok ? '' : ' is-empty'}">${stats.ok}/${d.count} calibrés</span>
+                    ${pct === 100 ? '<span class="tile-done">Protocole terminé</span>' : ''}
                 </span>
                 <span class="tile-bar" aria-hidden="true"><i style="width:${pct}%"></i></span>
             </div>
@@ -53,7 +54,7 @@ function renderHub() {
     }).join('');
 
     el().innerHTML = `
-        <h2>Laboratoire d'Enrichissement</h2>
+        <h1>Laboratoire d'Enrichissement</h1>
         <p class="labo-subtitle">Exercices pratiques : écrire, lire et comprendre du code.</p>
         <div class="module-grid">${cards}</div>
         <button class="labo-reset" data-action="reset-progress">Réinitialiser la progression du laboratoire</button>

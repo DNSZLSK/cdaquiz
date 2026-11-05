@@ -4,6 +4,8 @@ const QUIZ_PROGRESS_KEY = 'cdaquiz_progress';
 const LABO_PROGRESS_KEY = 'cdaquiz_labo_progress';
 const LEADERBOARD_KEY = 'cdaquiz_leaderboard';
 const SENSEI_PROGRESS_KEY = 'cdaquiz_sensei';
+// Modules retires du quiz : jamais reintroduits depuis le cloud (voir js/storage.js)
+const REMOVED_MODULES = ['unity'];
 
 function readJson(key, fallback) {
     try { return JSON.parse(localStorage.getItem(key)) || fallback; }
@@ -66,7 +68,7 @@ export function mergeAll(incoming) {
     // Progression quiz : meilleur pourcentage par module
     const localP = readJson(QUIZ_PROGRESS_KEY, {});
     for (const [mod, inc] of Object.entries(incoming.p || {})) {
-        if (!inc || typeof inc.bestPct !== 'number') continue;
+        if (!inc || typeof inc.bestPct !== 'number' || REMOVED_MODULES.includes(mod)) continue;
         const cur = localP[mod];
         if (!cur || inc.bestPct > (cur.bestPct || 0)) {
             localP[mod] = { bestPct: Math.max(inc.bestPct, cur?.bestPct || 0), lastPct: cur?.lastPct ?? inc.lastPct };
@@ -92,7 +94,7 @@ export function mergeAll(incoming) {
     const localB = readJson(LEADERBOARD_KEY, []);
     const seen = new Set(localB.map(e => JSON.stringify(e)));
     for (const entry of incoming.b || []) {
-        if (!entry || typeof entry.name !== 'string') continue;
+        if (!entry || typeof entry.name !== 'string' || REMOVED_MODULES.includes(entry.module)) continue;
         const key = JSON.stringify(entry);
         if (!seen.has(key)) {
             seen.add(key);

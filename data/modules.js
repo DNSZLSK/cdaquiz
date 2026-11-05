@@ -36,10 +36,6 @@ export const modules = {
         name: "UML",
         description: "Diagrammes de classes",
     },
-    unity: {
-        name: "Unity",
-        description: "MonoBehaviour, composants, GameObjects",
-    },
      bdd: {
         name: "Base de données",
         description: "MCD/MLD, SQL, CRUD, jointures",

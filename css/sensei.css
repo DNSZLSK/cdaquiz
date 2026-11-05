@@ -19,8 +19,8 @@
 #senseiRoot *{box-sizing:border-box}
 #senseiRoot.wrap{padding-bottom:24px;display:flex;flex-direction:column;gap:24px}
 #senseiRoot.wrap.has-sheet{padding-bottom:calc(200px + env(safe-area-inset-bottom, 0px))}
-#senseiRoot h2,#senseiRoot h3,#senseiRoot h4{margin:0;line-height:1.2;color:var(--ink)}
-#senseiRoot h2{font-size:clamp(1.7rem,3.4vw,2.4rem);font-weight:400;letter-spacing:-.01em}
+#senseiRoot h1,#senseiRoot h2,#senseiRoot h3,#senseiRoot h4{margin:0;line-height:1.2;color:var(--ink)}
+#senseiRoot h1,#senseiRoot h2{font-size:clamp(1.7rem,3.4vw,2.4rem);font-weight:400;letter-spacing:-.01em}
 #senseiRoot h3{font-size:1.12em;font-weight:600}
 #senseiRoot p{margin:0}
 #senseiRoot code{font-family:var(--mono);font-size:.88em;background:var(--bg);padding:.05em .35em;border-radius:2px}

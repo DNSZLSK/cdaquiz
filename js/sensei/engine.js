@@ -130,7 +130,7 @@ function header(){
   const due=dueIds().length;
   return `<header class="top">
     <div class="hub-head">
-      <h2>Chambre d'Enrichissement Lexical</h2>
+      <h1>Chambre d'Enrichissement Lexical</h1>
       <p class="labo-subtitle">Vocabulaire technique : lire, nommer et expliquer du code comme un développeur senior.</p>
     </div>
     <div class="chips">

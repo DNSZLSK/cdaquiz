@@ -1,34 +1,9 @@
 import { modules } from '../../data/modules.js';
 import { getQuestionsFor } from '../../data/catalog.js';
 import { loadProgress } from '../storage.js';
-import { unit } from './mascot.js';
 import { PICTO } from './pictos.js';
 
 const plural = (n, word) => `${n} ${word}${n > 1 ? 's' : ''}`;
-
-// Accueil : panneau de chambre de test. Grand numero fin, titre sobre, rangee de pictogrammes.
-function renderHero() {
-    const hero = document.getElementById('menuHero');
-    if (!hero) return;
-    const total = getQuestionsFor('all').length;
-    hero.innerHTML = `
-        <div class="ap-hero-sign">
-            <div class="ap-hero-num" aria-hidden="true">00</div>
-            <div class="ap-hero-rule" aria-hidden="true"></div>
-            <div class="ap-hero-picto" aria-hidden="true">${PICTO.tests}${PICTO.python}${PICTO.bdd}${PICTO.uml}${PICTO.docker}</div>
-        </div>
-        <div class="ap-hero-text">
-            <span class="ap-eyebrow">Protocole d'évaluation des compétences</span>
-            <h1 class="ap-title">Test d'aptitude développeur</h1>
-            <p class="ap-lead">${total} questions, des exercices de code et de SQL, et une chambre de vocabulaire. Le Centre d'Enrichissement mesure. Vous progressez.</p>
-            <div class="ap-hero-actions">
-                <button class="ap-btn ap-btn-primary" data-module="all">Lancer le protocole complet</button>
-                <a class="ap-btn ap-btn-quiet" href="#moduleGrid">Choisir un module</a>
-            </div>
-        </div>
-        <div class="ap-hero-unit" aria-hidden="true">${unit('calme', 132)}</div>
-    `;
-}
 
 // Panneau de module : numero de chambre en chiffres fins, pictogramme, titre, description,
 // puis compteur et calibration en bas. La couleur du module n'apparait que par petites touches.
@@ -50,7 +25,6 @@ function tile(key, num, name, description, count, p) {
 }
 
 export function renderModuleGrid() {
-    renderHero();
     const grid = document.getElementById('moduleGrid');
     grid.innerHTML = '';
     const progress = loadProgress();

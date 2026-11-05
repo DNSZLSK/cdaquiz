@@ -11,6 +11,7 @@ import { initTabs, setTabsVisible, setActiveTab } from './ui/tabs.js';
 import { initIdentity } from './ui/identity.js';
 import { resetQuizProgress } from './storage.js';
 import { getLink, pushOverwrite } from './labo/cloud.js';
+import { purgeRemovedModules } from './storage.js';
 
 registerExerciseType('qcm', qcmType);
 
@@ -19,7 +20,6 @@ registerScreen('menu', {
         setTabsVisible(true);
         setActiveTab('quiz');
         renderModuleGrid();
-        document.getElementById('menuHero').style.display = '';
         document.getElementById('menu').classList.add('active');
         document.getElementById('quizContent').style.display = 'block';
         document.getElementById('quizContent').innerHTML = '';
@@ -27,7 +27,6 @@ registerScreen('menu', {
     },
     hide() {
         setTabsVisible(false);
-        document.getElementById('menuHero').style.display = 'none';
         document.getElementById('menu').classList.remove('active');
     }
 });
@@ -50,6 +49,8 @@ registerScreen('results', {
 });
 
 function initApp() {
+    // Modules retires (Unity) : on efface leurs scores locaux avant tout affichage
+    purgeRemovedModules();
     initQuizScreen();
 
     // Onglets QUIZ | LABO | VOCABULAIRE (labo et sensei se chargent en lazy au premier clic)
@@ -65,13 +66,11 @@ function initApp() {
         }
     });
 
-    // Grille de modules + bouton du heros : delegation
-    const onModuleClick = (e) => {
+    // Grille de modules : delegation
+    document.getElementById('moduleGrid').addEventListener('click', (e) => {
         const card = e.target.closest('[data-module]');
         if (card) startQuiz(card.dataset.module);
-    };
-    document.getElementById('moduleGrid').addEventListener('click', onModuleClick);
-    document.getElementById('menuHero').addEventListener('click', onModuleClick);
+    });
 
     // Boutons statiques de l'ecran resultats
     document.getElementById('saveScoreBtn').addEventListener('click', saveScore);
