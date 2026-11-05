@@ -318,5 +318,4 @@ body:has(.ap-lesson) .progress-bar { visibility: hidden; }
 /* ---------- Nom de l'appli : lien vers l'accueil ---------- */
 .ap-home { display: block; color: inherit; text-decoration: none; border-radius: var(--ap-r); }
 .ap-home p { margin: 0; }
-.ap-home:hover .ap-brand { color: var(--ap-orange); }
 .ap-home:focus-visible { outline: 2px solid var(--ap-orange); outline-offset: 4px; }
