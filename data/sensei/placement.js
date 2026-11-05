@@ -5,9 +5,9 @@ export default [
     step: {
       type: "cloze",
       sentence: "Dans `double(3)`, 3 est un ___.",
-      options: ["paramètre", "argument", "retour"],
-      correct: 1,
-      why: ["Le paramètre est le nom dans la définition.", "", "Le retour est ce qui ressort."]
+      options: ["paramètre", "retour", "argument"],
+      correct: 2,
+      why: ["Le paramètre est le nom dans la définition.", "Le retour est ce qui ressort.", ""]
     }
   },
   {
@@ -41,8 +41,8 @@ println!("{}", x);`
     step: {
       type: "qcm",
       q: "Quelle phrase aide le plus un collègue ?",
-      options: ["« Le login bug. »", "« Avec un email en majuscules, l'API renvoie 401 au lieu de 200. »"],
-      correct: 1,
+      options: ["« Avec un email en majuscules, l'API renvoie 401 au lieu de 200. »","« Le login ne marche plus pour certains utilisateurs, depuis ce matin. »"],
+      correct: 0,
       explain: "Étapes, observé, attendu : le collègue peut agir."
     }
   },
@@ -71,11 +71,11 @@ println!("{}", x);`
     step: {
       type: "cloze",
       sentence: "Une URL de serveur écrite directement dans le code est ___.",
-      options: ["hardcodée", "asynchrone", "rétrocompatible"],
-      correct: 0,
+      options: ["asynchrone", "hardcodée", "rétrocompatible"],
+      correct: 1,
       why: [
-        "",
         "Asynchrone parle d'une opération qui prend du temps.",
+        "",
         "Rétrocompatible parle d'une nouvelle version qui marche avec l'ancien code."
       ]
     }
@@ -99,8 +99,8 @@ println!("{}", x);`
     step: {
       type: "qcm",
       q: "Le pattern qui garantit une seule instance d'une classe :",
-      options: ["Factory", "Singleton", "Observer"],
-      correct: 1,
+      options: ["Factory", "Observer", "Singleton"],
+      correct: 2,
       explain: "**Singleton** : une seule instance."
     }
   },
@@ -109,8 +109,8 @@ println!("{}", x);`
     step: {
       type: "qcm",
       q: "En UML, que veut dire le signe `-` devant un attribut ?",
-      options: ["public", "privé", "protégé"],
-      correct: 1,
+      options: ["privé", "public", "protégé"],
+      correct: 0,
       explain: "**−** = privé, **+** = public, **#** = protégé."
     }
   },
@@ -129,8 +129,8 @@ println!("{}", x);`
     step: {
       type: "qcm",
       q: "`console.log(totl)` alors que la variable s'appelle total. Quelle erreur ?",
-      options: ["TypeError", "ReferenceError", "SyntaxError"],
-      correct: 1,
+      options: ["TypeError", "SyntaxError", "ReferenceError"],
+      correct: 2,
       explain: "Un nom qui n'existe pas : **ReferenceError** (NameError en Python)."
     }
   },
@@ -139,8 +139,8 @@ println!("{}", x);`
     step: {
       type: "qcm",
       q: "Une boucle dans une boucle sur n éléments :",
-      options: ["O(1)", "O(n)", "O(n²)"],
-      correct: 2,
+      options: ["O(1)", "O(n²)", "O(n)"],
+      correct: 1,
       explain: "n × n : **O(n²)**."
     }
   },
@@ -169,8 +169,8 @@ println!("{}", x);`
     step: {
       type: "qcm",
       q: "Image et conteneur : lequel est en train de tourner ?",
-      options: ["L'image", "Le conteneur"],
-      correct: 1,
+      options: ["Le conteneur", "L'image"],
+      correct: 0,
       explain: "L'image est le modèle figé, le **conteneur** est l'image qui tourne."
     }
   },
@@ -179,8 +179,8 @@ println!("{}", x);`
     step: {
       type: "qcm",
       q: "Analyser ses dépendances pour trouver des CVE connues, c'est…",
-      options: ["SAST", "SCA", "DAST"],
-      correct: 1,
+      options: ["SAST", "DAST", "SCA"],
+      correct: 2,
       explain: "**SCA** : Software Composition Analysis."
     }
   },
@@ -199,8 +199,8 @@ println!("{}", x);`
     step: {
       type: "qcm",
       q: "Qui priorise le backlog en Scrum ?",
-      options: ["Le Scrum Master", "Le Product Owner", "L'équipe de dev"],
-      correct: 1,
+      options: ["Le Scrum Master", "Les Developers", "Le Product Owner"],
+      correct: 2,
       explain: "Le **Product Owner**."
     }
   },
@@ -213,8 +213,8 @@ println!("{}", x);`
         rs: `let x = 5;
 x = 6;`
       },
-      options: ["Oui", "Non"],
-      correct: 1,
+      options: ["Non", "Oui"],
+      correct: 0,
       explain: "`x` n'est pas `mut` : il est immuable."
     }
   },
@@ -223,8 +223,8 @@ x = 6;`
     step: {
       type: "qcm",
       q: "En Rust, qu'est-ce qui remplace null ?",
-      options: ["Result", "Option", "match"],
-      correct: 1,
+      options: ["Option", "Result", "match"],
+      correct: 0,
       explain: "**Option** : Some(valeur) ou None."
     }
   }

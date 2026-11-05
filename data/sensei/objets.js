@@ -14,51 +14,51 @@ export default {
           type: "concept",
           term: "Classe",
           def: "Un **moule** (ou un plan). Elle décrit les propriétés et les méthodes qu'auront les objets fabriqués avec elle.",
-          code: `class Counter {
+          code: { js: `class Counter {
   constructor() {
     this.value = 0;
   }
   increment() {
     this.value = this.value + 1;
   }
-}`,
+}` },
           phrase: "La classe Counter définit une propriété value et une méthode increment."
         },
         {
           type: "concept",
           term: "Instance",
           def: "Un objet **fabriqué avec le moule**, grâce au mot `new`. On peut fabriquer autant d'instances qu'on veut, chacune a ses propres valeurs.",
-          code: `const a = new Counter();   // une instance
-const b = new Counter();   // une autre instance`,
+          code: { js: `const a = new Counter();   // une instance
+const b = new Counter();   // une autre instance` },
           phrase: "On instancie la classe Counter."
         },
         {
           type: "concept",
           term: "Constructeur",
           def: "La méthode spéciale `constructor`, appelée **automatiquement** au moment du `new`. Elle prépare l'objet.",
-          code: `class User {
+          code: { js: `class User {
   constructor(name) {
     this.name = name;
   }
 }
-const u = new User("Alice");   // u.name vaut "Alice"`,
+const u = new User("Alice");   // u.name vaut "Alice"` },
           phrase: "Le constructeur initialise la propriété name."
         },
         {
           type: "concept",
           term: "this",
           def: "Dans une méthode, `this` veut dire « **l'objet sur lequel on travaille en ce moment** ».",
-          code: `a.increment();   // dans increment, this = a
-b.increment();   // dans increment, this = b`,
+          code: { js: `a.increment();   // dans increment, this = a
+b.increment();   // dans increment, this = b` },
           phrase: "this désigne l'instance courante."
         },
         {
           type: "trace",
           intro: "Suivez la valeur de `c.value`.",
-          code: `const c = new Counter();
+          code: { js: `const c = new Counter();
 c.increment();
 c.increment();
-console.log(c.value);`,
+console.log(c.value);` },
           cols: ["Ligne", "Ce qui se passe", "c.value"],
           rows: [
             {
@@ -108,12 +108,12 @@ console.log(c.value);`,
         {
           type: "predict",
           q: "Qu'affiche ce code ?",
-          code: `const a = new Counter();
+          code: { js: `const a = new Counter();
 const b = new Counter();
 a.increment();
 a.increment();
 b.increment();
-console.log(a.value + b.value);`,
+console.log(a.value + b.value);` },
           answers: ["3"],
           hint: "Chaque instance a sa propre boîte value.",
           explain: "a.value = 2, b.value = 1. 2 + 1 = **3**."
@@ -129,59 +129,59 @@ console.log(a.value + b.value);`,
           type: "concept",
           term: "Encapsulation",
           def: "**Protéger** les données d'un objet : on les cache, et on ne permet de les modifier qu'à travers des méthodes qui vérifient.",
-          code: `class Compte {
+          code: { js: `class Compte {
   #solde = 0;          // # = privé : inaccessible dehors
   deposer(montant) {
     if (montant > 0) this.#solde = this.#solde + montant;
   }
   lireSolde() { return this.#solde; }
-}`,
+}` },
           phrase: "Le solde est encapsulé : on ne peut le modifier que par deposer."
         },
         {
           type: "qcm",
           q: "Que se passe-t-il ?",
-          code: `const compte = new Compte();
-compte.#solde = 1000000;`,
+          code: { js: `const compte = new Compte();
+compte.#solde = 1000000;` },
           options: ["Le solde passe à 1 000 000", "Erreur : #solde est privé", "Le solde reste à 0 sans erreur"],
           correct: 1,
-          explain: "`#solde` est **privé** : JavaScript refuse qu'on y touche depuis l'extérieur (erreur). C'est l'encapsulation."
+          explain: "`#solde` est **privé** : écrire `compte.#solde` hors de la classe est une **SyntaxError**, détectée avant même l'exécution (le script entier refuse de se lancer). C'est l'encapsulation, garantie par le langage."
         },
         {
           type: "concept",
           term: "Abstraction",
           def: "Utiliser quelque chose **sans connaître ses détails**. On conduit une voiture sans savoir comment marche le moteur.",
-          code: `[3, 1, 2].sort();   // on sait CE QUE ça fait (trier)
-                    // pas COMMENT c'est codé`,
+          code: { js: `[3, 1, 2].sort();   // on sait CE QUE ça fait (trier)
+                    // pas COMMENT c'est codé` },
           phrase: "Cette méthode fournit une abstraction : on n'a pas besoin de connaître l'algorithme de tri."
         },
         {
           type: "concept",
           term: "Interface publique",
           def: "Ce que les autres **ont le droit d'utiliser** d'un objet : ses méthodes publiques. Le reste est un détail interne.",
-          code: `// interface publique de Compte :
+          code: { js: `// interface publique de Compte :
 compte.deposer(50);
-compte.lireSolde();`,
+compte.lireSolde();` },
           phrase: "L'interface publique de la classe se limite à deposer et lireSolde."
         },
         {
           type: "cloze",
           sentence: "Cacher les données et n'y donner accès que par des méthodes, c'est l'___.",
-          options: ["encapsulation", "abstraction", "héritage"],
-          correct: 0,
+          options: ["abstraction", "héritage", "encapsulation"],
+          correct: 2,
           why: [
-            "",
             "L'abstraction, c'est utiliser sans connaître les détails. Proche, mais ici on parle de **protéger** les données.",
-            "L'héritage, c'est reprendre une autre classe."
+            "L'héritage, c'est reprendre une autre classe.",
+            ""
           ]
         },
         {
           type: "qcm",
           q: "Pourquoi passer par `deposer()` plutôt que modifier le solde directement ?",
           options: [
-            "Pour que le code soit plus long",
-            "Pour pouvoir vérifier la valeur (par exemple refuser un montant négatif)",
-            "Parce que les propriétés sont lentes"
+            "Pour que le solde soit recalculé automatiquement à chaque lecture",
+            "Pour pouvoir vérifier la valeur avant de l'accepter, et refuser un montant négatif",
+            "Pour que d'autres classes puissent hériter de la méthode, ce qu'un champ ne permet pas"
           ],
           correct: 1,
           explain: "La méthode est un **gardien** : elle vérifie (`montant > 0`) avant de modifier. C'est tout l'intérêt de l'encapsulation."
@@ -197,18 +197,18 @@ compte.lireSolde();`,
           type: "concept",
           term: "Héritage",
           def: "Une classe **reprend tout** d'une autre avec `extends`, et peut en ajouter. Relation « **est un** » : un Chien **est un** Animal.",
-          code: `class Animal {
+          code: { js: `class Animal {
   constructor(nom) { this.nom = nom; }
   presenter() { return "Je suis " + this.nom; }
 }
-class Chien extends Animal {}`,
+class Chien extends Animal {}` },
           phrase: "Chien hérite de Animal."
         },
         {
           type: "predict",
           q: "Qu'affiche ce code ?",
-          code: `const rex = new Chien("Rex");
-console.log(rex.presenter());`,
+          code: { js: `const rex = new Chien("Rex");
+console.log(rex.presenter());` },
           answers: ["Je suis Rex", "\"Je suis Rex\""],
           hint: "Chien n'a pas de méthode presenter… mais il hérite de celle d'Animal.",
           explain: "Chien hérite de presenter d'Animal → **Je suis Rex**."
@@ -217,45 +217,45 @@ console.log(rex.presenter());`,
           type: "concept",
           term: "Composition",
           def: "Un objet **contient** d'autres objets. Relation « **a un** » : une Voiture **a un** Moteur.",
-          code: `class Voiture {
+          code: { js: `class Voiture {
   constructor() {
     this.moteur = new Moteur();   // composition
   }
-}`,
+}` },
           rule: "« est un » → héritage. « a un » → composition. En cas de doute, les devs préfèrent souvent la composition, plus souple.",
           phrase: "On préfère la composition à l'héritage ici."
         },
         {
           type: "qcm",
-          q: "Un Panier contient des Produits. Quelle relation ?",
-          options: ["Héritage (« est un »)", "Composition (« a un »)"],
-          correct: 1,
-          explain: "Un panier n'**est** pas un produit. Il **a** des produits → **composition**."
+          q: "Un Panier contient des Produits. Héritage, ou relation « a un » ?",
+          options: ["Relation « a un »", "Héritage (« est un »)"],
+          correct: 0,
+          explain: "Un panier n'**est** pas un produit : il **a** des produits. En UML, on précisera : les produits survivent au panier (ils restent au catalogue), c'est donc une **agrégation** ◇, pas une composition ◆."
         },
         {
           type: "concept",
           term: "Polymorphisme",
           def: "**Même méthode, comportement différent** selon l'objet. On appelle `parler()` sans se soucier de qui parle.",
-          code: `class Chien { parler() { return "Wouf"; } }
-class Chat  { parler() { return "Miaou"; } }`,
+          code: { js: `class Chien { parler() { return "Wouf"; } }
+class Chat  { parler() { return "Miaou"; } }` },
           phrase: "Grâce au polymorphisme, on appelle parler sur n'importe quel animal."
         },
         {
           type: "cloze",
           sentence: "Une Voiture a un Moteur : c'est de la ___.",
-          options: ["composition", "héritage", "polymorphisme"],
-          correct: 0,
+          options: ["héritage", "polymorphisme", "composition"],
+          correct: 2,
           why: [
-            "",
             "L'héritage, c'est « est un ». Une voiture n'est pas un moteur.",
-            "Le polymorphisme, c'est une même méthode avec des comportements différents."
+            "Le polymorphisme, c'est une même méthode avec des comportements différents.",
+            ""
           ]
         },
         {
           type: "predict",
           q: "Qu'affiche ce code ?",
-          code: `const animaux = [new Chien(), new Chat()];
-console.log(animaux.map(a => a.parler()));`,
+          code: { js: `const animaux = [new Chien(), new Chat()];
+console.log(animaux.map(a => a.parler()));` },
           answers: ["[\"Wouf\",\"Miaou\"]", "[Wouf,Miaou]", "Wouf,Miaou"],
           hint: "map appelle parler() sur chaque animal. Chacun répond à sa façon.",
           explain: "Le chien répond Wouf, le chat Miaou : **[\"Wouf\", \"Miaou\"]**."
@@ -276,44 +276,44 @@ console.log(animaux.map(a => a.parler()));`,
         {
           type: "concept",
           term: "Factory",
-          def: "Une fonction (ou méthode) dont le travail est de **fabriquer des objets** à votre place, prêts à l'emploi.",
-          code: `function createUser(name) {
+          def: "Une fonction ou un objet dont le travail est de **fabriquer des objets** à votre place, prêts à l'emploi. Attention : le GoF ne décrit pas « Factory » tout court, mais **Factory Method** et **Abstract Factory**. Une simple fonction comme `createUser` s'appelle souvent une *simple factory*.",
+          code: { js: `function createUser(name) {
   return { name: name, role: "user", active: true };
 }
-const u = createUser("Alice");`,
+const u = createUser("Alice");` },
           phrase: "createUser est une factory."
         },
         {
           type: "concept",
           term: "Observer",
           def: "Des objets **s'abonnent** à un événement. Quand il arrive, ils sont **prévenus**. Comme s'abonner à une chaîne YouTube.",
-          code: `button.addEventListener("click", () => {
+          code: { js: `button.addEventListener("click", () => {
   console.log("cliqué !");   // prévenu à chaque clic
-});`,
+});` },
           phrase: "addEventListener implémente le pattern Observer."
         },
         {
           type: "concept",
           term: "Strategy",
-          def: "On rend un comportement **interchangeable** en le passant comme une fonction. On choisit la « stratégie » au moment de l'appel.",
-          code: `const parPrix = (a, b) => a.prix - b.prix;
+          def: "On rend un comportement **interchangeable** : plusieurs « stratégies » respectent la même interface, et on choisit laquelle utiliser au moment de l'appel. En JavaScript, une simple fonction passée en paramètre suffit souvent.",
+          code: { js: `const parPrix = (a, b) => a.prix - b.prix;
 const parNom  = (a, b) => a.nom.localeCompare(b.nom);
-produits.sort(parPrix);   // on choisit la stratégie de tri`,
+produits.sort(parPrix);   // on choisit la stratégie de tri` },
           phrase: "La fonction de comparaison est une stratégie."
         },
         {
           type: "qcm",
           q: "Une newsletter prévient tous ses abonnés à chaque nouvel article. Quel pattern ?",
-          options: ["Factory", "Observer", "Strategy"],
-          correct: 1,
+          options: ["Observer", "Factory", "Strategy"],
+          correct: 0,
           explain: "Des abonnés prévenus quand un événement arrive : **Observer**."
         },
         {
           type: "cloze",
           sentence: "`addEventListener` est un exemple du pattern ___.",
-          options: ["Observer", "Factory", "Singleton"],
-          correct: 0,
-          why: ["", "Factory fabrique des objets.", "Singleton garantit une seule instance."]
+          options: ["Factory", "Singleton", "Observer"],
+          correct: 2,
+          why: ["Factory fabrique des objets.", "Singleton garantit une seule instance.", ""]
         },
         {
           type: "qcm",
@@ -367,15 +367,15 @@ produits.sort(parPrix);   // on choisit la stratégie de tri`,
           type: "concept",
           term: "D : inversion des dépendances",
           def: "Dépendre d'une **abstraction** (« un mailer »), pas d'un détail (« Gmail »). C'est l'idée derrière l'injection de dépendances.",
-          code: `function envoyerFacture(client, mailer) {   // n'importe quel mailer
+          code: { js: `function envoyerFacture(client, mailer) {   // n'importe quel mailer
   mailer.send(client.email);
-}`,
+}` },
           phrase: "On inverse la dépendance : le code métier ne connaît plus Gmail."
         },
         {
           type: "qcm",
           q: "Pour ajouter un nouveau type de remise, vous devez modifier une fonction de 200 lignes pleine de if. Quel principe est violé ?",
-          options: ["S : responsabilité unique", "O : ouvert / fermé", "L : Liskov"],
+          options: ["I : ségrégation des interfaces", "O : ouvert / fermé", "L : Liskov"],
           correct: 1,
           explain: "Ajouter un cas oblige à **modifier** le code existant : le principe **ouvert/fermé** n'est pas respecté."
         },
@@ -420,45 +420,45 @@ produits.sort(parPrix);   // on choisit la stratégie de tri`,
           type: "concept",
           term: "Singleton",
           def: "Une classe qui n'a **qu'une seule instance** dans toute l'application. Exemple : la configuration. Attention : c'est un état global, difficile à tester.",
-          code: `class Config {
+          code: { js: `class Config {
   static #instance = null;
   static get() {
     if (!Config.#instance) Config.#instance = new Config();
     return Config.#instance;
   }
 }
-Config.get() === Config.get();   // true : la même instance`,
+Config.get() === Config.get();   // true : la même instance` },
           phrase: "La connexion à la base est un singleton."
         },
         {
           type: "concept",
           term: "Adapter",
           def: "Un **adaptateur de prise** : il permet à deux parties qui ne parlent pas la même langue de travailler ensemble.",
-          code: `// l'ancienne API attend des centimes : ancien.pay(5000)
+          code: { js: `// l'ancienne API attend des centimes : ancien.pay(5000)
 class PaiementAdapter {
   constructor(ancien) { this.ancien = ancien; }
   payer(euros) { this.ancien.pay(euros * 100); }
-}`,
+}` },
           phrase: "On utilise un adapter pour brancher l'ancienne API de paiement."
         },
         {
           type: "concept",
           term: "Decorator",
           def: "On **emballe** un objet ou une fonction pour lui ajouter un comportement (logs, cache, contrôle d'accès) **sans modifier** l'original.",
-          code: `function avecLog(fn) {
+          code: { js: `function avecLog(fn) {
   return (...args) => {
     console.log("appel avec", args);
     return fn(...args);
   };
 }
-const addAvecLog = avecLog(add);`,
+const addAvecLog = avecLog(add);` },
           phrase: "On décore la fonction avec un log."
         },
         {
           type: "qcm",
           q: "Singleton appartient à quelle famille ?",
-          options: ["Création", "Structure", "Comportement"],
-          correct: 0,
+          options: ["Structure", "Comportement", "Création"],
+          correct: 2,
           explain: "Il contrôle **la fabrication** des objets (une seule instance) : famille **création**."
         },
         {
@@ -471,19 +471,19 @@ const addAvecLog = avecLog(add);`,
         {
           type: "cloze",
           sentence: "Ajouter un cache autour d'une fonction sans la modifier, c'est le pattern ___.",
-          options: ["Decorator", "Factory", "Strategy"],
-          correct: 0,
-          why: ["", "Factory fabrique des objets.", "Strategy permet de choisir un comportement parmi plusieurs."]
+          options: ["Factory", "Strategy", "Decorator"],
+          correct: 2,
+          why: ["Factory fabrique des objets.", "Strategy permet de choisir un comportement parmi plusieurs.", ""]
         },
         {
           type: "explain",
           q: "Expliquez ce code en nommant le pattern. Essayez d'utiliser : pattern, decorator, fonction, comportement.",
-          code: `function avecLog(fn) {
+          code: { js: `function avecLog(fn) {
   return (...args) => {
     console.log("appel avec", args);
     return fn(...args);
   };
-}`,
+}` },
           keywords: ["decorator", "fonction", "comportement", "sans modifier"],
           model: "avecLog est un decorator : c'est une fonction qui prend une autre fonction en paramètre et retourne une nouvelle fonction. Cette nouvelle fonction affiche ses arguments, puis appelle la fonction d'origine. On ajoute donc un comportement (le log) sans modifier la fonction de départ."
         }

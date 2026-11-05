@@ -76,7 +76,7 @@ afin de savoir quand elle arrive.`,
         },
         {
           type: "build",
-          intro: "Reconstruis la user story.",
+          intro: "Reconstruisez la user story.",
           answer: ["En tant qu'administrateur", "je veux exporter les commandes", "afin de faire la comptabilité"],
           distractors: ["la base de données", "en moins de 2 secondes"]
         },
@@ -92,9 +92,9 @@ alors il voit le numéro de suivi.`,
         {
           type: "cloze",
           sentence: "Dans un critère d'acceptation, « Alors » décrit ___.",
-          options: ["le résultat attendu", "le contexte de départ", "l'action de l'utilisateur"],
-          correct: 0,
-          why: ["", "Le contexte, c'est « Étant donné ».", "L'action, c'est « Quand »."]
+          options: ["le contexte de départ", "l'action de l'utilisateur", "le résultat attendu"],
+          correct: 2,
+          why: ["Le contexte, c'est « Étant donné ».", "L'action, c'est « Quand ».", ""]
         },
         {
           type: "concept",
@@ -142,7 +142,7 @@ alors il voit le numéro de suivi.`,
         {
           type: "concept",
           term: "Rituels Scrum",
-          def: "**Daily** : 15 min chaque jour (hier, aujourd'hui, mes blocages). **Sprint review** : on montre ce qui est fait. **Rétrospective** : on améliore notre façon de travailler.",
+          def: "Le Scrum Guide 2020 parle d'**événements** (« rituels » est le mot courant en entreprise). **Sprint Planning** : on choisit le travail et l'**objectif du sprint** (Sprint Goal). **Daily Scrum** : 15 min chaque jour pour faire le point sur l'avancement vers cet objectif. **Sprint Review** : on montre ce qui est fait. **Rétrospective** : on améliore notre façon de travailler.",
           phrase: "On en parlera à la rétrospective."
         },
         {
@@ -161,9 +161,9 @@ alors il voit le numéro de suivi.`,
         {
           type: "cloze",
           sentence: "La réunion où l'équipe discute de sa façon de travailler pour s'améliorer s'appelle la ___.",
-          options: ["rétrospective", "daily", "sprint review"],
-          correct: 0,
-          why: ["", "Le daily sert à se synchroniser chaque jour.", "La sprint review sert à montrer le produit."]
+          options: ["daily", "sprint review", "rétrospective"],
+          correct: 2,
+          why: ["Le daily sert à se synchroniser chaque jour.", "La sprint review sert à montrer le produit.", ""]
         }
       ]
     }

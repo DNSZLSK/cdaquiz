@@ -28,7 +28,7 @@ git commit -m "Corrige la validation de l'email"`,
           type: "concept",
           term: "Branche",
           def: "Une **ligne de travail parallèle**. Vous travaillez sur votre branche sans toucher à la branche principale (`main`).",
-          code: "git checkout -b fix-login   # crée la branche fix-login",
+          code: "git switch -c fix-login   # crée la branche fix-login et bascule dessus",
           phrase: "Je travaille sur une branche fix-login."
         },
         {
@@ -46,20 +46,20 @@ git commit -m "Corrige la validation de l'email"`,
         {
           type: "concept",
           term: "Conflit",
-          def: "Deux personnes ont modifié **la même ligne** différemment. Git ne sait pas laquelle garder : c'est à vous de choisir.",
+          def: "Deux branches ont modifié **la même zone** d'un fichier (la même ligne ou des lignes voisines), ou l'une a supprimé un fichier que l'autre a modifié. Git ne sait pas quelle version garder : c'est à vous de choisir.",
           phrase: "Il y a un conflit de merge sur app.js."
         },
         {
           type: "cloze",
           sentence: "Je demande à mes collègues de relire ma branche avant de la fusionner : j'ouvre une ___.",
-          options: ["pull request", "branche", "stack trace"],
-          correct: 0,
-          why: ["", "La branche existe déjà : on demande à la fusionner.", "Une stack trace sert à lire une erreur."]
+          options: ["branche", "stack trace", "pull request"],
+          correct: 2,
+          why: ["La branche existe déjà : on demande à la fusionner.", "Une stack trace sert à lire une erreur.", ""]
         },
         {
           type: "qcm",
           q: "Vous voulez corriger un bug sans risquer de casser `main`. Que faites-vous d'abord ?",
-          options: ["Je modifie directement main", "Je crée une branche", "Je supprime le dépôt"],
+          options: ["Je modifie main directement, puis je pousse vite", "Je crée une branche, puis une pull request", "Je corrige sur main, mais dans un commit séparé"],
           correct: 1,
           explain: "On crée une **branche**, on corrige, puis on ouvre une **pull request** pour la relecture."
         }
@@ -79,7 +79,7 @@ git commit -m "Corrige la validation de l'email"`,
         {
           type: "concept",
           term: "Déploiement continu",
-          def: "Quand tout est vert, le code est **mis en ligne automatiquement**. En anglais : CD.",
+          def: "Quand tout est vert, le code est **mis en production automatiquement**, sans validation manuelle. En anglais : continuous deployment. À ne pas confondre avec la **livraison continue** (continuous delivery) : le code est toujours prêt à partir, mais un humain déclenche la mise en production. Les deux s'abrègent CD.",
           phrase: "Avec le déploiement continu, chaque merge part en production."
         },
         {
@@ -91,14 +91,16 @@ git commit -m "Corrige la validation de l'email"`,
         {
           type: "concept",
           term: "GitHub Actions",
-          def: "L'outil de CI/CD de GitHub. Le pipeline est décrit dans un fichier YAML, dans `.github/workflows/`.",
+          def: "L'outil de CI/CD de GitHub. Le pipeline est décrit dans un fichier YAML, dans `.github/workflows/`. Bonnes pratiques : donner au workflow le minimum de droits (`permissions: contents: read`) et épingler chaque action par le SHA de son commit, car un tag comme `v7` peut être déplacé.",
           code: `name: CI
 on: [push]
+permissions:
+  contents: read
 jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4   # récupère le code
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1   # v7.0.1
       - run: npm ci                 # installe
       - run: npm test               # teste`,
           phrase: "Le workflow GitHub Actions lance les tests à chaque push."
@@ -106,8 +108,8 @@ jobs:
         {
           type: "qcm",
           q: "Dans le workflow ci-dessus, quand les tests se lancent-ils ?",
-          options: ["Une fois par jour", "À chaque push", "Seulement quand on clique sur un bouton"],
-          correct: 1,
+          options: ["À chaque push", "Une fois par jour", "Seulement quand on clique sur un bouton"],
+          correct: 0,
           explain: "`on: [push]` : le workflow démarre **à chaque push**."
         },
         {
@@ -119,9 +121,9 @@ jobs:
         {
           type: "cloze",
           sentence: "Lancer les tests automatiquement à chaque push, c'est l'intégration ___.",
-          options: ["continue", "manuelle", "unitaire"],
-          correct: 0,
-          why: ["", "Justement, c'est automatique, pas manuel.", "Unitaire qualifie un type de test, pas l'automatisation."]
+          options: ["manuelle", "continue", "unitaire"],
+          correct: 1,
+          why: ["Justement, c'est automatique, pas manuel.", "", "Unitaire qualifie un type de test, pas l'automatisation."]
         }
       ]
     },
@@ -147,12 +149,19 @@ jobs:
           type: "concept",
           term: "Dockerfile",
           def: "Le **fichier recette** qui explique comment construire l'image, étape par étape.",
-          code: `FROM node:20          # part d'une image avec Node
+          code: `# image de base : Node 26 (LTS), en version exacte
+FROM node:26.13.0-slim
 WORKDIR /app
-COPY . .              # copie le code
-RUN npm ci            # installe les dépendances
-CMD ["node", "server.js"]   # commande de démarrage`,
-          phrase: "Le Dockerfile part de l'image node:20."
+ENV NODE_ENV=production
+# d'abord les fichiers de dépendances : cette couche reste en cache
+COPY package*.json ./
+RUN npm ci --omit=dev
+# puis le code (le .dockerignore exclut .env et node_modules)
+COPY . .
+# l'image officielle fournit l'utilisateur node : pas de root
+USER node
+CMD ["node", "server.js"]`,
+          phrase: "Le Dockerfile part de l'image node:26.13.0-slim."
         },
         {
           type: "concept",
@@ -163,8 +172,8 @@ CMD ["node", "server.js"]   # commande de démarrage`,
         {
           type: "qcm",
           q: "Vous lancez 3 fois la même application avec Docker. Vous avez…",
-          options: ["3 images, 1 conteneur", "1 image, 3 conteneurs", "3 Dockerfiles"],
-          correct: 1,
+          options: ["3 images, 1 conteneur", "3 images, 3 conteneurs", "1 image, 3 conteneurs"],
+          correct: 2,
           explain: "Un seul moule (**1 image**), trois gâteaux qui tournent (**3 conteneurs**)."
         },
         {
@@ -200,7 +209,7 @@ CMD ["node", "server.js"]   # commande de démarrage`,
         {
           type: "concept",
           term: "Lockfile",
-          def: "Le fichier (`package-lock.json`) qui **fige les versions exactes** de toutes les dépendances. Tout le monde installe exactement les mêmes.",
+          def: "Le fichier qui **fige les versions exactes** de toutes les dépendances : `package-lock.json` en JavaScript, `uv.lock` ou `poetry.lock` en Python, `Cargo.lock` en Rust. Tout le monde installe exactement les mêmes.",
           phrase: "Il faut commiter le lockfile."
         },
         {
@@ -234,25 +243,25 @@ npm install express   # ✅ le vrai`,
         {
           type: "qcm",
           q: "Un outil lit votre code et repère une concaténation SQL dangereuse, sans lancer l'application. C'est…",
-          options: ["Du SAST", "Du DAST", "Un SBOM"],
-          correct: 0,
+          options: ["Du DAST", "Un SBOM", "Du SAST"],
+          correct: 2,
           explain: "Il lit le code sans l'exécuter : analyse **statique**, donc **SAST**."
         },
         {
           type: "qcm",
           q: "Vous voulez savoir si une de vos 300 dépendances a une CVE connue. Quel type d'outil ?",
-          options: ["DAST", "SCA", "Un Dockerfile"],
+          options: ["DAST", "SCA", "Un SBOM"],
           correct: 1,
           explain: "Analyser les dépendances : c'est la **SCA** (exemple : `npm audit`)."
         },
         {
           type: "cloze",
           sentence: "La liste complète des composants d'un logiciel s'appelle un ___.",
-          options: ["SBOM", "SAST", "lockfile"],
-          correct: 0,
+          options: ["SAST", "SBOM", "lockfile"],
+          correct: 1,
           why: [
-            "",
             "Le SAST analyse le code source.",
+            "",
             "Le lockfile fige les versions, mais le SBOM est la liste d'ingrédients complète, partageable."
           ]
         }

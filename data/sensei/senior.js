@@ -49,44 +49,44 @@ export default {
           type: "qcm",
           q: "Le débutant dit : « Des fois ça marche, des fois non, je comprends pas. » Que dirait un senior ?",
           options: [
-            "« C'est un bug aléatoire. »",
-            "« On a sûrement une race condition : le résultat dépend de l'ordre d'arrivée des requêtes. »",
-            "« Il faut relancer le serveur. »"
+            "« C'est un bug aléatoire, il vaut mieux relancer le serveur et voir si ça revient. »",
+            "« Ça doit venir du réseau, il est instable en ce moment : il faut réessayer plus tard. »",
+            "« On a sûrement une race condition : le résultat dépend de l'ordre d'arrivée des requêtes. »"
           ],
-          correct: 1,
+          correct: 2,
           explain: "Le senior **nomme** le mécanisme probable (race condition) et **explique** pourquoi (l'ordre des requêtes). Rien n'est vraiment « aléatoire » en informatique."
         },
         {
           type: "cloze",
           sentence: "Ça marche quand tout va bien, sur le ___, mais pas quand l'utilisateur oublie un champ.",
-          options: ["happy path", "edge case", "goulot d'étranglement"],
-          correct: 0,
+          options: ["edge case", "happy path", "goulot d'étranglement"],
+          correct: 1,
           why: [
-            "",
             "L'edge case, c'est justement le cas à la marge, comme le champ oublié. Ici on parle du cas où tout va bien.",
+            "",
             "Le goulot parle de lenteur, pas de scénario."
           ]
         },
         {
           type: "cloze",
           sentence: "Une liste vide, une date du 29 février, un nom de 300 caractères : ce sont des ___.",
-          options: ["edge cases", "race conditions", "happy paths"],
-          correct: 0,
+          options: ["race conditions", "happy paths", "edge cases"],
+          correct: 2,
           why: [
-            "",
             "Une race condition demande deux actions en même temps.",
-            "Le happy path, c'est quand tout est normal. Ici ce sont des cas extrêmes."
+            "Le happy path, c'est quand tout est normal. Ici ce sont des cas extrêmes.",
+            ""
           ]
         },
         {
           type: "build",
-          intro: "Construis la phrase du senior.",
+          intro: "Construisez la phrase du senior.",
           answer: ["Le goulot d'étranglement", "c'est la requête SQL", "qui n'a pas d'index"],
           distractors: ["c'est lent", "le happy path"]
         },
         {
           type: "explain",
-          q: "Reformule comme un senior : « Le site devient super lent quand il y a beaucoup de monde, je sais pas pourquoi. »",
+          q: "Reformulez comme un senior : « Le site devient super lent quand il y a beaucoup de monde, je sais pas pourquoi. »",
           keywords: ["scal", "goulot", "utilisateurs"],
           model: "Le site ne scale pas : les temps de réponse explosent quand le nombre d'utilisateurs augmente. Il faut trouver le goulot d'étranglement, par exemple une requête SQL sans index ou une boucle en O(n²)."
         }
@@ -114,7 +114,7 @@ export default {
             rs: "let url = \"http://192.168.1.12:3000\";   // hardcodé"
           },
           beginner: "T'as mis l'adresse directement.",
-          phrase: "L'URL de l'API est hardcodée, il faudrait la mettre dans la config."
+          phrase: "Ce lien vers l'API est hardcodé, il faudrait le mettre dans la config."
         },
         {
           type: "concept",
@@ -148,36 +148,36 @@ export default {
           type: "qcm",
           q: "En review, vous voyez `const API_KEY = \"abc123\";` dans le code. Quel commentaire est le plus senior ?",
           options: [
-            "« C'est nul. »",
-            "« La clé API est hardcodée : il faudrait la sortir dans une variable d'environnement, sinon elle finit dans Git. »",
-            "« nit: renomme la variable. »"
+            "« La clé API est hardcodée : sortez-la dans une variable d'environnement, sinon elle finit dans Git. »",
+            "« Attention, ce code n'est pas terrible, il faudrait le revoir avant de le fusionner. »",
+            "« nit: renomme la variable en apiKey, c'est la convention camelCase en JavaScript. »"
           ],
-          correct: 1,
+          correct: 0,
           explain: "Il **nomme** le problème (hardcodée), **propose** une solution (variable d'environnement) et **explique** le risque (Git). Et ce n'est pas un nit : c'est un problème de sécurité."
         },
         {
           type: "cloze",
           sentence: "Une fonction que personne n'appelle jamais, c'est du code ___.",
-          options: ["mort", "dupliqué", "hardcodé"],
-          correct: 0,
-          why: ["", "Dupliqué, c'est du code copié à plusieurs endroits.", "Hardcodé parle d'une valeur écrite en dur."]
+          options: ["dupliqué", "mort", "hardcodé"],
+          correct: 1,
+          why: ["Dupliqué, c'est du code copié à plusieurs endroits.", "", "Hardcodé parle d'une valeur écrite en dur."]
         },
         {
           type: "cloze",
           sentence: "« nit: » au début d'un commentaire de review veut dire que la remarque est ___.",
-          options: ["non bloquante", "urgente", "une faille de sécurité"],
-          correct: 0,
-          why: ["", "C'est l'inverse : nit annonce un petit détail.", "Une faille n'est jamais un nit."]
+          options: ["urgente", "non bloquante", "une faille de sécurité"],
+          correct: 1,
+          why: ["C'est l'inverse : nit annonce un petit détail.", "", "Une faille n'est jamais un nit."]
         },
         {
           type: "build",
-          intro: "Écris le commentaire de review.",
+          intro: "Écrivez le commentaire de review.",
           answer: ["Cette valeur est hardcodée", "il faudrait la mettre", "dans la configuration"],
           distractors: ["c'est du code mort", "c'est nul"]
         },
         {
           type: "explain",
-          q: "Écris un commentaire de code review poli et précis pour ce code.",
+          q: "Écrivez un commentaire de code review poli et précis pour ce code.",
           code: {
             js: `function getPrice(p) {
   return p * 1.2;
@@ -250,8 +250,8 @@ export default {
         {
           type: "qcm",
           q: "Vous renommez `user_name` en `username` dans la réponse de votre API. Le front utilisait `user_name`. C'est…",
-          options: ["un hotfix", "un breaking change", "un rollback"],
-          correct: 1,
+          options: ["un hotfix", "un rollback", "un breaking change"],
+          correct: 2,
           explain: "Le front attend `user_name` et ne le trouve plus : il casse. C'est un **breaking change**."
         },
         {
@@ -273,7 +273,7 @@ export default {
         },
         {
           type: "explain",
-          q: "Reformule comme un senior : « J'ai mis la nouvelle version en ligne, ça a tout cassé, du coup j'ai remis l'ancienne vite fait et là je corrige. »",
+          q: "Reformulez comme un senior : « J'ai mis la nouvelle version en ligne, ça a tout cassé, du coup j'ai remis l'ancienne vite fait et là je corrige. »",
           keywords: ["rollback", "hotfix", "régression"],
           model: "Le déploiement a introduit une régression, donc on a fait un rollback vers la version précédente. Je prépare un hotfix, et on redéploiera une fois qu'il sera testé."
         }
@@ -313,7 +313,7 @@ export default {
         {
           type: "concept",
           term: "Asynchrone",
-          def: "Une opération qui **prend du temps** (appel réseau, lecture de fichier) : le programme continue pendant ce temps et récupère le résultat plus tard. `await` veut dire « attends le résultat ici ».",
+          def: "Une opération qui **prend du temps** (appel réseau, lecture de fichier) : le programme continue pendant ce temps et récupère le résultat plus tard. `await` met **la fonction en cours** en pause jusqu'au résultat, sans bloquer le reste du programme.",
           code: {
             js: "const res = await fetch(\"/api/users\");   // on attend la réponse",
             py: "res = await client.get(\"/api/users\")   # on attend la réponse",
@@ -325,38 +325,38 @@ export default {
           type: "qcm",
           q: "Votre collègue veut prévoir 5 moyens de paiement alors que le client n'en demande qu'un. Quelle réponse est la plus senior ?",
           options: [
-            "« Bonne idée, on sait jamais. »",
             "« YAGNI : on fait la carte bancaire, et on rendra le code extensible quand un deuxième moyen arrivera. »",
-            "« Non. »"
+            "« Bonne idée : autant prévoir les 5 moyens tout de suite, on gagnera du temps plus tard. »",
+            "« Non, le client n'a demandé que la carte, on ne fera jamais les autres moyens de paiement. »"
           ],
-          correct: 1,
+          correct: 0,
           explain: "Il **nomme** le principe (YAGNI), **propose** un plan (une seule chose maintenant) et **rassure** (on pourra étendre plus tard). Ce n'est ni un oui mou, ni un non sec."
         },
         {
           type: "cloze",
           sentence: "Le prix est stocké à deux endroits et ils ne sont plus d'accord : il manque une source unique de ___.",
-          options: ["vérité", "données", "configuration"],
-          correct: 0,
+          options: ["données", "vérité", "configuration"],
+          correct: 1,
           why: [
-            "",
             "On dit « source unique de vérité » : c'est l'expression consacrée.",
+            "",
             "Ce n'est pas l'expression consacrée."
           ]
         },
         {
           type: "cloze",
           sentence: "Un appel réseau qui prend du temps et qu'on attend avec `await` est ___.",
-          options: ["asynchrone", "idempotent", "hardcodé"],
-          correct: 0,
+          options: ["idempotent", "hardcodé", "asynchrone"],
+          correct: 2,
           why: [
-            "",
             "Idempotent veut dire « même résultat si on le refait ». Rien à voir avec le temps d'attente.",
-            "Hardcodé parle d'une valeur écrite en dur."
+            "Hardcodé parle d'une valeur écrite en dur.",
+            ""
           ]
         },
         {
           type: "build",
-          intro: "Construis la réponse du senior.",
+          intro: "Construisez la réponse du senior.",
           answer: ["Restons simples", "une fonction suffit", "on ajoutera le reste", "quand on en aura besoin"],
           distractors: ["on sait jamais", "un singleton"]
         },

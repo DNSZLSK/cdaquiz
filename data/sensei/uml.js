@@ -39,11 +39,11 @@ export default {
         {
           type: "cloze",
           sentence: "« La livraison est gratuite dès 50 € » fait partie de la logique ___.",
-          options: ["métier", "de présentation", "de données"],
-          correct: 0,
+          options: ["de présentation", "métier", "de données"],
+          correct: 1,
           why: [
-            "",
             "La présentation, c'est l'affichage. La règle des 50 € existe même sans écran.",
+            "",
             "La couche données lit et écrit en base. Elle ne décide pas des règles."
           ]
         },
@@ -62,7 +62,7 @@ export default {
         },
         {
           type: "label",
-          intro: "Dans ce code serveur, nomme le rôle de chaque morceau (MVC).",
+          intro: "Dans ce code serveur, nommez le rôle de chaque morceau (MVC).",
           code: {
             js: `router.post("/orders", (req, res) => {
   const order = Order.create(req.body);
@@ -111,8 +111,8 @@ def create_order():
         {
           type: "qcm",
           q: "Dans MVC, qui s'occupe de l'affichage ?",
-          options: ["Le modèle", "La vue", "Le contrôleur"],
-          correct: 1,
+          options: ["La vue", "Le modèle", "Le contrôleur"],
+          correct: 0,
           explain: "La **vue** affiche. Le modèle gère les données, le contrôleur fait le lien."
         },
         {
@@ -218,9 +218,9 @@ def create_order():
         {
           type: "cloze",
           sentence: "Dans un diagramme de classes, le signe `-` devant un attribut veut dire ___.",
-          options: ["privé", "public", "supprimé"],
-          correct: 0,
-          why: ["", "Public, c'est le signe +.", "Le − ne supprime rien : il indique la visibilité."]
+          options: ["public", "privé", "supprimé"],
+          correct: 1,
+          why: ["Public, c'est le signe +.", "", "Le − ne supprime rien : il indique la visibilité."]
         },
         {
           type: "qcm",
@@ -231,13 +231,13 @@ def create_order():
 }`,
             py: `class Compte:
     def __init__(self):
-        self.__solde = 0   # __ = privé par convention`,
+        self._solde = 0   # _ = privé par convention (__ ajoute un renommage)`,
             rs: `pub struct Compte {
     solde: f64,   // sans pub = privé
 }`
           },
-          options: ["+ solde : number", "- solde : number", "# solde : number"],
-          correct: 1,
+          options: ["+ solde : number", "# solde : number", "- solde : number"],
+          correct: 2,
           explain: "Le solde est **privé** (`#` en JS, `__` en Python, pas de `pub` en Rust) : en UML on écrit **−**."
         },
         {
@@ -277,7 +277,7 @@ def create_order():
         {
           type: "concept",
           term: "Cardinalité",
-          def: "**Combien** d'objets de chaque côté. `1` : exactement un. `0..1` : zéro ou un. `*` ou `0..*` : zéro ou plusieurs. `1..*` : au moins un.",
+          def: "**Combien** d'objets de chaque côté. `1` : exactement un. `0..1` : zéro ou un. `*` ou `0..*` : zéro ou plusieurs. `1..*` : au moins un. En UML, le terme officiel est **multiplicité** ; « cardinalité » vient de Merise (MCD).",
           code: `Client 1 ──────── 0..* Commande
 // un client passe zéro ou plusieurs commandes
 // une commande appartient à exactement un client`,
@@ -304,20 +304,20 @@ def create_order():
         },
         {
           type: "concept",
-          term: "Composition (UML)",
-          def: "Un objet est **fait de** parties qui **meurent avec lui**. Losange **plein** ◆ côté « tout ».",
+          term: "Losange plein",
+          def: "En UML, le losange **plein** ◆, côté « tout », note une **composition** : l'objet est **fait de** parties qui **meurent avec lui**.",
           code: `Commande ◆──────── 1..* LigneDeCommande
 // si on supprime la commande, ses lignes disparaissent`,
           rule: "◇ vide = agrégation : les parties survivent. ◆ plein = composition : les parties meurent avec le tout.",
-          phrase: "Une commande est composée de lignes de commande."
+          phrase: "Le losange plein entre Commande et LigneDeCommande indique une composition."
         },
         {
           type: "concept",
-          term: "Héritage (UML)",
-          def: "« **est un** ». Flèche avec un triangle vide, qui pointe vers la classe mère.",
+          term: "Généralisation",
+          def: "Le nom UML de l'**héritage** (« **est un** ») : une flèche en trait plein avec un triangle vide, qui pointe vers la classe mère.",
           code: `Chien ──────▷ Animal
 // un chien est un animal`,
-          phrase: "Chien hérite d'Animal."
+          phrase: "Le diagramme montre une généralisation de Chien vers Animal."
         },
         {
           type: "label",
@@ -337,15 +337,15 @@ Chien ──────▷ Animal`,
         {
           type: "qcm",
           q: "Une Maison et ses Pièces : si on détruit la maison, les pièces disparaissent. Quelle relation ?",
-          options: ["Agrégation ◇", "Composition ◆", "Héritage ▷"],
-          correct: 1,
+          options: ["Composition ◆", "Agrégation ◇", "Héritage ▷"],
+          correct: 0,
           explain: "Les pièces **meurent avec** la maison : **composition** (losange plein)."
         },
         {
           type: "qcm",
           q: "Une Playlist et ses Chansons : une chanson existe même si on supprime la playlist. Quelle relation ?",
-          options: ["Agrégation ◇", "Composition ◆", "Héritage ▷"],
-          correct: 0,
+          options: ["Composition ◆", "Héritage ▷", "Agrégation ◇"],
+          correct: 2,
           explain: "Les chansons **survivent** : **agrégation** (losange vide)."
         },
         {
@@ -409,33 +409,39 @@ Admin ──┼── (Gérer le catalogue)  │
         {
           type: "cloze",
           sentence: "La banque qui valide un paiement est un ___ du système.",
-          options: ["acteur", "cas d'utilisation", "attribut"],
-          correct: 0,
+          options: ["cas d'utilisation", "acteur", "attribut"],
+          correct: 1,
           why: [
-            "",
             "Un cas d'utilisation est une action (« Payer »). La banque est quelqu'un qui agit.",
+            "",
             "Un attribut est une information dans une classe."
           ]
         },
         {
           type: "concept",
           term: "Diagramme de séquence",
-          def: "Qui envoie **quel message** à qui, et **dans quel ordre**. Chaque participant a une ligne verticale (sa **ligne de vie**). Le temps descend.",
-          code: `Client         API           BDD
-  │  POST /login  │             │
-  │──────────────▶│   SELECT    │
-  │               │────────────▶│
-  │               │◀────────────│
-  │◀──────────────│   200 OK    │`,
+          def: "Qui envoie **quel message** à qui, et **dans quel ordre**. Chaque participant a une ligne verticale (sa **ligne de vie**). Le temps descend. Un message se dessine en trait plein, sa réponse en **pointillés**.",
+          code: `Client           API            BDD
+  │  POST /login  │              │
+  │──────────────▶│              │
+  │               │    SELECT    │
+  │               │─────────────▶│
+  │               │◀╌╌╌╌╌╌╌╌╌╌╌╌╌│
+  │    200 OK     │              │
+  │◀╌╌╌╌╌╌╌╌╌╌╌╌╌╌│              │`,
           phrase: "Le diagramme de séquence montre que l'API interroge la base avant de répondre."
         },
         {
           type: "label",
           intro: "Nommez chaque morceau du diagramme.",
-          code: `Client         API           BDD
-  │  POST /login  │             │
-  │──────────────▶│   SELECT    │
-  │◀──────────────│   200 OK    │`,
+          code: `Client           API            BDD
+  │  POST /login  │              │
+  │──────────────▶│              │
+  │               │    SELECT    │
+  │               │─────────────▶│
+  │               │◀╌╌╌╌╌╌╌╌╌╌╌╌╌│
+  │    200 OK     │              │
+  │◀╌╌╌╌╌╌╌╌╌╌╌╌╌╌│              │`,
           options: ["participant", "message (requête)", "réponse"],
           marks: [
             {line:1, text:"API", answer:"participant", why:"En haut, les participants : chacun a sa ligne de vie."},
@@ -445,15 +451,15 @@ Admin ──┼── (Gérer le catalogue)  │
               answer: "message (requête)",
               why: "Flèche pleine vers la droite : un message envoyé."
             },
-            {line:4, text:"◀──────────────", answer:"réponse", why:"Flèche de retour : la réponse."}
+            {line:8, text:"◀╌╌╌╌╌╌╌╌╌╌╌╌╌╌", answer:"réponse", why:"Flèche en pointillés qui revient vers le client : la réponse."}
           ],
           traps: ["cas d'utilisation", "message asynchrone"]
         },
         {
           type: "qcm",
           q: "Dans un diagramme de séquence, le temps s'écoule…",
-          options: ["De gauche à droite", "De haut en bas", "De bas en haut"],
-          correct: 1,
+          options: ["De haut en bas", "De gauche à droite", "De bas en haut"],
+          correct: 0,
           explain: "Le temps **descend** : le premier message est en haut."
         },
         {
@@ -465,12 +471,14 @@ Admin ──┼── (Gérer le catalogue)  │
         {
           type: "explain",
           q: "Racontez ce diagramme. Essayez d'utiliser : client, requête, API, base de données, réponse.",
-          code: `Client         API           BDD
-  │  POST /login  │             │
-  │──────────────▶│   SELECT    │
-  │               │────────────▶│
-  │               │◀────────────│
-  │◀──────────────│   200 OK    │`,
+          code: `Client           API            BDD
+  │  POST /login  │              │
+  │──────────────▶│              │
+  │               │    SELECT    │
+  │               │─────────────▶│
+  │               │◀╌╌╌╌╌╌╌╌╌╌╌╌╌│
+  │    200 OK     │              │
+  │◀╌╌╌╌╌╌╌╌╌╌╌╌╌╌│              │`,
           keywords: ["client", "requête", "API", "base de données", "réponse"],
           model: "Le client envoie une requête POST /login à l'API. L'API interroge la base de données avec un SELECT pour trouver l'utilisateur. La base répond, puis l'API renvoie une réponse 200 OK au client."
         }

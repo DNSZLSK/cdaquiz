@@ -250,7 +250,7 @@ const ALIASES = {
   "Logique métier":["business logic"], "Architecture en couches":["layered architecture"],
   "Diagramme de classes":["class diagram"], "Diagramme de séquence":["sequence diagram"], "Cas d'utilisation":["use case"],
   "Booléen":["boolean"], "Boucle infinie":["infinite loop"],
-  "Breakpoint":["point d'arrêt"], "Erreur de décalage":["off-by-one error"],
+  "Breakpoint":["point d'arrêt"], "Erreur de décalage":["off-by-one error","off-by-one"],
   "Nombre magique":["magic number"], "Refactoring":["refactorisation"], "Dette technique":["technical debt"],
   "Test unitaire":["unit test"], "Edge case":["cas limite"],
   "Liste blanche":["allowlist","whitelist"], "Injection SQL":["SQL injection"], "Requête paramétrée":["parameterized query"],
@@ -261,7 +261,16 @@ const ALIASES = {
   "Conteneur":["container"], "Registre":["registry"], "Dépendance transitive":["transitive dependency"], "Lockfile":["fichier de verrouillage"],
   "Partie prenante":["stakeholder"], "Critères d'acceptation":["acceptance criteria"],
   "Compilateur":["compiler"], "Emprunt":["borrowing"], "Emprunt mutable":["mutable borrow"],
-  "Immuable par défaut":["immutable by default"]
+  "Immuable par défaut":["immutable by default"],
+  "Cardinalité":["multiplicité","multiplicity"], "Généralisation":["generalization"],
+  "Authentification":["authentication"], "Autorisation":["authorization"], "Régression":["regression"],
+  "Vulnérabilité":["vulnerability"], "Agrégation":["aggregation"], "Acteur":["actor"], "Attribut":["attribute"],
+  "Stack":["pile"], "Heap":["tas"], "Move":["déplacement"], "Definition of Done":["DoD"],
+  "User story":["récit utilisateur"], "POC":["proof of concept","preuve de concept"],
+  "Breaking change":["changement cassant"], "Race condition":["condition de concurrence"],
+  "Asynchrone":["asynchronous"], "État":["state"], "Lisibilité":["readability"], "Interface publique":["public interface"],
+  "Besoin fonctionnel":["exigence fonctionnelle","functional requirement"],
+  "Besoin non fonctionnel":["exigence non fonctionnelle","non-functional requirement"]
 };
 /* Comparaison tolerante pour "ecrivez le terme" : sans les mots de liaison
    (en, par, de, du, des, le, la, les, l', d', a), puis avec une petite faute de

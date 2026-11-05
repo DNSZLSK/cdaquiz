@@ -26,7 +26,7 @@ y = 6;          // ✅ y est mutable`
         {
           type: "concept",
           term: "Types de base",
-          def: "Rust connaît le type de chaque valeur **avant** l'exécution. `i32` : nombre entier. `f64` : nombre à virgule. `bool` : vrai/faux. `String` : texte modifiable. `&str` : texte fixe.",
+          def: "Rust connaît le type de chaque valeur **avant** l'exécution. `i32` : nombre entier. `f64` : nombre à virgule. `bool` : vrai/faux. `String` : texte modifiable. `&str` : une **tranche de texte empruntée** (string slice), en lecture seule.",
           code: {
             rs: `let age: i32 = 34;
 let prix: f64 = 9.99;
@@ -48,8 +48,8 @@ let nom: String = String::from("Bob");`
             rs: `let total = 0;
 total = total + 5;`
           },
-          options: ["Oui", "Non"],
-          correct: 1,
+          options: ["Non", "Oui"],
+          correct: 0,
           explain: "`total` est immuable (pas de `mut`). Le compilateur refuse la deuxième ligne."
         },
         {
@@ -109,7 +109,7 @@ total = total + 5;`
         {
           type: "concept",
           term: "Move",
-          def: "`let b = a;` sur une String **déplace** la valeur : b devient propriétaire, et a **n'est plus utilisable**. On ne copie pas les données du heap.",
+          def: "`let b = a;` sur une String **déplace** la valeur : b devient propriétaire, et a **n'est plus utilisable**. On ne copie pas les données du heap. Les types simples (`i32`, `f64`, `bool`…) implémentent le trait **Copy** : pour eux, `let b = a;` fait une copie, et a reste utilisable.",
           code: {
             rs: `let a = String::from("salut");
 let b = a;            // la valeur est déplacée dans b
@@ -125,8 +125,8 @@ println!("{}", a);    // ❌ erreur : a a été déplacé`
 let b = a;
 println!("{}", b);`
           },
-          options: ["Affiche hi", "Erreur : a a été déplacé", "Affiche rien"],
-          correct: 0,
+          options: ["Erreur : a a été déplacé", "Affiche hi", "Affiche rien"],
+          correct: 1,
           explain: "On utilise **b**, le nouveau propriétaire : ça marche et ça affiche **hi**. C'est utiliser **a** qui serait une erreur."
         },
         {
@@ -169,14 +169,14 @@ println!("{} {}", a, b);   // ✅ les deux existent`
           term: "Emprunt",
           def: "Avec `&`, on **prête** une valeur sans donner la propriété. La fonction peut la lire, puis le propriétaire la récupère.",
           code: {
-            rs: `fn longueur(s: &String) -> usize {
+            rs: `fn longueur(s: &str) -> usize {
     s.len()
 }
 let nom = String::from("Bob");
 let n = longueur(&nom);   // on prête nom
 println!("{}", nom);      // ✅ nom est toujours là`
           },
-          phrase: "La fonction emprunte la String au lieu de la prendre."
+          phrase: "Avec un emprunt, la fonction lit la String sans en devenir propriétaire."
         },
         {
           type: "concept",
@@ -213,13 +213,13 @@ r1.push('b');`
         },
         {
           type: "cloze",
-          sentence: "Pour qu'une fonction lise une valeur sans en devenir propriétaire, on lui passe un ___.",
-          options: ["emprunt", "move", "clone"],
-          correct: 0,
+          sentence: "Pour qu'une fonction lise une valeur sans la copier ni en devenir propriétaire, on lui passe un ___.",
+          options: ["move", "clone", "emprunt"],
+          correct: 2,
           why: [
-            "",
             "Un move lui donnerait la propriété.",
-            "Un clone fait une copie, ça marche mais ça coûte de la mémoire."
+            "Un clone fait une copie : justement ce qu'on veut éviter ici.",
+            ""
           ]
         }
       ]
@@ -292,11 +292,11 @@ r1.push('b');`
         {
           type: "cloze",
           sentence: "Une fonction qui peut échouer et dire pourquoi retourne un ___.",
-          options: ["Result", "Option", "match"],
-          correct: 0,
+          options: ["Option", "Result", "match"],
+          correct: 1,
           why: [
-            "",
             "Option sert quand une valeur peut **manquer**. Pour un **échec** avec une raison, c'est Result.",
+            "",
             "match sert à traiter les cas, ce n'est pas un type de retour."
           ]
         },
@@ -361,19 +361,19 @@ cargo audit`,
         {
           type: "cloze",
           sentence: "Le fichier qui fige les versions exactes des crates s'appelle ___.",
-          options: ["Cargo.lock", "Cargo.toml", "main.rs"],
-          correct: 0,
+          options: ["Cargo.toml", "main.rs", "Cargo.lock"],
+          correct: 2,
           why: [
-            "",
             "Cargo.toml liste ce que vous **demandez**. Les versions exactes sont dans le lock.",
-            "main.rs contient votre code."
+            "main.rs contient votre code.",
+            ""
           ]
         },
         {
           type: "qcm",
           q: "`cargo audit` est un outil de…",
-          options: ["SAST", "SCA", "DAST"],
-          correct: 1,
+          options: ["SCA", "SAST", "DAST"],
+          correct: 0,
           explain: "Il analyse **les dépendances** : c'est de la **SCA**."
         }
       ]

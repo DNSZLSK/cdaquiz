@@ -14,63 +14,63 @@ export default {
           type: "concept",
           term: "Booléen",
           def: "Une valeur qui ne peut être que `true` (vrai) ou `false` (faux). Une comparaison donne toujours un booléen.",
-          code: `5 > 3     // true
-2 === 7   // false`,
+          code: { js: `5 > 3     // true
+2 === 7   // false` },
           phrase: "La comparaison retourne un booléen."
         },
         {
           type: "concept",
           term: "Condition",
           def: "Un **aiguillage**. `if` pose une question. Si la réponse est `true`, on exécute le bloc. Sinon, on passe au bloc `else` (s'il existe).",
-          code: `let age = 20;
+          code: { js: `const age = 20;
 if (age >= 18) {
   console.log("majeur");   // ← exécuté (20 >= 18 est true)
 } else {
   console.log("mineur");   // ← sauté
-}`,
+}` },
           phrase: "Si l'âge est supérieur ou égal à 18, on affiche majeur."
         },
         {
           type: "concept",
           term: "Opérateurs logiques",
           def: "Pour combiner des tests. `&&` = **ET** (les deux doivent être vrais). `||` = **OU** (un seul suffit). `!` = **NON** (inverse).",
-          code: `true && false   // false
+          code: { js: `true && false   // false
 true || false   // true
-!true           // false`,
+!true           // false` },
           phrase: "On vérifie que l'utilisateur est connecté ET administrateur."
         },
         {
           type: "qcm",
           q: "Qu'affiche ce code ?",
-          code: `const age = 16;
+          code: { js: `const age = 16;
 const avecParent = true;
 if (age >= 18 || avecParent) {
   console.log("entrée");
 } else {
   console.log("refus");
-}`,
-          options: ["entrée", "refus"],
-          correct: 0,
+}` },
+          options: ["refus", "entrée"],
+          correct: 1,
           explain: "`age >= 18` est false, mais `avecParent` est true. Avec `||` (OU), **un seul vrai suffit** → \"entrée\"."
         },
         {
           type: "concept",
           term: "Modulo",
           def: "`%` donne le **reste** d'une division. Un nombre pair divisé par 2 a un reste de 0.",
-          code: `7 % 2   // 7 = 2×3 + 1  → reste 1
-8 % 2   // 8 = 2×4 + 0  → reste 0 (pair)`,
+          code: { js: `7 % 2   // 7 = 2×3 + 1  → reste 1
+8 % 2   // 8 = 2×4 + 0  → reste 0 (pair)` },
           phrase: "On utilise le modulo pour savoir si un nombre est pair."
         },
         {
           type: "trace",
           intro: "On compte les nombres pairs. Remplissez chaque tour.",
-          code: `let count = 0;
+          code: { js: `let count = 0;
 for (let i = 1; i <= 4; i++) {
   if (i % 2 === 0) {
     count = count + 1;
   }
 }
-console.log(count);`,
+console.log(count);` },
           cols: ["i", "i % 2", "pair ?", "count"],
           rows: [
             {c:["départ", "—", "—", "0"]},
@@ -116,21 +116,21 @@ console.log(count);`,
         {
           type: "cloze",
           sentence: "`5 > 3` donne `true` : le résultat d'une comparaison est un ___.",
-          options: ["booléen", "tableau", "argument"],
-          correct: 0,
-          why: ["", "Un tableau est une liste de valeurs.", "Un argument est une valeur donnée à une fonction."]
+          options: ["tableau", "argument", "booléen"],
+          correct: 2,
+          why: ["Un tableau est une liste de valeurs.", "Un argument est une valeur donnée à une fonction.", ""]
         },
         {
           type: "predict",
           q: "Qu'affiche ce code ?",
-          code: `const note = 12;
+          code: { js: `const note = 12;
 if (note >= 16) {
   console.log("très bien");
 } else if (note >= 10) {
   console.log("validé");
 } else {
   console.log("raté");
-}`,
+}` },
           answers: ["validé", "valide"],
           hint: "On teste dans l'ordre. `12 >= 16` ? Non. Alors on passe au test suivant.",
           explain: "`12 >= 16` → false. `12 >= 10` → true → **validé**. Le dernier `else` est sauté."
@@ -146,34 +146,34 @@ if (note >= 16) {
           type: "concept",
           term: "while",
           def: "Une boucle qui dit : « **tant que** le test est vrai, refais le bloc ». Utile quand on ne sait pas à l'avance combien de tours il faudra.",
-          code: `let n = 1;
+          code: { js: `let n = 1;
 while (n < 10) {
   n = n * 2;
 }
-// n vaut 16 à la fin`,
+// n vaut 16 à la fin` },
           phrase: "Tant que n est inférieur à 10, on le double."
         },
         {
           type: "concept",
           term: "Boucle infinie",
           def: "Une boucle dont le test **ne devient jamais faux**. Le programme tourne pour toujours et se bloque.",
-          code: `let i = 0;
+          code: { js: `let i = 0;
 while (i < 5) {
   console.log(i);
   // ❌ oubli de i++ : i reste à 0 pour toujours
-}`,
+}` },
           phrase: "On a une boucle infinie car la condition d'arrêt n'est jamais atteinte."
         },
         {
           type: "trace",
           intro: "Remplissez chaque tour. Le test se fait **avant** de modifier n.",
-          code: `let n = 1;
+          code: { js: `let n = 1;
 let steps = 0;
 while (n < 20) {
   n = n * 2;
   steps = steps + 1;
 }
-console.log(steps);`,
+console.log(steps);` },
           cols: ["Tour", "n < 20 ?", "n", "steps"],
           rows: [
             {c:["départ", "—", "1", "0"]},
@@ -237,12 +237,12 @@ console.log(steps);`,
         {
           type: "qcm",
           q: "Que se passe-t-il ?",
-          code: `let i = 10;
+          code: { js: `let i = 10;
 while (i > 0) {
   i = i + 1;
-}`,
-          options: ["La boucle fait 10 tours", "La boucle ne tourne pas", "Boucle infinie"],
-          correct: 2,
+}` },
+          options: ["La boucle fait 10 tours", "Boucle infinie", "La boucle ne tourne pas"],
+          correct: 1,
           explain: "i part de 10 et **augmente** : 11, 12, 13… Il sera toujours > 0. Le test ne devient jamais faux : **boucle infinie**."
         },
         {
@@ -273,38 +273,38 @@ while (i > 0) {
           type: "concept",
           term: "ReferenceError",
           def: "Erreur quand on utilise un **nom qui n'existe pas**. Le plus souvent : une faute de frappe.",
-          code: `const total = 10;
+          code: { js: `const total = 10;
 console.log(totl);
-// ReferenceError: totl is not defined`,
+// ReferenceError: totl is not defined` },
           phrase: "On a une ReferenceError : la variable n'est pas définie."
         },
         {
           type: "concept",
           term: "TypeError",
           def: "Erreur quand on fait avec une valeur **une chose impossible pour son type**. Par exemple lire une propriété de `undefined`.",
-          code: `const user = undefined;
+          code: { js: `const user = undefined;
 console.log(user.name);
-// TypeError: Cannot read properties of undefined`,
+// TypeError: Cannot read properties of undefined` },
           phrase: "On essaie de lire une propriété sur undefined, d'où la TypeError."
         },
         {
           type: "qcm",
           q: "Quelle erreur donne ce code ?",
-          code: `function saluer(nom) {
+          code: { js: `function saluer(nom) {
   return "Salut " + nom;
 }
-console.log(salut("Kevin"));`,
-          options: ["ReferenceError", "TypeError", "Aucune erreur"],
-          correct: 0,
+console.log(salut("Kevin"));` },
+          options: ["TypeError", "ReferenceError", "Aucune erreur"],
+          correct: 1,
           explain: "La fonction s'appelle `saluer`, mais on appelle `salut` : **ce nom n'existe pas** → ReferenceError."
         },
         {
           type: "concept",
           term: "Stack trace",
-          def: "La **liste des fonctions** en cours au moment de l'erreur, avec les numéros de ligne. La ligne du **haut** montre où ça a cassé.",
-          code: `TypeError: Cannot read properties of undefined (reading 'name')
+          def: "La **liste des fonctions** en cours au moment de l'erreur, avec les numéros de ligne. En JavaScript et en Java, la ligne du **haut** montre où ça a cassé. Attention : en Python, le traceback se lit dans l'autre sens, l'appel le plus récent est **en bas**, juste au-dessus du message.",
+          code: { js: `TypeError: Cannot read properties of undefined (reading 'name')
     at afficher (app.js:12:20)    ← ici : ligne 12
-    at main (app.js:30:3)         ← appelée depuis la ligne 30`,
+    at main (app.js:30:3)         ← appelée depuis la ligne 30` },
           rule: "Lisez une erreur en 3 temps : **1.** le type (TypeError…) **2.** le message **3.** la première ligne de la stack trace qui pointe vers **votre** fichier.",
           phrase: "D'après la stack trace, l'erreur vient de la ligne 12 de app.js."
         },
@@ -312,30 +312,30 @@ console.log(salut("Kevin"));`,
           type: "concept",
           term: "Exception",
           def: "Une erreur « lancée » pendant l'exécution. `try` essaie un bloc. Si une exception arrive, `catch` l'**attrape** au lieu de laisser le programme planter.",
-          code: `try {
+          code: { js: `try {
   risque();          // si ça plante ici…
 } catch (error) {
   console.log("Problème");   // …on arrive ici
-}`,
+}` },
           phrase: "On attrape l'exception avec un bloc try/catch."
         },
         {
           type: "cloze",
           sentence: "La liste des fonctions en cours au moment de l'erreur s'appelle la ___.",
-          options: ["stack trace", "boucle", "dette technique"],
-          correct: 0,
-          why: ["", "Une boucle répète du code.", "La dette technique, c'est le coût futur des raccourcis."]
+          options: ["boucle", "dette technique", "stack trace"],
+          correct: 2,
+          why: ["Une boucle répète du code.", "La dette technique, c'est le coût futur des raccourcis.", ""]
         },
         {
           type: "predict",
           q: "Qu'affiche ce code ?",
-          code: `try {
+          code: { js: `try {
   const user = undefined;
   console.log(user.name);
   console.log("fin");
 } catch (error) {
   console.log("Oups");
-}`,
+}` },
           answers: ["Oups", "\"Oups\""],
           hint: "`user.name` sur undefined lance une TypeError. Où va le programme ensuite ?",
           explain: "La ligne 3 lance une exception. On saute directement dans `catch` (\"fin\" n'est jamais affiché) → **Oups**."
@@ -364,21 +364,21 @@ console.log(salut("Kevin"));`,
           type: "concept",
           term: "Erreur de décalage",
           def: "Se tromper **d'un seul cran** dans une boucle : commencer à 1 au lieu de 0, ou s'arrêter un tour trop tôt. En anglais : off-by-one.",
-          code: `for (let i = 1; i < nums.length; i++)
-//           ↑ oublie l'index 0`,
+          code: { js: `for (let i = 1; i < nums.length; i++)
+//           ↑ oublie l'index 0` },
           phrase: "C'est une erreur off-by-one : on saute le premier élément."
         },
         {
           type: "predict",
           q: "`sum([5, 1, 2])` devrait donner 8. Que retourne-t-il vraiment ?",
-          code: `function sum(nums) {
+          code: { js: `function sum(nums) {
   let total = 0;
   for (let i = 1; i < nums.length; i++) {
     total = total + nums[i];
   }
   return total;
 }
-sum([5, 1, 2]);`,
+sum([5, 1, 2]);` },
           answers: ["3"],
           hint: "Regardez la valeur de départ de `i`. Quel élément est oublié ?",
           explain: "i part de 1 : on additionne `nums[1]` (1) et `nums[2]` (2). Le 5 (index 0) est oublié → **3**."
@@ -386,13 +386,13 @@ sum([5, 1, 2]);`,
         {
           type: "qcm",
           q: "Où est le bug ?",
-          code: "for (let i = 1; i < nums.length; i++)",
+          code: { js: "for (let i = 1; i < nums.length; i++)" },
           options: [
             "`i < nums.length` devrait être `i <= nums.length`",
-            "`let i = 1` devrait être `let i = 0`",
-            "`i++` devrait être `i--`"
+            "`i++` devrait être `i--`",
+            "`let i = 1` devrait être `let i = 0`"
           ],
-          correct: 1,
+          correct: 2,
           explain: "Les index commencent à **0**. En partant de 1, on saute le premier élément. Attention : `<=` serait aussi un bug (on lirait `nums[3]`, qui n'existe pas)."
         },
         {
@@ -410,9 +410,9 @@ sum([5, 1, 2]);`,
           type: "qcm",
           q: "Face à un bug, que faites-vous en premier ?",
           options: [
-            "Je demande directement la correction à une IA",
+            "Je demande directement la correction à une IA, en collant tout le fichier",
             "Je lis le message d'erreur et je regarde quelle ligne pose problème",
-            "Je réécris tout le fichier"
+            "J'ajoute des console.log partout dans le fichier pour voir ce qui se passe"
           ],
           correct: 1,
           explain: "D'abord **observer** : lire le type d'erreur, le message, la ligne. Souvent, la réponse est déjà écrite dedans."
@@ -428,49 +428,49 @@ sum([5, 1, 2]);`,
           type: "concept",
           term: "Lisibilité",
           def: "À quel point un **humain** comprend vite le code. Le code est lu bien plus souvent qu'il n'est écrit.",
-          code: `// peu lisible
+          code: { js: `// peu lisible
 const d = u.filter(x => x.a > 17);
 // lisible
-const adults = users.filter(user => user.age > 17);`,
+const adults = users.filter(user => user.age > 17);` },
           phrase: "On renomme pour améliorer la lisibilité."
         },
         {
           type: "concept",
           term: "camelCase",
           def: "La convention de nommage en JavaScript : premier mot en minuscule, puis **chaque mot suivant commence par une majuscule**.",
-          code: `let totalPrice;      // ✅ camelCase
-let total_price;     // snake_case (Python)
-class UserService {} // PascalCase (pour les classes)`,
+          code: { js: `const totalPrice = 0;    // ✅ camelCase
+const total_price = 0;   // snake_case (Python)
+class UserService {} // PascalCase (pour les classes)` },
           phrase: "On respecte la convention camelCase."
         },
         {
           type: "concept",
           term: "Nommer une fonction",
           def: "Une fonction **fait une action** : on la nomme avec un **verbe**. Une variable **contient quelque chose** : on la nomme avec un **nom**.",
-          code: `function getUser() {}      // verbe : get
+          code: { js: `function getUser() {}      // verbe : get
 function calculateTotal() {}
-const userList = [];       // nom`,
+const userList = [];       // nom` },
           phrase: "La fonction est nommée par un verbe qui décrit son action."
         },
         {
           type: "concept",
           term: "Nombre magique",
           def: "Un nombre écrit directement dans le code, **sans explication**. On le remplace par une constante avec un nom.",
-          code: `if (age >= 18) {}          // 18 = pourquoi ?
+          code: { js: `if (age >= 18) {}          // 18 = pourquoi ?
 const MAJORITY_AGE = 18;
-if (age >= MAJORITY_AGE) {} // ✅ clair`,
+if (age >= MAJORITY_AGE) {} // ✅ clair` },
           phrase: "On extrait le nombre magique dans une constante nommée."
         },
         {
           type: "qcm",
           q: "Quel est le meilleur nom pour une fonction qui envoie un email de bienvenue ?",
           options: [
-            "`email()`",
             "`sendWelcomeEmail()`",
+            "`email()`",
             "`doStuff()`",
             "`welcomeEmailData`"
           ],
-          correct: 1,
+          correct: 0,
           explain: "**sendWelcomeEmail** : un verbe (send), en camelCase, qui dit exactement ce que fait la fonction."
         },
         {
@@ -478,21 +478,21 @@ if (age >= MAJORITY_AGE) {} // ✅ clair`,
           q: "Lequel est écrit en camelCase ?",
           options: [
             "`user_name`",
-            "`UserName`",
             "`userName`",
+            "`UserName`",
             "`USERNAME`"
           ],
-          correct: 2,
+          correct: 1,
           explain: "**userName** : premier mot en minuscule, les suivants commencent par une majuscule."
         },
         {
           type: "cloze",
           sentence: "`if (age >= 18)` : 18 est un nombre ___ qu'on devrait mettre dans une constante.",
-          options: ["magique", "primitif", "privé"],
-          correct: 0,
+          options: ["primitif", "magique", "privé"],
+          correct: 1,
           why: [
-            "",
             "C'est bien une valeur primitive, mais le problème ici est qu'il n'a **pas de nom** : on dit nombre magique.",
+            "",
             "Privé concerne la visibilité dans une classe."
           ]
         }
@@ -514,19 +514,19 @@ if (age >= MAJORITY_AGE) {} // ✅ clair`,
           type: "concept",
           term: "Duplication",
           def: "Le même code **copié-collé** à plusieurs endroits. Si on doit le corriger, il faut penser à tous les endroits. Le principe **DRY** (Don't Repeat Yourself) dit : évitez de vous répéter.",
-          code: `const prixA = 100 + 100 * 0.2;
-const prixB = 50 + 50 * 0.2;    // même calcul copié`,
+          code: { js: `const prixA = 100 + 100 * 0.2;
+const prixB = 50 + 50 * 0.2;    // même calcul copié` },
           phrase: "Il y a de la duplication : appliquons DRY."
         },
         {
           type: "concept",
           term: "Extraire une fonction",
           def: "Le refactoring le plus courant : prendre un morceau de code répété, le mettre dans une fonction avec un bon nom, et l'appeler.",
-          code: `function addTax(price) {
+          code: { js: `function addTax(price) {
   return price + price * 0.2;
 }
 const prixA = addTax(100);
-const prixB = addTax(50);`,
+const prixB = addTax(50);` },
           phrase: "On extrait le calcul dans une fonction addTax."
         },
         {
@@ -538,12 +538,12 @@ const prixB = addTax(50);`,
         {
           type: "qcm",
           q: "Est-ce un refactoring ?",
-          code: `// avant
+          code: { js: `// avant
 function total(a, b) { return a + b; }
 // après
-function total(a, b) { return a + b + 1; }`,
-          options: ["Oui", "Non"],
-          correct: 1,
+function total(a, b) { return a + b + 1; }` },
+          options: ["Non", "Oui"],
+          correct: 0,
           explain: "Le résultat **change** (`total(2, 3)` donnait 5, maintenant 6). Ce n'est pas un refactoring, c'est une modification du comportement."
         },
         {
@@ -556,9 +556,9 @@ function total(a, b) { return a + b + 1; }`,
         {
           type: "cloze",
           sentence: "Changer la forme du code sans changer son comportement, c'est du ___.",
-          options: ["refactoring", "debug", "déploiement"],
-          correct: 0,
-          why: ["", "Déboguer, c'est corriger un comportement faux.", "Déployer, c'est mettre en ligne."]
+          options: ["debug", "déploiement", "refactoring"],
+          correct: 2,
+          why: ["Déboguer, c'est corriger un comportement faux.", "Déployer, c'est mettre en ligne.", ""]
         }
       ]
     },
@@ -571,29 +571,29 @@ function total(a, b) { return a + b + 1; }`,
           type: "concept",
           term: "Test unitaire",
           def: "Un petit programme qui vérifie **une seule fonction** : on lui donne une entrée connue et on vérifie la sortie.",
-          code: `function add(a, b) { return a + b; }
+          code: { js: `function add(a, b) { return a + b; }
 
 test("add additionne", () => {
   expect(add(2, 3)).toBe(5);   // ✅ vert
-});`,
+});` },
           phrase: "On écrit un test unitaire pour la fonction add."
         },
         {
           type: "concept",
           term: "Assertion",
           def: "La ligne qui **vérifie** : « je m'attends à ce que ce résultat soit égal à ça ». Si c'est faux, le test devient rouge.",
-          code: `expect(add(2, 3)).toBe(5);
-//     résultat      attendu`,
+          code: { js: `expect(add(2, 3)).toBe(5);
+//     résultat      attendu` },
           phrase: "L'assertion échoue : on attendait 5 et on a reçu 6."
         },
         {
           type: "qcm",
           q: "Quel test échoue ?",
-          code: `function double(n) {
+          code: { js: `function double(n) {
   return n + 2;     // bug !
 }
 expect(double(2)).toBe(4);   // test A
-expect(double(3)).toBe(6);   // test B`,
+expect(double(3)).toBe(6);   // test B` },
           options: ["Le test A", "Le test B", "Les deux"],
           correct: 1,
           explain: "`double(2)` = 2 + 2 = 4 → A passe **par hasard**. `double(3)` = 3 + 2 = 5, pas 6 → **B échoue**. Un seul test ne suffit pas !"
@@ -601,9 +601,9 @@ expect(double(3)).toBe(6);   // test B`,
         {
           type: "qcm",
           q: "Avant de livrer `average`, on teste ces entrées. Comment un senior les appelle-t-il ?",
-          code: `average([])     // tableau vide ?
+          code: { js: `average([])     // tableau vide ?
 average([0])    // un seul élément ?
-average(null)   // pas de tableau du tout ?`,
+average(null)   // pas de tableau du tout ?` },
           options: ["Des edge cases", "Des happy paths", "Des race conditions"],
           correct: 0,
           explain: "Des **edge cases** (en français : des **cas limites**) : des entrées au bord de ce qui est prévu. C'est là que se cachent les bugs, il faut les tester exprès."
@@ -611,13 +611,13 @@ average(null)   // pas de tableau du tout ?`,
         {
           type: "predict",
           q: "Que retourne `average([])` ?",
-          code: `function average(nums) {
+          code: { js: `function average(nums) {
   let total = 0;
   for (const n of nums) {
     total = total + n;
   }
   return total / nums.length;
-}`,
+}` },
           answers: ["NaN"],
           hint: "Avec un tableau vide, total vaut 0 et `nums.length` vaut 0. Que donne `0 / 0` en JavaScript ?",
           explain: "`0 / 0` donne **NaN** (Not a Number, « pas un nombre »). C'est un bug de cas limite : il faudrait traiter le tableau vide à part."
@@ -625,18 +625,18 @@ average(null)   // pas de tableau du tout ?`,
         {
           type: "concept",
           term: "Régression",
-          def: "Un bug qui **réapparaît** dans quelque chose qui marchait avant, à cause d'une nouvelle modification. Les tests servent à les détecter tout de suite.",
+          def: "Quelque chose qui **marchait** et qui **ne marche plus** après une modification (un nouveau commit, une mise à jour de dépendance). Les tests servent à les détecter tout de suite.",
           phrase: "Ce commit a introduit une régression, les tests sont rouges."
         },
         {
           type: "cloze",
           sentence: "Un tableau vide passé à une fonction est un cas ___.",
-          options: ["limite", "d'utilisation", "nominal"],
-          correct: 0,
+          options: ["d'utilisation", "nominal", "limite"],
+          correct: 2,
           why: [
-            "",
             "Un cas d'utilisation est une action d'un utilisateur (UML).",
-            "Le cas **nominal**, c'est l'inverse : l'entrée normale, attendue (le happy path). Un tableau vide est au **bord** de ce qui est prévu."
+            "Le cas **nominal**, c'est l'inverse : l'entrée normale, attendue (le happy path). Un tableau vide est au **bord** de ce qui est prévu.",
+            ""
           ]
         }
       ]
@@ -655,28 +655,28 @@ average(null)   // pas de tableau du tout ?`,
         {
           type: "concept",
           term: "O(1)",
-          def: "**Temps constant** : 1 opération, que le tableau ait 10 ou 1 million d'éléments.",
-          code: "nums[0]   // lire une case : toujours 1 opération",
+          def: "**Temps constant** : le nombre d'opérations ne dépend pas de la taille. Lire `nums[0]` coûte pareil avec 10 ou 1 million d'éléments.",
+          code: { js: "nums[0]   // lire une case : même coût, quelle que soit la taille" },
           phrase: "L'accès par index est en O(1)."
         },
         {
           type: "concept",
           term: "O(n)",
           def: "**Temps linéaire** : une boucle sur n éléments = n opérations. 2× plus de données = 2× plus long.",
-          code: `for (const n of nums) {   // n tours
+          code: { js: `for (const n of nums) {   // n tours
   console.log(n);
-}`,
+}` },
           phrase: "Parcourir le tableau est en O(n)."
         },
         {
           type: "concept",
           term: "O(n²)",
           def: "**Temps quadratique** : une boucle **dans** une boucle. Pour n éléments, n × n opérations. Ça explose vite.",
-          code: `for (const a of nums) {
+          code: { js: `for (const a of nums) {
   for (const b of nums) {   // n tours, n fois
     compare(a, b);
   }
-}`,
+}` },
           phrase: "Deux boucles imbriquées : on est en O(n²)."
         },
         {
@@ -716,24 +716,24 @@ average(null)   // pas de tableau du tout ?`,
         {
           type: "qcm",
           q: "Quelle est la complexité de ce code ?",
-          code: `function hasDuplicate(nums) {
+          code: { js: `function hasDuplicate(nums) {
   for (let i = 0; i < nums.length; i++) {
     for (let j = i + 1; j < nums.length; j++) {
       if (nums[i] === nums[j]) return true;
     }
   }
   return false;
-}`,
+}` },
           options: ["O(1)", "O(n)", "O(n²)"],
           correct: 2,
-          explain: "Une boucle **dans** une boucle, chacune sur le tableau : **O(n²)**."
+          explain: "Une boucle **dans** une boucle, chacune sur le tableau : **O(n²)**. La boucle intérieure démarre à i + 1, donc environ n²/2 comparaisons, mais on ne garde pas les constantes : c'est toujours O(n²)."
         },
         {
           type: "cloze",
           sentence: "Une boucle dans une boucle sur le même tableau a une complexité en ___.",
           options: ["O(n²)", "O(1)", "O(n)"],
           correct: 0,
-          why: ["", "O(1), c'est un temps constant (une seule opération).", "O(n), c'est une seule boucle."]
+          why: ["", "O(1), c'est un temps constant : le coût ne dépend pas de la taille.", "O(n), c'est une seule boucle."]
         }
       ]
     }

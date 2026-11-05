@@ -20,9 +20,9 @@ export default {
           type: "concept",
           term: "Validation",
           def: "**Vérifier** qu'une donnée a la forme attendue **avant** de l'utiliser. Sinon, on la refuse.",
-          code: `if (typeof age !== "number" || age < 0 || age > 130) {
+          code: { js: `if (typeof age !== "number" || age < 0 || age > 130) {
   throw new Error("Âge invalide");
-}`,
+}` },
           phrase: "On valide l'âge côté serveur."
         },
         {
@@ -35,16 +35,16 @@ export default {
           type: "concept",
           term: "Liste blanche",
           def: "Accepter **seulement** ce qui est connu et autorisé, et refuser tout le reste. Plus sûr qu'une liste noire (essayer d'interdire tout ce qui est dangereux). En anglais : allowlist.",
-          code: `const tris = ["prix", "nom", "date"];
-if (!tris.includes(choix)) throw new Error("Tri invalide");`,
+          code: { js: `const tris = ["prix", "nom", "date"];
+if (!tris.includes(choix)) throw new Error("Tri invalide");` },
           phrase: "On utilise une liste blanche des valeurs autorisées."
         },
         {
           type: "qcm",
           q: "Le formulaire empêche de saisir un prix négatif (côté navigateur). Est-ce suffisant ?",
           options: [
-            "Oui, l'utilisateur ne peut pas le contourner",
-            "Non, un attaquant peut envoyer la requête directement au serveur"
+            "Oui : le navigateur bloque la saisie, donc la valeur reçue est toujours positive",
+            "Non : un attaquant peut envoyer la requête directement au serveur, sans le formulaire"
           ],
           correct: 1,
           explain: "Un attaquant peut envoyer une requête HTTP **sans passer par votre formulaire**. Il faut **aussi** valider côté serveur."
@@ -52,11 +52,11 @@ if (!tris.includes(choix)) throw new Error("Tri invalide");`,
         {
           type: "cloze",
           sentence: "Accepter seulement les valeurs connues et refuser tout le reste, c'est une liste ___.",
-          options: ["blanche", "noire", "chaînée"],
-          correct: 0,
+          options: ["noire", "blanche", "chaînée"],
+          correct: 1,
           why: [
-            "",
             "La liste noire essaie d'interdire ce qui est dangereux : on en oublie toujours.",
+            "",
             "Une liste chaînée est une structure de données, sans rapport."
           ]
         }
@@ -71,13 +71,13 @@ if (!tris.includes(choix)) throw new Error("Tri invalide");`,
           type: "concept",
           term: "Injection SQL",
           def: "L'attaquant écrit du **code SQL dans un champ** de formulaire. Si le serveur colle ce texte directement dans sa requête, le code de l'attaquant s'exécute.",
-          code: "const query = \"SELECT * FROM users WHERE name = '\" + name + \"'\";",
+          code: { js: "const query = \"SELECT * FROM users WHERE name = '\" + name + \"'\";" },
           phrase: "Cette concaténation expose l'application à une injection SQL."
         },
         {
           type: "qcm",
           q: "Si `name` vaut `' OR '1'='1`, que devient la requête ?",
-          code: "const query = \"SELECT * FROM users WHERE name = '\" + name + \"'\";",
+          code: { js: "const query = \"SELECT * FROM users WHERE name = '\" + name + \"'\";" },
           options: [
             "SELECT * FROM users WHERE name = '' OR '1'='1'",
             "Une erreur, la requête est refusée",
@@ -90,27 +90,27 @@ if (!tris.includes(choix)) throw new Error("Tri invalide");`,
           type: "concept",
           term: "Requête paramétrée",
           def: "On envoie la requête et les données **séparément**. La base sait que `name` est une donnée, jamais du code. C'est **la** protection contre l'injection SQL.",
-          code: "db.query(\"SELECT * FROM users WHERE name = ?\", [name]);",
+          code: { js: "db.query(\"SELECT * FROM users WHERE name = ?\", [name]);" },
           phrase: "On utilise une requête paramétrée pour éviter l'injection."
         },
         {
           type: "concept",
           term: "XSS",
           def: "Cross-Site Scripting : l'attaquant fait **exécuter son JavaScript** dans le navigateur des autres, par exemple via un commentaire affiché tel quel.",
-          code: `// ❌ dangereux : le HTML du commentaire est interprété
+          code: { js: `// ❌ dangereux : le HTML du commentaire est interprété
 div.innerHTML = commentaire;
 // ✅ sûr : affiché comme du texte
-div.textContent = commentaire;`,
+div.textContent = commentaire;` },
           phrase: "Afficher ce commentaire avec innerHTML crée une faille XSS."
         },
         {
           type: "qcm",
           q: "Un commentaire contient `<img src=x onerror=alert(1)>`. Laquelle de ces lignes est sûre ?",
           options: [
-            "`div.innerHTML = commentaire;`",
-            "`div.textContent = commentaire;`"
+            "`div.textContent = commentaire;`",
+            "`div.innerHTML = commentaire;`"
           ],
-          correct: 1,
+          correct: 0,
           explain: "`textContent` affiche le texte **tel quel**, sans l'interpréter comme du HTML. Aucun script ne s'exécute."
         },
         {
@@ -123,11 +123,11 @@ div.textContent = commentaire;`,
         {
           type: "cloze",
           sentence: "Pour se protéger de l'injection SQL, on utilise une requête ___.",
-          options: ["paramétrée", "concaténée", "rapide"],
-          correct: 0,
+          options: ["concaténée", "paramétrée", "rapide"],
+          correct: 1,
           why: [
-            "",
             "Concaténer la donnée dans la requête, c'est justement ce qui crée la faille.",
+            "",
             "La vitesse n'a rien à voir avec l'injection."
           ]
         }
@@ -167,25 +167,25 @@ div.textContent = commentaire;`,
         {
           type: "concept",
           term: "Hachage",
-          def: "Transformer un mot de passe en une **empreinte** impossible à inverser. On stocke l'empreinte, jamais le mot de passe en clair. À la connexion, on compare les empreintes.",
+          def: "Transformer un mot de passe en une **empreinte** impossible à inverser, avec un algorithme lent et un **sel** (une valeur aléatoire propre à chaque mot de passe) : bcrypt ou Argon2id. On stocke l'empreinte, jamais le mot de passe en clair. À la connexion, on appelle la fonction de vérification de la bibliothèque (`bcrypt.compare`), qui refait le calcul avec le même sel.",
           code: "\"monMotDePasse\"  →  \"$2b$12$Kx9...\"   // bcrypt",
           phrase: "Les mots de passe sont hachés avec bcrypt."
         },
         {
           type: "cloze",
           sentence: "Vérifier qui vous êtes, c'est l'___. Vérifier ce que vous avez le droit de faire, c'est l'autorisation.",
-          options: ["authentification", "encapsulation", "abstraction"],
-          correct: 0,
-          why: ["", "L'encapsulation protège les données d'un objet.", "L'abstraction cache des détails."]
+          options: ["encapsulation", "abstraction", "authentification"],
+          correct: 2,
+          why: ["L'encapsulation protège les données d'un objet.", "L'abstraction cache des détails.", ""]
         },
         {
           type: "concept",
           term: "Secret",
           def: "Une information qui donne un accès : mot de passe, clé API, token. **Jamais** dans le code ni dans Git. On la met dans une variable d'environnement (fichier `.env`, ignoré par Git).",
-          code: `// ❌
+          code: { js: `// ❌
 const API_KEY = "sk_test_123abc";
 // ✅
-const API_KEY = process.env.API_KEY;`,
+const API_KEY = process.env.API_KEY;` },
           phrase: "Cette clé API est un secret, elle ne doit pas être commitée."
         }
       ]
@@ -216,7 +216,7 @@ const API_KEY = process.env.API_KEY;`,
         {
           type: "concept",
           term: "OWASP Top 10",
-          def: "La **liste des 10 risques** de sécurité web les plus fréquents, publiée par l'OWASP (une organisation). Injection, contrôle d'accès défaillant, composants vulnérables…",
+          def: "La **liste des 10 risques** de sécurité web les plus critiques, publiée par l'OWASP (une fondation). Édition en vigueur : le **Top 10:2025** (owasp.org/Top10/2025) : contrôle d'accès défaillant (A01), mauvaise configuration (A02), failles de la chaîne d'approvisionnement logicielle (A03), défaillances cryptographiques (A04), injection (A05)…",
           phrase: "L'injection fait partie de l'OWASP Top 10."
         },
         {
@@ -230,19 +230,19 @@ const API_KEY = process.env.API_KEY;`,
           type: "qcm",
           q: "Votre API a 40 routes, dont 15 ne servent plus. Que dirait un dev sécurité ?",
           options: [
-            "« Ça ne pose aucun problème. »",
-            "« Supprimons-les pour réduire la surface d'attaque. »",
-            "« Il faut en ajouter d'autres. »"
+            "« Supprimons-les : chaque route inutile agrandit notre surface d'attaque. »",
+            "« Ce n'est pas grave tant qu'elles n'apparaissent pas dans le menu de l'application. »",
+            "« Gardons-les pour la compatibilité, et protégeons-les par une authentification plus forte. »"
           ],
-          correct: 1,
+          correct: 0,
           explain: "Chaque route inutile est une porte de plus pour un attaquant. Les supprimer **réduit la surface d'attaque**."
         },
         {
           type: "cloze",
           sentence: "Tous les points d'entrée possibles pour un attaquant forment la surface ___.",
-          options: ["d'attaque", "de test", "de code"],
-          correct: 0,
-          why: ["", "On parle de sécurité, pas de tests.", "Ce n'est pas le bon terme."]
+          options: ["de test", "d'attaque", "de code"],
+          correct: 1,
+          why: ["On parle de sécurité, pas de tests.", "", "Ce n'est pas le bon terme."]
         }
       ]
     },
@@ -270,7 +270,7 @@ const API_KEY = process.env.API_KEY;`,
           type: "concept",
           term: "Sauvegarde",
           def: "Une **copie régulière** des données, stockée ailleurs. Une sauvegarde n'est fiable que si on a **testé la restauration**.",
-          phrase: "On teste la restauration des sauvegardes chaque mois."
+          phrase: "On teste la restauration de chaque sauvegarde tous les mois."
         },
         {
           type: "concept",
@@ -281,8 +281,8 @@ const API_KEY = process.env.API_KEY;`,
         {
           type: "qcm",
           q: "Votre application se connecte à la base avec le compte `root`. Quel principe est violé ?",
-          options: ["Moindre privilège", "Ouvert / fermé", "Idempotence"],
-          correct: 0,
+          options: ["Ouvert / fermé", "Idempotence", "Moindre privilège"],
+          correct: 2,
           explain: "Le compte a beaucoup plus de droits que nécessaire. Si l'appli est piratée, l'attaquant a tout : le **moindre privilège** n'est pas respecté."
         },
         {

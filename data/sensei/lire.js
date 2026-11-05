@@ -63,12 +63,12 @@ prix = prix * 2;`
         {
           type: "cloze",
           sentence: "Dans `x = x + 1`, le signe `=` sert à ___ une valeur dans x.",
-          options: ["comparer", "ranger", "additionner"],
-          correct: 1,
+          options: ["comparer", "additionner", "ranger"],
+          correct: 2,
           why: [
             "Comparer, c'est le rôle de `===` en JS, ou de `==` en Python et Rust. `=` ne compare jamais.",
-            "",
-            "Additionner, c'est le rôle de `+`. Le `=` vient après : il range le résultat."
+            "Additionner, c'est le rôle de `+`. Le `=` vient après : il range le résultat.",
+            ""
           ]
         },
         {
@@ -82,8 +82,8 @@ a = a + 2`,
             rs: `let mut a = 5;
 a = a + 2;`
           },
-          options: ["5", "7", "2", "Erreur"],
-          correct: 1,
+          options: ["5", "2", "Erreur", "7"],
+          correct: 3,
           explain: "**1.** On calcule la droite : `a + 2` → `5 + 2` → 7. **2.** On met 7 dans `a`."
         },
         {
@@ -129,7 +129,7 @@ println!("{}", x);`
           type: "concept",
           term: "Constante",
           def: {
-            js: "Une boîte **scellée** : déclarée avec `const`, on ne peut plus changer ce qu'il y a dedans.",
+            js: "Une boîte **scellée** : déclarée avec `const`, on ne peut plus lui **réaffecter** une autre valeur. Attention : si elle contient un objet, l'objet lui-même reste modifiable (`const user = {}` puis `user.nom = \"Ada\"` fonctionne).",
             py: "Une boîte **scellée**. Python n'a pas de vraie constante : par convention, on écrit son nom en MAJUSCULES pour dire « n'y touche pas ».",
             rs: "Une boîte **scellée**. En Rust, une variable `let` sans `mut` est déjà non modifiable. `const` sert aux valeurs fixes de tout le programme."
           },
@@ -248,8 +248,8 @@ i += 1;   // i contient maintenant 5`
 //   ①départ   ②test   ③après le tour`,
             py: `for i in range(1, 4):
 # range(1, 4) donne 1, 2, 3 : le 4 est EXCLU`,
-            rs: `for i in 1..=3 {   // 1 à 3, 3 INCLUS
-for i in 1..3 {    // 1 et 2 : le 3 est EXCLU`
+            rs: `for i in 1..=3 { println!("{i}"); }   // 1, 2, 3 : le 3 est INCLUS
+for i in 1..3 { println!("{i}"); }    // 1, 2 : le 3 est EXCLU`
           },
           rule: {
             js: "Un `for` a 3 parties séparées par `;`. **①** le départ, fait une seule fois. **②** le test, avant chaque tour : faux → on sort. **③** ce qu'on fait après chaque tour (ici `i++`).",
@@ -273,8 +273,8 @@ for i in 1..3 {    // 1 et 2 : le 3 est EXCLU`
           },
           options: {
             js: ["départ", "condition d'arrêt", "incrémentation", "corps de la boucle"],
-            py: ["compteur de boucle", "valeurs parcourues", "corps de la boucle", "condition"],
-            rs: ["compteur de boucle", "valeurs parcourues", "corps de la boucle", "condition"]
+            py: ["compteur de boucle", "valeurs parcourues", "corps de la boucle", "valeur de retour"],
+            rs: ["compteur de boucle", "valeurs parcourues", "corps de la boucle", "valeur de retour"]
           },
           marks: {
             js: [
@@ -339,11 +339,11 @@ for i in 1..3 {    // 1 et 2 : le 3 est EXCLU`
         {
           type: "trace",
           intro: "Remplissez une ligne par tour. Attention : le test regarde `i`, pas `total`.",
-          code: `let total = 0;
+          code: { js: `let total = 0;
 for (let i = 1; i <= 3; i++) {
   total = total + i;
 }
-console.log(total);`,
+console.log(total);` },
           cols: ["Tour", "i", "i <= 3 ?", "total"],
           rows: [
             {c:["départ", "—", "—", "0"]},
@@ -389,11 +389,11 @@ console.log(total);`,
         {
           type: "trace",
           intro: "Même structure. Ici `x` diminue. À chaque tour, on repart de ce que contient la boîte x.",
-          code: `let x = 10;
+          code: { js: `let x = 10;
 for (let i = 1; i <= 3; i++) {
   x = x - i;
 }
-console.log(x);`,
+console.log(x);` },
           cols: ["Tour", "i", "i <= 3 ?", "x"],
           rows: [
             {c:["départ", "—", "—", "10"]},
@@ -486,17 +486,17 @@ for (let i = 0; i < 5; i++) {
 }
 console.log(count);`,
             py: `count = 0
-for i in range(5):
+for _ in range(5):
     count = count + 2
 print(count)`,
             rs: `let mut count = 0;
-for i in 0..5 {
+for _ in 0..5 {
     count = count + 2;
 }
 println!("{}", count);`
           },
           answers: ["10"],
-          hint: "Comptez d'abord les tours (i = 0, 1, 2, 3, 4), puis ajoutez 2 à chaque tour.",
+          hint: "Comptez d'abord les tours (5 tours : 0, 1, 2, 3, 4), puis ajoutez 2 à chaque tour.",
           explain: "5 tours, +2 à chaque fois : 2, 4, 6, 8, **10**."
         },
         {
@@ -679,12 +679,12 @@ greet("Bob");`
         {
           type: "cloze",
           sentence: "Dans `double(3)`, 3 est un ___.",
-          options: ["paramètre", "argument", "retour"],
-          correct: 1,
+          options: ["paramètre", "retour", "argument"],
+          correct: 2,
           why: [
             "Le paramètre, c'est le **nom** dans la définition : `n`. 3 est la **valeur** donnée à l'appel.",
-            "",
-            "La valeur de retour, c'est ce qui **ressort** (6), pas ce qu'on donne."
+            "La valeur de retour, c'est ce qui **ressort** (6), pas ce qu'on donne.",
+            ""
           ]
         },
         {
@@ -734,11 +734,11 @@ println!("{}", result);`
         {
           type: "cloze",
           sentence: "La fonction double ___ n multiplié par 2.",
-          options: ["retourne", "affiche", "déclare"],
-          correct: 0,
+          options: ["affiche", "retourne", "déclare"],
+          correct: 1,
           why: [
-            "",
             "Afficher, c'est montrer à l'écran (`console.log`, `print`). Ici rien ne s'affiche : la valeur est **renvoyée**.",
+            "",
             "Déclarer, c'est créer une variable ou une fonction. Ici on **renvoie** un résultat."
           ]
         },
@@ -936,14 +936,18 @@ println!("{}", user.age);`
         {
           type: "concept",
           term: "Valeur primitive",
-          def: "Une valeur simple : un nombre, un booléen (`true`/`false`). Avec `b = a`, on fait une **photocopie** de la valeur.",
+          def: {
+            js: "Une valeur simple : un nombre, un texte, un booléen (`true`/`false`). Avec `b = a`, on fait une **photocopie** de la valeur.",
+            py: "Une valeur simple et **non modifiable** (immuable) : un nombre, un texte, un booléen. `b = a` donne deux noms pour la même valeur, mais comme on ne peut pas la modifier, `b = 5` rebranche seulement `b` : `a` ne bouge pas.",
+            rs: "Une valeur simple : un nombre, un booléen. Ces types implémentent le trait `Copy` : `let b = a;` fait une vraie **copie**."
+          },
           code: {
-            js: `let a = 1;
+            js: `const a = 1;
 let b = a;   // b reçoit une copie de 1
 b = 5;       // a contient toujours 1`,
             py: `a = 1
-b = a    # b reçoit une copie de 1
-b = 5    # a contient toujours 1`,
+b = a    # a et b désignent le même 1
+b = 5    # b désigne 5, a contient toujours 1`,
             rs: `let a = 1;
 let mut b = a;   // b reçoit une copie de 1
 b = 5;           // a contient toujours 1`
@@ -969,7 +973,11 @@ b["count"] = 5     # a["count"] vaut aussi 5`,
 let b = &mut a;   // b pointe vers la fiche a
 b.count = 5;      // a.count vaut aussi 5`
           },
-          rule: "Nombre, booléen → photocopie. Objet, dict, tableau → même fiche partagée.",
+          rule: {
+            js: "Nombre, texte, booléen → photocopie. Objet, tableau → même fiche partagée.",
+            py: "Nombre, texte, booléen : non modifiables, `b = 5` rebranche seulement `b`. Liste, dict : `b = a` donne deux noms pour la même fiche, et une modification par `b` se voit par `a`.",
+            rs: "Nombre, booléen : copiés (trait `Copy`). String, Vec : déplacés (move), ou prêtés avec `&`."
+          },
           phrase: "b est une référence vers le même objet que a."
         },
         {
@@ -1008,7 +1016,7 @@ println!("{}", a.count);`
           type: "predict",
           q: "Et maintenant, avec un nombre ?",
           code: {
-            js: `let a = 1;
+            js: `const a = 1;
 let b = a;
 b = 5;
 console.log(a);`,
@@ -1022,8 +1030,16 @@ b = 5;
 println!("{}", a);`
           },
           answers: ["1"],
-          hint: "Un nombre est une valeur primitive : `b = a` fait une photocopie.",
-          explain: "`b` a reçu une **copie** de 1. Changer `b` ne touche pas `a` : **1**."
+          hint: {
+            js: "Un nombre est une valeur primitive : `b = a` fait une photocopie.",
+            py: "Un nombre ne se modifie pas : `b = 5` rebranche seulement `b`.",
+            rs: "Un i32 implémente Copy : `let mut b = a;` fait une copie."
+          },
+          explain: {
+            js: "`b` a reçu une **copie** de 1. Changer `b` ne touche pas `a` : **1**.",
+            py: "`b = 5` fait désigner 5 par `b` ; `a` désigne toujours 1 : **1**.",
+            rs: "`b` a reçu une **copie** de 1. Changer `b` ne touche pas `a` : **1**."
+          }
         },
         {
           type: "build",
@@ -1118,11 +1134,11 @@ nums[3]      // 3 (le dernier)`
         {
           type: "cloze",
           sentence: "`nums[0]` lit l'élément à l'___ 0.",
-          options: ["index", "itération", "argument"],
-          correct: 0,
+          options: ["itération", "index", "argument"],
+          correct: 1,
           why: [
-            "",
             "Une itération est un tour de boucle. Ici on lit une place précise.",
+            "",
             "Un argument est une valeur donnée à une fonction. Le 0 ici est une position."
           ]
         },
@@ -1130,13 +1146,13 @@ nums[3]      // 3 (le dernier)`
           type: "concept",
           term: "Fonction fléchée",
           def: {
-            js: "Une façon **courte** d'écrire une fonction. `n => n * 10` se lit : « prend n, retourne n × 10 ».",
+            js: "Une façon **courte** d'écrire une fonction. `n => n * 10` se lit : « prend n, retourne n × 10 ». Différence avec `function` : elle n'a pas son propre `this`, elle garde celui de l'endroit où elle est écrite.",
             py: "Une façon **courte** d'écrire une fonction : la **lambda**. `lambda n: n * 10` se lit : « prend n, retourne n × 10 ».",
-            rs: "Une façon **courte** d'écrire une fonction : la **closure**. `|n| n * 10` se lit : « prend n, retourne n × 10 »."
+            rs: "Une façon **courte** d'écrire une fonction : la **closure**. `|n| n * 10` se lit : « prend n, retourne n × 10 ». Contrairement à une `fn`, une closure peut **capturer** les variables qui l'entourent."
           },
           code: {
             js: `n => n * 10
-// c'est la même chose que :
+// presque la même chose que (sauf pour this) :
 function (n) { return n * 10; }`,
             py: `lambda n: n * 10
 # c'est la même chose que :
@@ -1286,7 +1302,7 @@ let big: Vec<i32> = nums.into_iter().filter(|n| *n > 5).collect();`
         },
         {
           type: "predict",
-          q: "Qu'affiche ce code ? (écris le tableau, par exemple [1, 2])",
+          q: "Qu'affiche ce code ? (écrivez le tableau, par exemple [1, 2])",
           code: {
             js: `const nums = [4, 7, 10, 3];
 const big = nums.filter(n => n > 5).map(n => n * 10);
@@ -1323,7 +1339,7 @@ println!("{:?}", big);`
             js: `const users = [
   { name: "Alice", age: 28 },
   { name: "Bob", age: 34 },
-  { name: "Charlie", age: 22 }
+  { name: "Charlie", age: 15 }
 ];
 
 function getAdults(users) {
@@ -1332,14 +1348,14 @@ function getAdults(users) {
             py: `users = [
     {"name": "Alice", "age": 28},
     {"name": "Bob", "age": 34},
-    {"name": "Charlie", "age": 22},
+    {"name": "Charlie", "age": 15},
 ]
 
 def get_adults(users):
     return [user for user in users if user["age"] >= 18]`
           },
           keywords: ["tableau", "objet", "propriété", "paramètre", "callback", "retourne", "nouveau tableau"],
-          model: "users référence un tableau d'objets. Chaque objet a deux propriétés : name (un texte) et age (un nombre). La fonction getAdults prend un tableau en paramètre et le filtre avec un callback qui teste user.age >= 18. Elle retourne un nouveau tableau qui contient seulement les utilisateurs majeurs (ici, les trois)."
+          model: "users référence un tableau d'objets. Chaque objet a deux propriétés : name (un texte) et age (un nombre). La fonction getAdults prend un tableau en paramètre et le filtre avec un callback qui teste user.age >= 18. Elle retourne un nouveau tableau qui contient seulement les utilisateurs majeurs (ici Alice et Bob : Charlie, 15 ans, est écarté)."
         },
         {
           type: "senior",
@@ -1376,8 +1392,8 @@ def get_adults(users):
           term: "Égalité stricte",
           def: {
             js: "`===` **compare** deux valeurs et répond `true` ou `false`. À ne pas confondre avec `=`, qui **met** une valeur dans une boîte.",
-            py: "`==` **compare** deux valeurs et répond `True` ou `False`. À ne pas confondre avec `=`, qui **met** une valeur dans une boîte.",
-            rs: "`==` **compare** deux valeurs et répond `true` ou `false`. À ne pas confondre avec `=`, qui **met** une valeur dans une boîte."
+            py: "`==` **compare** deux valeurs et répond `True` ou `False`. À ne pas confondre avec `=`, qui **met** une valeur dans une boîte. En Python, on dit simplement **égalité** : il n'y a pas de version « stricte » comme le `===` de JavaScript.",
+            rs: "`==` **compare** deux valeurs et répond `true` ou `false`. À ne pas confondre avec `=`, qui **met** une valeur dans une boîte. En Rust, on dit simplement **égalité** : il n'y a pas de version « stricte » comme le `===` de JavaScript."
           },
           code: {
             js: `x = 5;      // met 5 dans x
@@ -1395,36 +1411,36 @@ x == 5    // pose la question « x vaut 5 ? » → true`
           options: {
             js: [
               "`=`",
-              "`===`",
-              "`=>`"
+              "`=>`",
+              "`===`"
             ],
             py: [
               "`=`",
-              "`==`",
-              ":"
+              ":",
+              "`==`"
             ],
             rs: [
               "`=`",
-              "`==`",
-              "`=>`"
+              "`=>`",
+              "`==`"
             ]
           },
-          correct: 1,
+          correct: 2,
           why: {
             js: [
               "`=` met une valeur dans une boîte, il ne compare pas.",
-              "",
-              "`=>` sert à écrire une fonction fléchée."
+              "`=>` sert à écrire une fonction fléchée.",
+              ""
             ],
             py: [
               "`=` met une valeur dans une boîte, il ne compare pas.",
-              "",
-              "`:` ouvre un bloc (après `if`, `for`, `def`)."
+              "`:` ouvre un bloc (après `if`, `for`, `def`).",
+              ""
             ],
             rs: [
               "`=` met une valeur dans une boîte, il ne compare pas.",
-              "",
-              "`=>` sert dans un `match`, pour dire « dans ce cas, fais ça »."
+              "`=>` sert dans un `match`, pour dire « dans ce cas, fais ça ».",
+              ""
             ]
           }
         },
@@ -1461,7 +1477,7 @@ nums.push(5);      // push aussi`
           },
           code: {
             js: `let a;          // undefined : rien n'a été mis
-let b = null;   // null : vide volontairement`,
+const b = null; // null : vide volontairement`,
             py: "b = None   # vide volontairement",
             rs: `let a: Option<i32> = Some(5);   // il y a une valeur
 let b: Option<i32> = None;      // pas de valeur`
@@ -1497,18 +1513,18 @@ hello();                            // appel → affiche salut`
     println!("salut");
 }`
           },
-          options: ["salut", "Rien du tout", "Une erreur"],
-          correct: 1,
+          options: ["salut", "Une erreur", "Rien du tout"],
+          correct: 2,
           explain: "La recette est écrite (**déclarée**) mais personne ne cuisine (**aucun appel**) : il manque `hello()`. Rien ne s'affiche."
         },
         {
           type: "cloze",
           sentence: "Dans `add(2, 3)`, 2 et 3 sont des ___.",
-          options: ["paramètres", "arguments", "propriétés"],
-          correct: 1,
+          options: ["arguments", "paramètres", "propriétés"],
+          correct: 0,
           why: [
-            "Les paramètres sont les **noms** dans la définition (`a`, `b`).",
             "",
+            "Les paramètres sont les **noms** dans la définition (`a`, `b`).",
             "Les propriétés sont les informations d'un objet. Ici on donne des valeurs à une fonction."
           ]
         }

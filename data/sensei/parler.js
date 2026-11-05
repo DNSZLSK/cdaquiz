@@ -23,21 +23,21 @@ export default {
           type: "concept",
           term: "Effet de bord",
           def: "Quand une fonction **modifie quelque chose en dehors d'elle** : une variable extérieure, l'affichage, un fichier, la base de données.",
-          code: `let total = 0;
+          code: { js: `let total = 0;
 function ajouter(prix) {
   total = total + prix;   // effet de bord : modifie total
-}`,
+}` },
           phrase: "Cette fonction a un effet de bord : elle modifie une variable globale."
         },
         {
           type: "explain",
           q: "Décrivez ce code en 3 temps (quoi, comment, pourquoi/limite). Essayez d'utiliser : paramètre, effet de bord.",
-          code: `let total = 0;
+          code: { js: `let total = 0;
 
 function ajouter(prix) {
   total = total + prix;
   console.log("Total : " + total);
-}`,
+}` },
           keywords: ["fonction", "paramètre", "variable", "effet de bord", "affiche"],
           model: "Quoi : ajouter ajoute un prix au total et affiche le nouveau total. Comment : elle prend un paramètre prix, l'additionne à la variable total déclarée en dehors de la fonction, puis affiche le résultat avec console.log. Limite : elle a deux effets de bord (elle modifie une variable globale et elle affiche), donc ce n'est pas une fonction pure et elle est plus difficile à tester."
         }
@@ -70,8 +70,8 @@ Observé : sum([5, 1, 2]) retourne 3.`,
           type: "qcm",
           q: "Quelle phrase aide le plus un collègue ?",
           options: [
-            "« Ça marche pas. »",
-            "« Le login bug. »",
+            "« Le login ne marche plus depuis ce matin, pour tout le monde ou presque, je ne sais pas pourquoi. »",
+            "« Il y a sûrement un problème dans l'API de connexion, il faudrait que quelqu'un regarde. »",
             "« Quand je me connecte avec un email en majuscules, l'API renvoie un 401 au lieu d'un 200. »"
           ],
           correct: 2,
@@ -88,7 +88,7 @@ Observé : sum([5, 1, 2]) retourne 3.`,
           type: "qcm",
           q: "Quelle formulation est la plus précise ?",
           options: [
-            "« La fonction fait un truc bizarre avec le tableau. »",
+            "« La fonction a un comportement bizarre avec le tableau qu'on lui passe en paramètre. »",
             "« La fonction modifie le tableau d'origine au lieu d'en retourner un nouveau. »"
           ],
           correct: 1,
@@ -128,9 +128,9 @@ EN REVANCHE ils sont plus complexes à déployer.`,
           type: "qcm",
           q: "Quelle réponse sonne le plus « senior » quand on vous demande pourquoi vous avez choisi SQL ?",
           options: [
-            "« Parce que c'est bien. »",
-            "« Nos données sont très liées entre elles, donc les tables et les jointures SQL sont adaptées. En revanche, le schéma est moins souple. »",
-            "« Je sais pas, c'était déjà comme ça. »"
+            "« SQL est la technologie la plus utilisée en entreprise, donc c'est forcément le meilleur choix pour nous. »",
+            "« Nos données sont très liées entre elles : les jointures SQL sont adaptées. En revanche, le schéma est moins souple. »",
+            "« On a toujours utilisé SQL dans l'équipe, tout le monde le connaît, donc on continue avec. »"
           ],
           correct: 1,
           explain: "Elle donne une **raison** (données liées), une **conséquence** (SQL adapté) et un **compromis** (moins souple)."
@@ -138,7 +138,7 @@ EN REVANCHE ils sont plus complexes à déployer.`,
         {
           type: "explain",
           q: "Expliquez à un collègue pourquoi ce code est mieux que la concaténation. Utilisez au moins « parce que » et « donc ».",
-          code: "db.query(\"SELECT * FROM users WHERE name = ?\", [name]);",
+          code: { js: "db.query(\"SELECT * FROM users WHERE name = ?\", [name]);" },
           keywords: ["parce que", "donc", "injection", "requête paramétrée", "entrée"],
           model: "On utilise une requête paramétrée parce que name vient de l'utilisateur : c'est une entrée non fiable. La base reçoit la requête et la donnée séparément, donc le contenu de name ne peut jamais être exécuté comme du SQL. On se protège ainsi contre l'injection SQL."
         }
@@ -169,7 +169,7 @@ Je lui ai dit mon idée       → Je lui ai proposé mon idée.`,
         {
           type: "concept",
           term: "Remplacer « truc »",
-          def: "« Truc », « chose », « machin » : nomme **ce que c'est vraiment**. En code : élément, valeur, composant, fichier, fonction, paramètre…",
+          def: "« Truc », « chose », « machin » : nommez **ce que c'est vraiment**. En code : élément, valeur, composant, fichier, fonction, paramètre…",
           code: `Le truc en haut        → Le bandeau de navigation.
 Ce truc-là dans le code → Cette fonction / ce paramètre.`,
           phrase: "Le composant de navigation ne s'affiche pas."
@@ -178,18 +178,18 @@ Ce truc-là dans le code → Cette fonction / ce paramètre.`,
           type: "qcm",
           q: "« J'ai fait un projet sur la sécurité. » Quelle version est la plus précise ?",
           options: [
-            "« J'ai fait un truc sur la sécurité. »",
-            "« J'ai conçu un outil qui analyse la sécurité des dépendances. »",
-            "« J'ai fait un projet sécurité. »"
+            "« J'ai travaillé sur un gros projet autour de la sécurité informatique. »",
+            "« J'ai fait plein de choses sur la sécurité, surtout côté technique. »",
+            "« J'ai conçu un outil qui analyse la sécurité des dépendances. »"
           ],
-          correct: 1,
+          correct: 2,
           explain: "**Conçu** (verbe précis), **un outil** (nom précis), **qui analyse la sécurité des dépendances** (ce que ça fait exactement)."
         },
         {
           type: "qcm",
           q: "« Il m'a dit que mon code avait un problème. » Quel verbe est le plus précis ?",
-          options: ["Il m'a parlé", "Il m'a signalé", "Il m'a fait"],
-          correct: 1,
+          options: ["Il m'a signalé", "Il m'a parlé", "Il m'a fait"],
+          correct: 0,
           explain: "**Signaler**, c'est attirer l'attention sur un problème. C'est exactement ce qui s'est passé."
         },
         {
@@ -203,8 +203,8 @@ Ce truc-là dans le code → Cette fonction / ce paramètre.`,
         {
           type: "qcm",
           q: "En cours, le prof utilise un mot que vous ne connaissez pas. Quelle réaction montre le plus d'assurance ?",
-          options: ["Ne rien dire et faire semblant", "« Je ne connais pas ce terme, vous pouvez le définir ? »", "Partir"],
-          correct: 1,
+          options: ["« Je ne connais pas ce terme, vous pouvez le définir ? »", "Hocher la tête, puis chercher le mot discrètement plus tard", "Attendre la pause pour demander à un camarade de classe"],
+          correct: 0,
           explain: "Poser la question calmement montre que vous êtes **sûr de vous**. Et souvent, d'autres personnes ne le savaient pas non plus."
         }
       ]
