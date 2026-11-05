@@ -217,7 +217,6 @@ const uniqTerms = ts => { const seen=new Set(); return ts.filter(t=>{ const k=fo
 /* Deux mots sont « proches » quand l'un apparaît dans la définition de l'autre (while : « une boucle qui… »). */
 const allText = v => isVar(v) ? Object.values(v).join(" ") : String(v||"");
 function related(a, b){
-  if(sameGroup(a,b)) return true;
   const da=fold(allText(a.def)+" "+(a.beginner||"")), db=fold(allText(b.def)+" "+(b.beginner||""));
   return termParts(b).some(p=>da.includes(fold(p))) || termParts(a).some(p=>db.includes(fold(p)));
 }
@@ -230,42 +229,40 @@ function termTyped(v){
   if(!TERM_NORM){ TERM_NORM={}; TERMS.forEach(t=>[t.term, coreTerm(t)].forEach(x=>{ const k=norm(x); if(!TERM_NORM[k]) TERM_NORM[k]=t; })); }
   return TERM_NORM[norm(v)]||null;
 }
-/* Synonymes et traductions courantes acceptes pour "ecrivez le terme".
-   Les termes du programme qui sont de vrais synonymes l'un de l'autre sont aussi
-   lies dans SAME : ils ne servent jamais de piege l'un pour l'autre. */
+/* Equivalents acceptes pour "ecrivez le terme" : UNIQUEMENT des traductions anglaises
+   exactes et des equivalents francais etablis. Pas de mot vague (liste, retour,
+   pattern), pas d'usage a corriger (cryptage), pas de notion voisine mais differente
+   (pile d'appels != stack trace, n-tiers != couches, requete preparee != parametree).
+   Chaque cle doit etre un terme existant : verifie par les tests. */
 const ALIASES = {
-  "Affectation":["assignation","assignment"], "Constante":["const"], "Itération":["iteration","tour de boucle"],
-  "Incrémenter":["incrementation","incrementer de 1"], "Condition d'arrêt":["condition de sortie"],
-  "Paramètre":["parameter","parametre formel"], "Valeur de retour":["retour","return","return value"],
-  "Fonction pure":["pure function"], "Propriété":["property"], "Valeur primitive":["primitive","type primitif"],
-  "Référence":["reference"], "Tableau":["array","liste"], "Index":["indice"], "Fonction fléchée":["arrow function","fonction flechee"],
-  "Méthode":["method"], "Effet de bord":["side effect","effet secondaire"], "Égalité stricte":["===","triple egal"],
-  "Goulot d'étranglement":["bottleneck"], "Scalabilité":["scalability","passage a l'echelle"],
-  "Code review":["revue de code","relecture de code"], "Hardcodé":["en dur","hardcoded","code en dur"], "Code mort":["dead code"],
-  "Sur-ingénierie":["over-engineering","overengineering","surconception"], "Rétrocompatible":["backward compatible","retrocompatibilite"],
-  "Rollback":["retour arriere"], "Hotfix":["correctif urgent"], "Feature flag":["feature toggle"],
-  "Source unique de vérité":["single source of truth","ssot"], "Constructeur":["constructor"],
-  "Héritage":["inheritance"], "Polymorphisme":["polymorphism"], "Design pattern":["patron de conception","pattern"],
-  "Logique métier":["business logic","regles metier"], "Architecture en couches":["layered architecture","architecture n-tiers","architecture multicouche"],
+  "Affectation":["assignment"], "Constante":["constant"], "Itération":["iteration"],
+  "Incrémenter":["increment"], "Condition d'arrêt":["condition de sortie"],
+  "Paramètre":["parameter"], "Valeur de retour":["return value"],
+  "Fonction pure":["pure function"], "Propriété":["property"], "Valeur primitive":["primitive value"],
+  "Référence":["reference"], "Index":["indice"], "Fonction fléchée":["arrow function"],
+  "Méthode":["method"], "Effet de bord":["side effect"], "Égalité stricte":["strict equality"],
+  "Goulot d'étranglement":["bottleneck"], "Scalabilité":["scalability"],
+  "Code review":["revue de code"], "Hardcodé":["codé en dur","hardcoded"], "Code mort":["dead code"],
+  "Sur-ingénierie":["over-engineering","overengineering"], "Rétrocompatible":["backward compatible"],
+  "Rollback":["retour arrière"], "Feature flag":["feature toggle"],
+  "Source unique de vérité":["single source of truth"], "Constructeur":["constructor"],
+  "Héritage":["inheritance"], "Polymorphisme":["polymorphism"], "Design pattern":["patron de conception"],
+  "Logique métier":["business logic"], "Architecture en couches":["layered architecture"],
   "Diagramme de classes":["class diagram"], "Diagramme de séquence":["sequence diagram"], "Cas d'utilisation":["use case"],
-  "Booléen":["boolean","bool"], "Boucle infinie":["infinite loop"], "Stack trace":["pile d'appels","trace de pile"],
-  "Déboguer":["debugger","debug","deboguer le code"], "Breakpoint":["point d'arret"], "Erreur de décalage":["off-by-one","off by one"],
-  "Nombre magique":["magic number"], "Refactoring":["refactorisation","refactoriser","refacto"], "Dette technique":["tech debt","dette tech"],
-  "Test unitaire":["unit test","test unitaire automatise"], "Cas limite":["edge case"], "Edge case":["cas limite","cas a la marge"],
-  "Liste blanche":["allowlist","whitelist","liste d'autorisation"], "Injection SQL":["sql injection"], "Requête paramétrée":["requete preparee","prepared statement"],
-  "Échappement":["escaping","echapper"], "Moindre privilège":["least privilege","principe du moindre privilege"],
-  "Surface d'attaque":["attack surface"], "Chiffrement":["encryption","cryptage"], "Hachage":["hash","hashage"], "Sauvegarde":["backup"],
-  "Dépôt":["repo","repository"], "Branche":["branch"], "Merge":["fusion","fusionner"], "Pull request":["pr","merge request","demande de fusion"],
-  "Conflit":["merge conflict","conflit de fusion"], "Intégration continue":["ci","continuous integration"], "Déploiement continu":["cd","continuous deployment"],
+  "Booléen":["boolean"], "Boucle infinie":["infinite loop"],
+  "Breakpoint":["point d'arrêt"], "Erreur de décalage":["off-by-one error"],
+  "Nombre magique":["magic number"], "Refactoring":["refactorisation"], "Dette technique":["technical debt"],
+  "Test unitaire":["unit test"], "Edge case":["cas limite"],
+  "Liste blanche":["allowlist","whitelist"], "Injection SQL":["SQL injection"], "Requête paramétrée":["parameterized query"],
+  "Échappement":["escaping"], "Moindre privilège":["least privilege"],
+  "Surface d'attaque":["attack surface"], "Chiffrement":["encryption"], "Hachage":["hashing"], "Sauvegarde":["backup"],
+  "Dépôt":["repository"], "Branche":["branch"], "Merge":["fusion"], "Pull request":["PR","merge request"],
+  "Conflit":["merge conflict"], "Intégration continue":["CI","continuous integration"], "Déploiement continu":["continuous deployment"],
   "Conteneur":["container"], "Registre":["registry"], "Dépendance transitive":["transitive dependency"], "Lockfile":["fichier de verrouillage"],
-  "Partie prenante":["stakeholder"], "Critères d'acceptation":["acceptance criteria","criteres d'acceptance"],
-  "Compilateur":["compiler"], "Ownership":["propriete","possession"], "Move":["deplacement"], "Emprunt":["borrow"], "Emprunt mutable":["mutable borrow"],
-  "Immuable par défaut":["immuable","immutable"]
+  "Partie prenante":["stakeholder"], "Critères d'acceptation":["acceptance criteria"],
+  "Compilateur":["compiler"], "Emprunt":["borrowing"], "Emprunt mutable":["mutable borrow"],
+  "Immuable par défaut":["immutable by default"]
 };
-// paires qui ne doivent jamais servir de piege l'une pour l'autre :
-// vrais synonymes (edge case = cas limite) ou homonymes trompeurs (ownership = propriete)
-const SAME = [["Edge case","Cas limite"], ["Ownership","Propriété"]];
-const sameGroup = (a, b) => SAME.some(g => g.includes(a.term) && g.includes(b.term));
 /* Comparaison tolerante pour "ecrivez le terme" : sans les mots de liaison
    (en, par, de, du, des, le, la, les, l', d', a), puis avec une petite faute de
    frappe permise (1 lettre des 6 caracteres, 2 des 12). */

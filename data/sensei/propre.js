@@ -1,4 +1,4 @@
-// Vocabulaire Sensei - chapitre "Code propre, debug et tests" : 8 lecons, 30 mots.
+// Vocabulaire Sensei - chapitre "Code propre, debug et tests" : 8 lecons, 29 mots.
 // Un champ peut etre un texte, ou {js, py, rs} quand il depend du langage choisi.
 export default {
   id: "propre",
@@ -565,7 +565,7 @@ function total(a, b) { return a + b + 1; }`,
     {
       id: "tests",
       title: "Tester son code",
-      sub: "Test unitaire, assertion, cas limite",
+      sub: "Test unitaire, assertion, edge case",
       steps: [
         {
           type: "concept",
@@ -599,13 +599,14 @@ expect(double(3)).toBe(6);   // test B`,
           explain: "`double(2)` = 2 + 2 = 4 → A passe **par hasard**. `double(3)` = 3 + 2 = 5, pas 6 → **B échoue**. Un seul test ne suffit pas !"
         },
         {
-          type: "concept",
-          term: "Cas limite",
-          def: "Une entrée **au bord** de ce qui est prévu : tableau vide, 0, nombre négatif, `null`, texte vide. C'est là que se cachent les bugs.",
+          type: "qcm",
+          q: "Avant de livrer `average`, on teste ces entrées. Comment un senior les appelle-t-il ?",
           code: `average([])     // tableau vide ?
 average([0])    // un seul élément ?
 average(null)   // pas de tableau du tout ?`,
-          phrase: "Il faut tester le cas limite du tableau vide."
+          options: ["Des edge cases", "Des happy paths", "Des race conditions"],
+          correct: 0,
+          explain: "Des **edge cases** (en français : des **cas limites**) : des entrées au bord de ce qui est prévu. C'est là que se cachent les bugs, il faut les tester exprès."
         },
         {
           type: "predict",
