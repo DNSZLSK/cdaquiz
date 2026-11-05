@@ -12,7 +12,7 @@ export default {
       "code": "class Convertisseur {\n    static double celsiusToFahrenheit(double celsius) {\n        return celsius * 9.0 / 5.0 + 32;\n    }\n}\n\n@Test\nvoid testConversion0Degre() {\n    assertEquals(32.0, Convertisseur.celsiusToFahrenheit(0));\n}",
       "question": "Ce test passe ou échoue ?",
       "options": [
-        "Passe",
+        "Passe : 0 × 9 / 5 + 32 donne exactement 32.0, égal à l'attendu",
         "Échoue : la méthode renvoie l'entier 32, différent du double 32.0 attendu",
         "Échoue : assertEquals ne peut pas comparer deux doubles sans delta",
         "Échoue : erreur de compilation, on passe l'entier 0 à un paramètre double"
@@ -51,14 +51,14 @@ export default {
       "code": "class Diviseur {\n    static int diviser(int a, int b) {\n        if (b == 0) throw new ArithmeticException(\"Division par zéro\");\n        return a / b;\n    }\n}\n\n@Test\nvoid testDivisionParZero() {\n    assertThrows(ArithmeticException.class, () -> {\n        Diviseur.diviser(10, 0);\n    });\n}",
       "question": "Ce test passe ou échoue ?",
       "options": [
-        "Passe : l'exception est bien levée",
+        "Passe : assertThrows attend justement une ArithmeticException, et elle est levée",
         "Échoue : l'exception levée dans le lambda interrompt le test avant la fin",
         "Échoue : il faudrait un try/catch autour de l'appel pour attraper l'exception",
         "Échoue : assertThrows attend une instance d'exception, pas ArithmeticException.class"
       ],
       "answer": 0,
       "explanation": "assertThrows vérifie qu'une exception du type donné est bien levée par le code dans le lambda. Ici, diviser(10, 0) lève bien ArithmeticException, donc le test passe. L'exception n'interrompt pas le test : assertThrows exécute le lambda et attrape lui-même l'exception. Aucun try/catch n'est nécessaire, c'est précisément ce que assertThrows remplace. Et la signature attend bien la CLASSE de l'exception (ArithmeticException.class), pas une instance.",
-      "hint": "assertThrows est SATISFAIT quand l'exception est levée. C'est le but du test."
+      "hint": "Que vérifie assertThrows : que le code s'exécute sans erreur, ou qu'il lève une exception précise ?"
     },
     {
       "id": "tu-04",
@@ -91,7 +91,7 @@ export default {
       "code": "// Interface\ninterface IMeteoService {\n    int getTemperature(String ville);\n}\n\n// Classe à tester\nclass ConseilVestimentaire {\n    IMeteoService meteo;\n    \n    ConseilVestimentaire(IMeteoService meteo) {\n        this.meteo = meteo;\n    }\n    \n    String conseil(String ville) {\n        int temp = meteo.getTemperature(ville);\n        if (temp < 10) return \"Manteau\";\n        if (temp < 20) return \"Veste\";\n        return \"T-shirt\";\n    }\n}\n\n// Test\n@Test\nvoid testConseilFroid() {\n    IMeteoService mockMeteo = Mockito.mock(IMeteoService.class);\n    Mockito.when(mockMeteo.getTemperature(\"Brest\")).thenReturn(7);\n    \n    ConseilVestimentaire cv = new ConseilVestimentaire(mockMeteo);\n    assertEquals(\"Manteau\", cv.conseil(\"Brest\"));\n}",
       "question": "Ce test passe ou échoue ?",
       "options": [
-        "Passe",
+        "Passe : le mock renvoie 7, et le premier test 7 < 10 renvoie Manteau",
         "Échoue : conseil() retourne \"Veste\", car 7 < 20 est vrai aussi",
         "Échoue : sans @ExtendWith(MockitoExtension.class), le mock n'est pas initialisé",
         "Échoue : il manque un Mockito.verify() pour que le test soit validé"
@@ -152,13 +152,13 @@ export default {
       "question": "Lequel de ces deux tests échoue ?",
       "options": [
         "Seul testAdulte échoue",
-        "testSenior échoue",
+        "Seul testSenior échoue",
         "Les deux tests passent",
         "Les deux tests échouent"
       ],
       "answer": 1,
       "explanation": "testAdulte : 18 n'est PAS < 18, donc on passe au if suivant. 18 < 65 = true → \"adulte\". Le test passe. testSenior : 64 < 65 = true → \"adulte\" (pas \"senior\"). Le test échoue car il attend \"senior\" mais reçoit \"adulte\". La valeur limite est 65, pas 64. Croire que testAdulte échoue revient à lire la borne 18 < 18 comme vraie, or elle est stricte : 18 tombe bien dans \"adulte\". Croire que les deux passent revient à classer 64 en senior alors que 64 < 65 le classe adulte. Et les deux n'échouent pas : seul testSenior a mal choisi sa valeur limite.",
-      "hint": "Attention aux bornes : < 65 signifie que 64 entre dans cette catégorie, pas dans la suivante."
+      "hint": "Pour chaque test, suivez les if dans l'ordre avec la valeur passée : où s'arrête 18 ? Où s'arrête 64 ?"
     }
   ]
 };

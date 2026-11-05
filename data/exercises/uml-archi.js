@@ -9,7 +9,7 @@ export default {
       "concepts": [
         "composition vs agrégation"
       ],
-      "code": "// Scénario A\nclass Maison {\n    List<Piece> pieces; // créées dans le constructeur de Maison\n    Maison() {\n        this.pieces = List.of(new Piece(\"salon\"), new Piece(\"cuisine\"));\n    }\n}\n\n// Scénario B\nclass Playlist {\n    List<Chanson> chansons; // les chansons existent indépendamment\n    void ajouter(Chanson c) {\n        this.chansons.add(c);\n    }\n}",
+      "code": "// Scénario A\nclass Maison {\n    List<Piece> pieces; // créées dans le constructeur de Maison\n    Maison() {\n        this.pieces = List.of(new Piece(\"salon\"), new Piece(\"cuisine\"));\n    }\n}\n\n// Scénario B\nclass Playlist {\n    List<Chanson> chansons = new ArrayList<>(); // les chansons existent indépendamment\n    void ajouter(Chanson c) {\n        this.chansons.add(c);\n    }\n}",
       "question": "Quelle relation est une composition et laquelle est une agrégation ?",
       "options": [
         "A = composition, B = agrégation",
@@ -57,7 +57,7 @@ export default {
       ],
       "answer": 1,
       "explanation": "Une association N-N avec attribut produit TOUJOURS une table de jointure. Résultat : table ETUDIANT, table MATIERE, table NOTER (avec etudiant_id, matiere_id, note). L'attribut 'note' est porté par la table de jointure car il dépend des deux entités. Répondre 2 tables reviendrait à traiter l'association comme un 1-N en glissant matiere_id et note dans ETUDIANT, impossible : un étudiant a plusieurs notes. 4 tables supposerait une table séparée pour l'attribut note, alors qu'il se loge dans NOTER. 1 table aplatirait tout et dupliquerait les données de l'étudiant et de la matière à chaque note : c'est la dénormalisation à éviter.",
-      "hint": "Règle MCD → MLD : une association N-N crée une 3ème table (table de jointure)."
+      "hint": "La note dépend à la fois de l'étudiant et de la matière : dans quelle table peut-elle tenir ?"
     },
     {
       "id": "uml-04",
@@ -85,7 +85,7 @@ export default {
       "concepts": [
         "héritage vs interface en UML"
       ],
-      "code": "class Forme {}\nclass Cercle extends Forme {}\nclass Rectangle extends Forme {}\n\ninterface IDessinable {\n    void dessiner();\n}\n\nclass Cercle extends Forme implements IDessinable {\n    public void dessiner() { /* ... */ }\n}",
+      "code": "class Forme {}\nclass Rectangle extends Forme {}\n\ninterface IDessinable {\n    void dessiner();\n}\n\nclass Cercle extends Forme implements IDessinable {\n    public void dessiner() { /* ... */ }\n}",
       "question": "En UML, comment représente-t-on extends vs implements ?",
       "options": [
         "extends = flèche pleine avec triangle vide, implements = flèche pointillée avec triangle vide",
@@ -109,7 +109,7 @@ export default {
       "options": [
         "DAO (Data Access Object) : permet de changer de base de données sans modifier la logique métier",
         "Strategy : permet de changer d'algorithme de persistance à l'exécution sans toucher au client",
-        "Adapter : convertit les API incompatibles de MySQL et MongoDB vers une interface commune",
+        "Adapter (GoF) : convertit les API incompatibles de MySQL et MongoDB vers une interface commune",
         "Factory Method : délègue aux sous-classes le choix de l'implémentation concrète à instancier"
       ],
       "answer": 0,

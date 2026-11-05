@@ -280,18 +280,18 @@ export default {
         },
         {
           "id": "fbr-15",
-          "question": "Affichez le nom de l'artiste, le nom de la scène et l'heure de début des concerts du samedi, triés par heure de début.",
+          "question": "Affichez le nom de l'artiste, le nom de la scène et l'heure de début des concerts du samedi, triés par heure de début, puis par nom d'artiste.",
           "hint": "Repartez de la jointure de l'exercice précédent, filtrez sur le jour, puis triez.",
           "concepts": [
             "JOIN",
             "WHERE",
             "ORDER BY"
           ],
-          "solution": "SELECT artiste.nom, scene.nom, concert.heure_debut FROM concert JOIN artiste ON concert.id_artiste = artiste.id JOIN scene ON concert.id_scene = scene.id WHERE concert.jour = 'samedi' ORDER BY concert.heure_debut;"
+          "solution": "SELECT artiste.nom, scene.nom, concert.heure_debut FROM concert JOIN artiste ON concert.id_artiste = artiste.id JOIN scene ON concert.id_scene = scene.id WHERE concert.jour = 'samedi' ORDER BY concert.heure_debut, artiste.nom;"
         },
         {
           "id": "fbr-16",
-          "question": "Affichez le nombre de concerts par scène.",
+          "question": "Affichez le nom de chaque scène et son nombre de concerts.",
           "hint": "Joignez concert et scene, puis GROUP BY sur le nom de la scène avec COUNT().",
           "concepts": [
             "JOIN",
@@ -302,12 +302,13 @@ export default {
         },
         {
           "id": "fbr-17",
-          "question": "Affichez le nom et le prénom des bénévoles affectés à la scène 'Maen Braz'.",
-          "hint": "Joignez affectation, benevole et scene, puis filtrez sur le nom de la scène. Attention : un bénévole affecté plusieurs jours apparaîtra en double sans DISTINCT.",
+          "question": "Affichez le nom et le prénom des bénévoles affectés à la scène 'Maen Braz', chaque bénévole une seule fois.",
+          "hint": "Joignez affectation, benevole et scene, puis filtrez sur le nom de la scène. Un bénévole affecté plusieurs jours à cette scène apparaît sur plusieurs lignes : comment n'en garder qu'une ?",
           "concepts": [
             "JOIN",
             "WHERE",
-            "multi-tables"
+            "multi-tables",
+            "DISTINCT"
           ],
           "solution": "SELECT DISTINCT benevole.nom, benevole.prenom FROM affectation JOIN benevole ON affectation.id_benevole = benevole.id JOIN scene ON affectation.id_scene = scene.id WHERE scene.nom = 'Maen Braz';"
         },
@@ -485,7 +486,7 @@ export default {
             ]
           }
         ],
-        "seed_sql": "CREATE TABLE biere (id INTEGER PRIMARY KEY, nom VARCHAR(100) NOT NULL, style VARCHAR(50), degre_alcool DECIMAL(3,1), prix_unitaire DECIMAL(5,2), stock INTEGER DEFAULT 0); CREATE TABLE ingredient (id INTEGER PRIMARY KEY, nom VARCHAR(100) NOT NULL, categorie VARCHAR(50), prix_kg DECIMAL(7,2)); CREATE TABLE recette_ingredient (id INTEGER PRIMARY KEY, id_biere INTEGER REFERENCES biere(id), id_ingredient INTEGER REFERENCES ingredient(id), quantite_kg DECIMAL(5,3)); CREATE TABLE client (id INTEGER PRIMARY KEY, nom VARCHAR(100) NOT NULL, type_client VARCHAR(20), ville VARCHAR(100)); CREATE TABLE commande (id INTEGER PRIMARY KEY, id_client INTEGER REFERENCES client(id), date_commande DATE, statut VARCHAR(20) DEFAULT 'en attente'); CREATE TABLE ligne_commande (id INTEGER PRIMARY KEY, id_commande INTEGER REFERENCES commande(id), id_biere INTEGER REFERENCES biere(id), quantite INTEGER NOT NULL); INSERT INTO biere VALUES (1, 'Ambrée du Goëlo', 'ambrée', 6.5, 4.50, 120), (2, 'Blanche de Bréhat', 'blanche', 4.8, 3.80, 85), (3, 'IPA Tempête', 'IPA', 7.2, 5.20, 45), (4, 'Stout Noz', 'stout', 8.0, 5.50, 30), (5, 'Blonde des Abers', 'blonde', 5.0, 3.50, 200), (6, 'Triple Kornog', 'triple', 9.5, 6.80, 15), (7, 'Saison Estivale', 'saison', 4.5, 4.00, 0); INSERT INTO ingredient VALUES (1, 'Malt Pale Ale', 'malt', 1.80), (2, 'Malt Munich', 'malt', 2.10), (3, 'Malt Caramel', 'malt', 2.50), (4, 'Houblon Cascade', 'houblon', 28.00), (5, 'Houblon Citra', 'houblon', 45.00), (6, 'Houblon Strisselspalt', 'houblon', 22.00), (7, 'Levure Ale', 'levure', 85.00), (8, 'Blé malté', 'malt', 1.90), (9, 'Malt Torréfié', 'malt', 3.20), (10, 'Sarrasin', 'céréale', 2.80); INSERT INTO recette_ingredient VALUES (1, 1, 1, 3.500), (2, 1, 3, 1.200), (3, 1, 6, 0.080), (4, 1, 7, 0.015), (5, 2, 1, 2.800), (6, 2, 8, 1.500), (7, 2, 6, 0.050), (8, 3, 1, 4.000), (9, 3, 4, 0.120), (10, 3, 5, 0.100), (11, 4, 1, 3.000), (12, 4, 9, 2.000), (13, 4, 4, 0.090), (14, 5, 1, 3.800), (15, 5, 6, 0.060), (16, 5, 7, 0.012); INSERT INTO client VALUES (1, 'Le Phare', 'bar', 'Paimpol'), (2, 'Crêperie Ty Breizh', 'restaurant', 'Saint-Brieuc'), (3, 'Cave du Port', 'caviste', 'Binic'), (4, 'L Abri du Marin', 'bar', 'Erquy'), (5, 'Hôtel de la Plage', 'restaurant', 'Plérin'), (6, 'Pierre Dupont', 'particulier', 'Paimpol'), (7, 'Marie Le Gall', 'particulier', 'Lannion'), (8, 'Ferme de Kerloas', 'particulier', 'Ploubazlanec'); INSERT INTO commande VALUES (1, 1, '2026-06-01', 'livrée'), (2, 2, '2026-06-03', 'livrée'), (3, 1, '2026-06-15', 'livrée'), (4, 3, '2026-06-20', 'en attente'), (5, 4, '2026-07-01', 'en attente'), (6, 6, '2026-07-05', 'livrée'), (7, 5, '2026-07-10', 'en attente'), (8, 7, '2026-07-12', 'annulée'); INSERT INTO ligne_commande VALUES (1, 1, 1, 24), (2, 1, 5, 48), (3, 2, 2, 12), (4, 2, 1, 12), (5, 3, 3, 24), (6, 3, 1, 12), (7, 4, 5, 36), (8, 4, 2, 24), (9, 5, 4, 12), (10, 5, 1, 24), (11, 6, 6, 6), (12, 7, 1, 48), (13, 7, 3, 24), (14, 7, 5, 48);"
+        "seed_sql": "PRAGMA foreign_keys = ON;\nCREATE TABLE biere (id INTEGER PRIMARY KEY, nom VARCHAR(100) NOT NULL, style VARCHAR(50), degre_alcool DECIMAL(3,1), prix_unitaire DECIMAL(5,2), stock INTEGER DEFAULT 0); CREATE TABLE ingredient (id INTEGER PRIMARY KEY, nom VARCHAR(100) NOT NULL, categorie VARCHAR(50), prix_kg DECIMAL(7,2)); CREATE TABLE recette_ingredient (id INTEGER PRIMARY KEY, id_biere INTEGER REFERENCES biere(id), id_ingredient INTEGER REFERENCES ingredient(id), quantite_kg DECIMAL(5,3)); CREATE TABLE client (id INTEGER PRIMARY KEY, nom VARCHAR(100) NOT NULL, type_client VARCHAR(20), ville VARCHAR(100)); CREATE TABLE commande (id INTEGER PRIMARY KEY, id_client INTEGER REFERENCES client(id), date_commande DATE, statut VARCHAR(20) DEFAULT 'en attente'); CREATE TABLE ligne_commande (id INTEGER PRIMARY KEY, id_commande INTEGER REFERENCES commande(id), id_biere INTEGER REFERENCES biere(id), quantite INTEGER NOT NULL); INSERT INTO biere VALUES (1, 'Ambrée du Goëlo', 'ambrée', 6.5, 4.50, 120), (2, 'Blanche de Bréhat', 'blanche', 4.8, 3.80, 85), (3, 'IPA Tempête', 'IPA', 7.2, 5.20, 45), (4, 'Stout Noz', 'stout', 8.0, 5.50, 30), (5, 'Blonde des Abers', 'blonde', 5.0, 3.50, 200), (6, 'Triple Kornog', 'triple', 9.5, 6.80, 15), (7, 'Saison Estivale', 'saison', 4.5, 4.00, 0); INSERT INTO ingredient VALUES (1, 'Malt Pale Ale', 'malt', 1.80), (2, 'Malt Munich', 'malt', 2.10), (3, 'Malt Caramel', 'malt', 2.50), (4, 'Houblon Cascade', 'houblon', 28.00), (5, 'Houblon Citra', 'houblon', 45.00), (6, 'Houblon Strisselspalt', 'houblon', 22.00), (7, 'Levure Ale', 'levure', 85.00), (8, 'Blé malté', 'malt', 1.90), (9, 'Malt Torréfié', 'malt', 3.20), (10, 'Sarrasin', 'céréale', 2.80); INSERT INTO recette_ingredient VALUES (1, 1, 1, 3.500), (2, 1, 3, 1.200), (3, 1, 6, 0.080), (4, 1, 7, 0.015), (5, 2, 1, 2.800), (6, 2, 8, 1.500), (7, 2, 6, 0.050), (8, 3, 1, 4.000), (9, 3, 4, 0.120), (10, 3, 5, 0.100), (11, 4, 1, 3.000), (12, 4, 9, 2.000), (13, 4, 4, 0.090), (14, 5, 1, 3.800), (15, 5, 6, 0.060), (16, 5, 7, 0.012); INSERT INTO client VALUES (1, 'Le Phare', 'bar', 'Paimpol'), (2, 'Crêperie Ty Breizh', 'restaurant', 'Saint-Brieuc'), (3, 'Cave du Port', 'caviste', 'Binic'), (4, 'L Abri du Marin', 'bar', 'Erquy'), (5, 'Hôtel de la Plage', 'restaurant', 'Plérin'), (6, 'Pierre Dupont', 'particulier', 'Paimpol'), (7, 'Marie Le Gall', 'particulier', 'Lannion'), (8, 'Ferme de Kerloas', 'particulier', 'Ploubazlanec'); INSERT INTO commande VALUES (1, 1, '2026-06-01', 'livrée'), (2, 2, '2026-06-03', 'livrée'), (3, 1, '2026-06-15', 'livrée'), (4, 3, '2026-06-20', 'en attente'), (5, 4, '2026-07-01', 'en attente'), (6, 6, '2026-07-05', 'livrée'), (7, 5, '2026-07-10', 'en attente'), (8, 7, '2026-07-12', 'annulée'); INSERT INTO ligne_commande VALUES (1, 1, 1, 24), (2, 1, 5, 48), (3, 2, 2, 12), (4, 2, 1, 12), (5, 3, 3, 24), (6, 3, 1, 12), (7, 4, 5, 36), (8, 4, 2, 24), (9, 5, 4, 12), (10, 5, 1, 24), (11, 6, 6, 6), (12, 7, 1, 48), (13, 7, 3, 24), (14, 7, 5, 48);\nINSERT INTO commande VALUES (9, 7, '2026-07-14', 'annulée');\nINSERT INTO ligne_commande VALUES (15, 9, 4, 6);"
       },
       "exercises": [
         {
@@ -530,51 +531,57 @@ export default {
         },
         {
           "id": "tym-05",
-          "question": "Affichez le nom de la bière, le nom de l'ingrédient et la quantité (en kg) de chaque ligne de recette, triés par nom de bière.",
+          "question": "Affichez le nom de la bière, le nom de l'ingrédient et la quantité (en kg) de chaque ligne de recette, triés par nom de bière, puis par nom d'ingrédient.",
           "hint": "Joignez biere → recette_ingredient → ingredient.",
           "concepts": [
             "JOIN",
             "multi-tables"
           ],
-          "solution": "SELECT biere.nom AS biere, ingredient.nom AS ingredient, recette_ingredient.quantite_kg FROM recette_ingredient JOIN biere ON recette_ingredient.id_biere = biere.id JOIN ingredient ON recette_ingredient.id_ingredient = ingredient.id ORDER BY biere.nom;"
+          "solution": "SELECT biere.nom AS biere, ingredient.nom AS ingredient, recette_ingredient.quantite_kg FROM recette_ingredient JOIN biere ON recette_ingredient.id_biere = biere.id JOIN ingredient ON recette_ingredient.id_ingredient = ingredient.id ORDER BY biere.nom, ingredient.nom;"
         },
         {
           "id": "tym-06",
-          "question": "Affichez le nom de chaque bière et son coût total en ingrédients (somme de quantite_kg × prix_kg).",
-          "hint": "JOIN les 3 tables, GROUP BY biere.nom, SUM(quantite_kg * prix_kg).",
+          "question": "Affichez le nom de chaque bière et son coût total en ingrédients (somme de quantite_kg × prix_kg), arrondi à 2 décimales. Une bière sans recette doit apparaître avec un coût de 0.",
+          "hint": "Quelle jointure garde les bières qui n'ont aucune ligne de recette ? Et que vaut SUM() quand il n'y a rien à additionner ?",
           "concepts": [
             "JOIN",
             "GROUP BY",
             "SUM",
-            "expression"
+            "expression",
+            "LEFT JOIN",
+            "COALESCE",
+            "ROUND"
           ],
-          "solution": "SELECT biere.nom, SUM(recette_ingredient.quantite_kg * ingredient.prix_kg) AS cout_ingredients FROM recette_ingredient JOIN biere ON recette_ingredient.id_biere = biere.id JOIN ingredient ON recette_ingredient.id_ingredient = ingredient.id GROUP BY biere.nom;"
+          "solution": "SELECT biere.nom, ROUND(COALESCE(SUM(recette_ingredient.quantite_kg * ingredient.prix_kg), 0), 2) AS cout_ingredients FROM biere LEFT JOIN recette_ingredient ON recette_ingredient.id_biere = biere.id LEFT JOIN ingredient ON recette_ingredient.id_ingredient = ingredient.id GROUP BY biere.id;"
         },
         {
           "id": "tym-07",
-          "question": "Affichez le nom des clients et leur nombre de commandes, pour ceux qui ont passé au moins 2 commandes.",
-          "hint": "GROUP BY client, HAVING COUNT(*) >= 2.",
+          "question": "Affichez le nom des clients et leur nombre de commandes, pour ceux qui ont passé au moins 2 commandes (hors commandes annulées).",
+          "hint": "Écartez d'abord les commandes annulées (WHERE), puis regroupez par client et ne gardez que ceux qui en ont au moins 2 (HAVING).",
           "concepts": [
             "GROUP BY",
             "HAVING",
-            "COUNT"
+            "COUNT",
+            "WHERE"
           ],
-          "solution": "SELECT client.nom, COUNT(*) AS nb_commandes FROM commande JOIN client ON commande.id_client = client.id GROUP BY client.id HAVING COUNT(*) >= 2;"
+          "solution": "SELECT client.nom, COUNT(*) AS nb_commandes FROM commande JOIN client ON commande.id_client = client.id WHERE commande.statut <> 'annulée' GROUP BY client.id HAVING COUNT(*) >= 2;"
         },
         {
           "id": "tym-08",
-          "question": "Affichez l'id, la date et le montant total de chaque commande (somme de quantite × prix_unitaire).",
-          "hint": "Joignez commande → ligne_commande → biere, GROUP BY commande.id.",
+          "question": "Affichez l'id, la date et le montant total (somme de quantite × prix_unitaire) de chaque commande, y compris celles qui n'ont aucune ligne (montant 0).",
+          "hint": "Une jointure interne fait disparaître la commande sans ligne : laquelle la garde ? Et comment transformer un total NULL en 0 ?",
           "concepts": [
             "JOIN",
             "GROUP BY",
-            "SUM"
+            "SUM",
+            "LEFT JOIN",
+            "COALESCE"
           ],
-          "solution": "SELECT commande.id, commande.date_commande, SUM(ligne_commande.quantite * biere.prix_unitaire) AS montant_total FROM commande JOIN ligne_commande ON ligne_commande.id_commande = commande.id JOIN biere ON ligne_commande.id_biere = biere.id GROUP BY commande.id;"
+          "solution": "SELECT commande.id, commande.date_commande, COALESCE(SUM(ligne_commande.quantite * biere.prix_unitaire), 0) AS montant_total FROM commande LEFT JOIN ligne_commande ON ligne_commande.id_commande = commande.id LEFT JOIN biere ON ligne_commande.id_biere = biere.id GROUP BY commande.id;"
         },
         {
           "id": "tym-09",
-          "question": "Affichez le nom de la bière la plus commandée et sa quantité totale commandée.",
+          "question": "Affichez le nom de la bière dont la quantité totale commandée (somme des quantités de toutes les lignes de commande, commandes annulées comprises) est la plus élevée, avec cette quantité.",
           "hint": "GROUP BY sur la bière avec SUM(quantite), puis triez en décroissant et gardez la première ligne : ORDER BY ... DESC LIMIT 1.",
           "concepts": [
             "GROUP BY",
@@ -643,7 +650,7 @@ export default {
         {
           "id": "tym-15",
           "question": "Supprimez toutes les commandes annulées.",
-          "hint": "DELETE FROM ... WHERE statut = 'annulée'. Attention : il faut d'abord supprimer les lignes de commande associées.",
+          "hint": "Une commande annulée peut avoir des lignes de commande, et les clés étrangères sont vérifiées. Que se passe-t-il si vous supprimez la commande en premier ?",
           "concepts": [
             "DELETE",
             "WHERE"

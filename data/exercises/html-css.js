@@ -73,7 +73,7 @@ export default {
       "code": ".card {\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n  gap: 10px;\n  padding: 20px;\n}\n\n<div class=\"card\">\n  <img src=\"photo.jpg\" />\n  <h2>Titre</h2>\n  <p>Description</p>\n  <button>Voir plus</button>\n</div>",
       "question": "Comment sont disposés les éléments dans la card ?",
       "options": [
-        "Empilés verticalement, centrés horizontalement, avec 10px d'espace entre chaque",
+        "Empilés verticalement, centrés horizontalement, espacés de 10px",
         "Sur une seule ligne horizontale, avec 10px d'espace entre chaque",
         "Empilés verticalement, étirés sur toute la largeur de la card",
         "Empilés verticalement, regroupés au centre vertical de la card"
@@ -93,14 +93,14 @@ export default {
       "code": "<img src=\"graphique-ventes.png\" />\n<img src=\"decoration.png\" alt=\"\" />\n<img src=\"logo-entreprise.png\" alt=\"Logo MonEntreprise\" />",
       "question": "Quelle image pose un problème d'accessibilité ?",
       "options": [
-        "La 1ère : il manque l'attribut alt",
+        "La 1ère : il lui manque l'attribut alt que lisent les lecteurs d'écran",
         "La 2ème : un alt vide équivaut à une absence d'attribut alt",
         "La 3ème : le alt d'un logo ne doit pas citer le nom de l'entreprise",
         "Aucune : alt est un attribut facultatif quand src est renseigné"
       ],
       "answer": 0,
       "explanation": "La 1ère image n'a pas d'attribut alt : les lecteurs d'écran ne peuvent pas la décrire et certains lisent alors le nom du fichier. alt=\"\" n'équivaut pas à une absence d'alt : c'est le signal volontaire d'une image décorative que les lecteurs d'écran doivent ignorer. Le alt d'un logo doit au contraire citer le nom de l'entreprise, c'est exactement l'information utile à transmettre. Enfin alt n'est pas facultatif : il est requis pour l'accessibilité et la validité du HTML.",
-      "hint": "alt=\"\" (vide) est volontaire pour les images décoratives. L'absence totale d'alt est le problème."
+      "hint": "Comparez les trois : un alt absent, un alt vide et un alt rempli ne veulent pas dire la même chose."
     },
     {
       "id": "hc-06",
@@ -116,7 +116,7 @@ export default {
         "Il manque transform: translate(-50%, -50%) pour compenser la taille de l'élément",
         "top: 50% se calcule par rapport à la largeur du viewport, pas à sa hauteur",
         "margin: auto est ignoré dès que l'élément est en position: fixed",
-        "Il faudrait position: absolute, car fixed se place par rapport au parent et non à l'écran"
+        "Il faudrait position: absolute (et non fixed) pour se caler sur l'écran et non sur le parent"
       ],
       "answer": 0,
       "explanation": "top: 50% et left: 50% placent le COIN SUPÉRIEUR GAUCHE de la modal au centre de l'écran : elle déborde donc vers la droite et le bas. transform: translate(-50%, -50%) la décale de la moitié de sa propre taille, la centrant visuellement. top en % se calcule bien par rapport à la hauteur du conteneur, ce sont margin et padding en % qui se réfèrent à la largeur. margin: auto n'est pas ignoré en position: fixed, il peut même centrer l'élément quand left et right valent 0. Et c'est l'inverse : fixed se positionne par rapport au viewport, absolute par rapport à un ancêtre positionné.",
@@ -133,14 +133,14 @@ export default {
       "code": ".grid {\n  display: grid;\n  grid-template-columns: repeat(3, 1fr);\n  gap: 20px;\n}\n\n@media (max-width: 768px) {\n  .grid {\n    grid-template-columns: 1fr;\n  }\n}",
       "question": "Que se passe-t-il quand l'écran fait 600px de large ?",
       "options": [
-        "Les éléments passent sur une seule colonne (empilés)",
+        "Les éléments passent sur une seule colonne et gardent leur gap de 20px",
         "Ils restent sur 3 colonnes : max-width cible les écrans plus larges que 768px",
         "Une seule colonne mais sans le gap de 20px, la media query remplaçant tout le bloc .grid",
         "L'affichage ne change qu'après rechargement : une media query n'est évaluée qu'au chargement"
       ],
       "answer": 0,
       "explanation": "600px < 768px donc la media query s'applique : grid-template-columns passe de repeat(3, 1fr) à 1fr et les éléments s'empilent sur une colonne. max-width cible les écrans plus étroits ou égaux à 768px, pas plus larges (ce serait min-width). La media query ne remplace que les propriétés qu'elle redéclare : le gap de 20px est conservé. Et les media queries sont réévaluées en continu lors du redimensionnement, sans aucun rechargement de la page.",
-      "hint": "max-width: 768px s'applique quand l'écran est PLUS PETIT que 768px."
+      "hint": "max-width: 768px : la règle s'applique-t-elle en dessous ou au-dessus de 768px ?"
     },
     {
       "id": "hc-08",
@@ -160,7 +160,7 @@ export default {
       ],
       "answer": 1,
       "explanation": ":hover s'active quand la souris survole l'élément, sans qu'aucun clic ne soit nécessaire. :active existe mais ne s'applique que pendant le clic, tant que le bouton de la souris reste enfoncé. :focus cible l'élément qui détient le focus, obtenu au clavier (Tab) ou après un clic, pas au simple survol. :visited ne concerne que les liens déjà visités, jamais un bouton.",
-      "hint": "Le mot anglais pour 'survoler' / 'planer au-dessus de'."
+      "hint": "Cette pseudo-classe réagit au simple passage du pointeur, sans clic ni focus."
     }
   ]
 };

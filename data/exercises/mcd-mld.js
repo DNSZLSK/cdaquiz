@@ -90,14 +90,14 @@ export default {
       "code": "Table INSCRIPTION :\n- id_etudiant (FK → ETUDIANT)\n- id_cours (FK → COURS)\n- date_inscription\n\nOption A : clé primaire = id auto-incrémenté\nOption B : clé primaire composée = (id_etudiant, id_cours)",
       "question": "Quelle option empêche un étudiant de s'inscrire deux fois au même cours ?",
       "options": [
-        "Option B : la clé composée interdit le doublon (id_etudiant, id_cours)",
+        "Option B : la clé composée interdit deux fois le même couple étudiant-cours",
         "Option A : chaque inscription reçoit un id unique, donc pas de doublon possible",
         "Les deux : toute clé primaire empêche par définition les lignes en double",
         "Aucune : il faut de toute façon ajouter une contrainte UNIQUE séparée"
       ],
       "answer": 0,
       "explanation": "Avec la clé primaire composée (id_etudiant, id_cours), la BDD refuse deux lignes portant le même couple : le doublon est impossible. L'auto-incrément de l'option A garantit seulement que chaque ligne a un id différent : deux inscriptions identiques recevraient les id 7 et 8 sans la moindre erreur. Une clé primaire n'empêche donc pas 'par définition' les doublons métier : tout dépend des colonnes qui la composent. Et la contrainte UNIQUE séparée n'est nécessaire qu'avec l'option A ; avec la clé composée de l'option B, elle serait redondante.",
-      "hint": "La clé primaire garantit l'unicité. Composée, elle garantit l'unicité de la COMBINAISON."
+      "hint": "Dans chaque option, quelles colonnes forment la clé, et que compare la base pour refuser une ligne ?"
     },
     {
       "id": "mcd-06",
@@ -129,13 +129,13 @@ export default {
       "code": "Un lutin prépare des cadeaux.\nLorsqu'un lutin termine un cadeau, on enregistre la date de fin de préparation.\nPlusieurs lutins peuvent préparer le même type de cadeau.\nUn lutin peut préparer plusieurs cadeaux.",
       "question": "Où se place l'attribut 'date de préparation' dans le MCD ?",
       "options": [
-        "Sur l'association PREPARER (entre Lutin et Cadeau)",
+        "Sur l'association PREPARER, qui relie Lutin et Cadeau",
         "Sur l'entité Cadeau, puisque c'est le cadeau qui est terminé",
         "Sur l'entité Lutin, puisque c'est lui qui effectue la préparation",
         "Dans une entité faible DATE_PREPARATION reliée aux deux entités"
       ],
       "answer": 0,
-      "explanation": "La date de préparation dépend de QUEL lutin prépare QUEL cadeau : elle n'a de sens que pour un couple (lutin, cadeau) précis, donc elle se place sur l'association et deviendra une colonne de la table de jointure en MLD. Sur Cadeau, il n'y aurait qu'une date par cadeau alors que plusieurs lutins peuvent préparer le même type de cadeau. Sur Lutin, un lutin qui prépare plusieurs cadeaux ne pourrait stocker qu'une seule date. Et une entité faible DATE_PREPARATION est injustifiée : une date isolée n'a ni identifiant ni attributs propres, ce n'est pas une entité.",
+      "explanation": "La date de préparation dépend de QUEL lutin prépare QUEL cadeau : elle n'a de sens que pour un couple (lutin, cadeau) précis, donc elle se place sur l'association et deviendra une colonne de la table de jointure en MLD. Sur Cadeau, il n'y aurait qu'une date par cadeau alors que plusieurs lutins peuvent préparer le même type de cadeau. Sur Lutin, un lutin qui prépare plusieurs cadeaux ne pourrait stocker qu'une seule date. Une entité DATE_PREPARATION n'est pas nécessaire ici. Elle ne se justifie que si le même lutin peut préparer plusieurs fois le même cadeau et qu'il faut garder chaque date : en Merise, on passe alors à une association ternaire avec une entité DATE.",
       "hint": "Si un attribut dépend du LIEN entre deux entités (pas d'une entité seule), il va sur l'association."
     },
     {
@@ -155,7 +155,7 @@ export default {
         "Navire (0,N) : Occuper : (0,1) Emplacement (avec dates sur l'entité NAVIRE)"
       ],
       "answer": 0,
-      "explanation": "Sur la durée de vie du système, un navire occupe 0 ou N emplacements (au fil de ses séjours) et un emplacement accueille 0 ou N navires : d'où (0,N) des deux côtés, avec les dates portées par l'association. Le 'un seul à la fois' est une contrainte temporelle, gérée par l'applicatif ou une contrainte SQL, pas par les cardinalités. La lecture (0,1)/(0,1) photographie la situation à un instant T alors que le MCD compte toutes les occurrences dans le temps ; la version (0,1)/(1,1) y ajoute un emplacement toujours occupé, ce que la règle n'impose pas. Et (0,N)/(0,1) mélange les deux lectures : si l'historique compte d'un côté, il compte des deux, et les dates dépendent du couple, pas du seul navire.",
+      "explanation": "Sur la durée de vie du système, un navire occupe 0 ou N emplacements (au fil de ses séjours) et un emplacement accueille 0 ou N navires : d'où (0,N) des deux côtés, avec les dates portées par l'association. Le 'un seul à la fois' est une contrainte temporelle, gérée par l'applicatif ou une contrainte SQL, pas par les cardinalités. Attention au passage en MLD : avec une simple table OCCUPER de clé (id_navire, id_emplacement), un navire ne pourrait jamais revenir sur le même emplacement. Pour garder tout l'historique, on ajoute la date de début à la clé (association ternaire avec une entité DATE, en Merise) ou on transforme OCCUPER en entité OCCUPATION avec son propre identifiant. La lecture (0,1)/(0,1) photographie la situation à un instant T alors que le MCD compte toutes les occurrences dans le temps ; la version (0,1)/(1,1) y ajoute un emplacement toujours occupé, ce que la règle n'impose pas. Et (0,N)/(0,1) mélange les deux lectures : si l'historique compte d'un côté, il compte des deux, et les dates dépendent du couple, pas du seul navire.",
       "hint": "Les cardinalités en MCD considèrent TOUTES les occurrences dans le temps, pas seulement à un instant T."
     },
     {
@@ -169,7 +169,7 @@ export default {
       "code": "Table COMMANDE :\n| id | client_nom | client_ville | produit | quantite |\n| 1  | Dupont     | Paris        | Chaise  | 3        |\n| 2  | Dupont     | Paris        | Table   | 1        |\n| 3  | Martin     | Lyon         | Chaise  | 5        |",
       "question": "Quel problème de conception présente cette table ?",
       "options": [
-        "Redondance : client_nom et client_ville sont répétés : il faut une table CLIENT séparée",
+        "Redondance : client_nom et client_ville sont répétés, il faut une table CLIENT séparée",
         "Violation de la 1NF : client_nom et client_ville sont des attributs multivalués",
         "La clé primaire devrait être composée (client_nom, produit) au lieu de id",
         "Dépendance transitive : quantite dépend de produit et doit migrer dans une autre table"
@@ -196,7 +196,7 @@ export default {
       ],
       "answer": 0,
       "explanation": "FOREIGN KEY (colonne) REFERENCES table(colonne) crée la contrainte de clé étrangère : la BDD vérifiera que chaque id_service de salarie correspond à un id existant dans service. REFERENCES existe bien mais désigne la table cible, il apparaît d'ailleurs déjà plus loin sur la même ligne. CONSTRAINT sert uniquement à nommer une contrainte et doit être suivi de FOREIGN KEY (CONSTRAINT fk_service FOREIGN KEY ...). CHECK, lui, vérifie une condition sur les valeurs d'une ligne, pas un lien d'intégrité référentielle entre deux tables.",
-      "hint": "Le mot-clé en deux mots qui signifie 'clé étrangère' en anglais."
+      "hint": "Regardez la fin de la ligne : REFERENCES y est déjà. Il manque ce qui déclare id_service comme contrainte vers une autre table."
     },
     {
       "id": "mcd-11",
@@ -215,8 +215,8 @@ export default {
         "3 tables : CLIENT, CHAMBRE, RESERVATION (id_resa auto-incrémenté, date_resa, sans FK)"
       ],
       "answer": 0,
-      "explanation": "N-N donne une table de jointure RESERVATION portant les FK des deux entités plus l'attribut de l'association (date_resa) : c'est le pattern universel du many-to-many, le même que pour enfant-cadeau, navire-emplacement ou salarié-projet. Deux tables avec id_client dans CHAMBRE appliqueraient la règle du 1-N : chaque chambre ne pourrait être réservée que par un seul client. Placer date_resa dans CLIENT est incorrect : la date dépend du couple (client, chambre), pas du client seul. Et une table RESERVATION sans clés étrangères ne relie plus rien : sans id_client ni id_chambre, impossible de savoir qui a réservé quelle chambre.",
-      "hint": "Règle universelle : N-N = 3 tables. Les attributs de l'association vont dans la table du milieu."
+      "explanation": "N-N donne une table de jointure RESERVATION portant les FK des deux entités plus l'attribut de l'association (date_resa) : c'est le schéma de toute association plusieurs-à-plusieurs, le même que pour enfant-cadeau ou salarié-projet. Deux tables avec id_client dans CHAMBRE appliqueraient la règle du 1-N : chaque chambre ne pourrait être réservée que par un seul client. Placer date_resa dans CLIENT est incorrect : la date dépend du couple (client, chambre), pas du client seul. Et une table RESERVATION sans clés étrangères ne relie plus rien : sans id_client ni id_chambre, impossible de savoir qui a réservé quelle chambre.",
+      "hint": "Combien d'entités, et où ranger date_resa si elle dépend à la fois du client et de la chambre ?"
     },
     {
       "id": "mcd-12",
@@ -225,16 +225,16 @@ export default {
       "concepts": [
         "héritage en MCD"
       ],
-      "code": "Dans un parc animalier :\n- Tous les animaux ont un nom, un age et un poids\n- Les mammifères ont en plus une période de gestation\n- Les oiseaux ont en plus une envergure\n- Les reptiles ont en plus un type d'écailles",
+      "code": "Dans un parc animalier :\n- Tous les animaux ont un nom, un âge et un poids\n- Les mammifères ont en plus une période de gestation\n- Les oiseaux ont en plus une envergure\n- Les reptiles ont en plus un type d'écailles",
       "question": "Comment modéliser ça en MCD ?",
       "options": [
-        "Une entité parente ANIMAL et 3 sous-entités (MAMMIFERE, OISEAU, REPTILE) en héritage",
+        "Une entité parente ANIMAL et trois sous-entités en héritage : MAMMIFERE, OISEAU, REPTILE",
         "Une seule entité ANIMAL avec un attribut discriminant et tous les attributs spécifiques",
-        "3 entités MAMMIFERE, OISEAU, REPTILE portant chacune nom, age et poids",
+        "3 entités MAMMIFERE, OISEAU, REPTILE portant chacune nom, âge et poids",
         "Une entité ANIMAL reliée à une entité TYPE_ANIMAL qui porte les attributs spécifiques"
       ],
       "answer": 0,
-      "explanation": "C'est de l'héritage en MCD (spécialisation/généralisation) : ANIMAL porte les attributs communs, chaque sous-entité porte ses attributs spécifiques. En MLD, on choisira ensuite entre table unique avec NULL, une table par sous-type ou 4 tables avec FK, selon les requêtes prévues. L'entité unique avec discriminant correspond justement à l'une de ces implémentations MLD, pas à la modélisation conceptuelle : au niveau MCD elle mélange tous les attributs. Trois entités indépendantes dupliqueraient nom, age et poids et feraient perdre la généralisation. Et une entité TYPE_ANIMAL reliée par association ne fonctionne pas : une entité a une structure fixe, elle ne peut pas porter une période de gestation pour l'un et une envergure pour l'autre.",
+      "explanation": "C'est de l'héritage en MCD (spécialisation/généralisation) : ANIMAL porte les attributs communs, chaque sous-entité porte ses attributs spécifiques. En MLD, on choisira ensuite entre table unique avec NULL, une table par sous-type ou 4 tables avec FK, selon les requêtes prévues. L'entité unique avec discriminant correspond justement à l'une de ces implémentations MLD, pas à la modélisation conceptuelle : au niveau MCD elle mélange tous les attributs. Trois entités indépendantes dupliqueraient nom, âge et poids et feraient perdre la généralisation. Et une entité TYPE_ANIMAL reliée par association ne fonctionne pas : une entité a une structure fixe, elle ne peut pas porter une période de gestation pour l'un et une envergure pour l'autre.",
       "hint": "Quand des entités partagent des attributs communs mais ont aussi des attributs propres, c'est de l'héritage."
     }
   ]

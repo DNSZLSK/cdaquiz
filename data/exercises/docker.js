@@ -12,14 +12,14 @@ export default {
       "code": "docker ps -a",
       "question": "Qu'affiche cette commande ?",
       "options": [
-        "Tous les containers (actifs ET arrêtés)",
+        "Tous les containers : actifs et arrêtés",
         "Uniquement les containers arrêtés",
         "Tous les containers et toutes les images du système",
         "Les containers actifs avec leur consommation CPU et mémoire"
       ],
       "answer": 0,
       "explanation": "docker ps affiche les containers actifs. L'option -a (all) ajoute aussi les containers arrêtés. Sans -a, seuls les containers en cours d'exécution sont listés. Croire que -a filtre sur les seuls arrêtés inverse son rôle : le flag AJOUTE les arrêtés, il ne retire pas les actifs. Les images se listent avec docker images, jamais avec ps. Et la consommation CPU/mémoire en direct est le rôle de docker stats, pas de docker ps.",
-      "hint": "-a signifie 'all'. Sans ce flag, seuls les containers en cours d'exécution s'affichent."
+      "hint": "Sans option, docker ps n'affiche que les containers en cours d'exécution. Que change -a ?"
     },
     {
       "id": "dk-02",
@@ -47,7 +47,7 @@ export default {
       "concepts": [
         "Dockerfile"
       ],
-      "code": "FROM ubuntu\nEXPOSE 8080\nWORKDIR /app\n______ target/mon-api.jar app.jar\n\nRUN apt update\nRUN apt install -y openjdk-21-jdk\n\nENTRYPOINT [\"java\", \"-jar\", \"/app/app.jar\"]",
+      "code": "FROM eclipse-temurin:21.0.13_9-jre\nWORKDIR /app\n______ target/mon-api.jar app.jar\nEXPOSE 8080\nENTRYPOINT [\"java\", \"-jar\", \"/app/app.jar\"]",
       "question": "Quelle instruction copie le fichier JAR dans l'image ?",
       "options": [
         "ADD",
@@ -56,8 +56,8 @@ export default {
         "VOLUME"
       ],
       "answer": 1,
-      "explanation": "COPY copie des fichiers depuis le contexte de build (votre machine) vers l'image Docker. ADD copierait aussi le fichier, mais il est réservé aux cas particuliers (décompression d'archives, téléchargement d'URL) : la bonne pratique pour une simple copie est COPY. RUN exécute une commande à l'intérieur de l'image pendant le build et n'a pas accès aux fichiers de votre machine. VOLUME déclare un point de montage rempli au lancement du container : il ne copie rien dans l'image au build.",
-      "hint": "Deux instructions Docker copient des fichiers. La plus simple et recommandée est..."
+      "explanation": "COPY copie des fichiers depuis le contexte de build (votre machine) vers l'image Docker. ADD copierait aussi le fichier, mais il est réservé aux cas particuliers (décompression d'archives, téléchargement d'URL) : la bonne pratique pour une simple copie est COPY. RUN exécute une commande à l'intérieur de l'image pendant le build et n'a pas accès aux fichiers de votre machine. VOLUME déclare un point de montage rempli au lancement du container : il ne copie rien dans l'image au build. Remarquez l'image de base : eclipse-temurin:21.0.13_9-jre, avec une version exacte (jamais latest ni une image sans tag, pour que le build reste reproductible) et un simple JRE. Pour lancer un jar, inutile d'installer un JDK complet sur une Ubuntu sans tag.",
+      "hint": "Deux instructions savent copier des fichiers ; l'une sait aussi décompresser des archives et télécharger des URL. Laquelle suffit ici ?"
     },
     {
       "id": "dk-04",
@@ -86,7 +86,7 @@ export default {
         "Dockerfile Angular",
         "nginx"
       ],
-      "code": "FROM nginx:1.17.1-alpine\n______ dist/mon-app-angular /usr/share/nginx/html\nEXPOSE 80",
+      "code": "FROM nginx:1.30.6-alpine\n______ dist/mon-app-angular/browser /usr/share/nginx/html\nEXPOSE 80",
       "question": "Quelle instruction copie le build Angular dans le serveur nginx ?",
       "options": [
         "RUN",
@@ -95,7 +95,7 @@ export default {
         "WORKDIR"
       ],
       "answer": 1,
-      "explanation": "COPY copie le contenu du dossier dist/ (le résultat de ng build) dans le répertoire de nginx qui sert les fichiers statiques. L'image nginx sert ensuite ces fichiers sur le port 80. RUN exécute une commande dans l'image au moment du build (par exemple apk add) mais ne peut pas atteindre les fichiers de votre machine. ADD ferait la copie, mais il est réservé aux archives à décompresser et aux URLs : pour des fichiers statiques, la bonne pratique est COPY. WORKDIR se contente de définir le répertoire courant des instructions suivantes, il ne transfère aucun fichier.",
+      "explanation": "COPY copie le résultat de ng build dans le répertoire de nginx qui sert les fichiers statiques. Depuis Angular 17, ce résultat se trouve dans dist/<app>/browser. Pour qu'une URL comme /produits/42 marche aussi au rechargement, il faut en plus une configuration nginx avec try_files $uri $uri/ /index.html, qui renvoie toutes les routes vers l'application Angular. L'image nginx sert ensuite ces fichiers sur le port 80. RUN exécute une commande dans l'image au moment du build (par exemple apk add) mais ne peut pas atteindre les fichiers de votre machine. ADD ferait la copie, mais il est réservé aux archives à décompresser et aux URLs : pour des fichiers statiques, la bonne pratique est COPY. WORKDIR se contente de définir le répertoire courant des instructions suivantes, il ne transfère aucun fichier.",
       "hint": "Le build Angular produit des fichiers statiques. Il suffit de les copier dans le bon dossier de nginx."
     },
     {

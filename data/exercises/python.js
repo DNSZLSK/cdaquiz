@@ -136,7 +136,7 @@ export default {
         "[0, 0, 0, 0]"
       ],
       "answer": 0,
-      "explanation": "La compréhension garde chaque n de nombres pour lequel n % 2 == 0 est vrai, c'est à dire les pairs : [2, 4, 6, 8]. [1, 3, 5, 7] inverserait la condition : n % 2 == 0 sélectionne les pairs, pas les impairs. La liste de booléens correspondrait à [n % 2 == 0 for n in nombres], sans clause if : ici le test sert de filtre, il n'est pas collecté. Et [0, 0, 0, 0] supposerait qu'on collecte n % 2 au lieu de n, or c'est bien n qui est placé avant le for.",
+      "explanation": "La compréhension garde chaque n de nombres pour lequel n % 2 == 0 est vrai, c'est-à-dire les pairs : [2, 4, 6, 8]. [1, 3, 5, 7] inverserait la condition : n % 2 == 0 sélectionne les pairs, pas les impairs. La liste de booléens correspondrait à [n % 2 == 0 for n in nombres], sans clause if : ici le test sert de filtre, il n'est pas collecté. Et [0, 0, 0, 0] supposerait qu'on collecte n % 2 au lieu de n, or c'est bien n qui est placé avant le for.",
       "hint": "n % 2 == 0 est vrai quand n est pair. La compréhension filtre et collecte ces valeurs."
     },
     {
@@ -150,13 +150,13 @@ export default {
       "code": "def diviser(a, b):\n    try:\n        resultat = a / b\n    except ZeroDivisionError:\n        print(\"Erreur : division par zéro\")\n    return resultat\n\nprint(diviser(10, 0))",
       "question": "Ce code affiche 'Erreur : division par zéro' puis plante. Pourquoi ?",
       "options": [
-        "resultat n'est jamais assigné quand b vaut 0, donc return resultat lève NameError",
+        "resultat n'est jamais assigné quand b vaut 0, donc return resultat lève UnboundLocalError",
         "L'except aurait dû capturer ArithmeticError : ZeroDivisionError ne couvre que la division entière avec //",
         "Le return placé hors du bloc try relance automatiquement l'exception qui vient d'être capturée",
         "Il manque un bloc finally : sans lui, une fonction contenant un try ne peut pas retourner de valeur"
       ],
       "answer": 0,
-      "explanation": "Quand b vaut 0, l'exception est capturée et le message s'affiche, mais l'assignation de resultat a été interrompue : au moment du return, la variable n'existe pas et Python lève NameError. Il faudrait retourner une valeur dans le except ou initialiser resultat avant le try. ZeroDivisionError couvre la division / comme la division entière //, inutile de remonter à ArithmeticError. Un return après un except ne relance jamais l'exception capturée : elle a été traitée et absorbée. Et finally sert à exécuter du code de nettoyage dans tous les cas, il n'est en rien nécessaire pour qu'une fonction retourne une valeur.",
+      "explanation": "Quand b vaut 0, l'exception est capturée et le message s'affiche, mais l'assignation de resultat a été interrompue : au moment du return, la variable locale n'a reçu aucune valeur et Python lève UnboundLocalError (une sous-classe de NameError). Il faudrait retourner une valeur dans le except ou initialiser resultat avant le try. ZeroDivisionError couvre la division / comme la division entière //, inutile de remonter à ArithmeticError. Un return après un except ne relance jamais l'exception capturée : elle a été traitée et absorbée. Et finally sert à exécuter du code de nettoyage dans tous les cas, il n'est en rien nécessaire pour qu'une fonction retourne une valeur.",
       "hint": "Si l'erreur survient AVANT l'assignation de resultat, que vaut resultat au moment du return ?"
     },
     {
@@ -197,7 +197,7 @@ export default {
       ],
       "answer": 0,
       "explanation": "La suite de Fibonacci : fib(0)=0, fib(1)=1, fib(2)=1, fib(3)=2, fib(4)=3, fib(5)=5, fib(6)=8. Chaque valeur est la somme des deux précédentes. 13 est fib(7) : le terme suivant, obtenu en comptant une étape de trop. 5 est fib(5) : une étape de moins, typique d'un décompte commencé à 1 au lieu de 0. 12 serait la somme cumulée des termes fib(0) à fib(5) : la définition additionne seulement les deux termes précédents, pas toute la suite.",
-      "hint": "Construisez la suite : 0, 1, 1, 2, 3, 5, 8... Le 6ème terme (en partant de 0) est ?"
+      "hint": "Calculez fib(2), fib(3)… à la main, en partant des deux cas de base fib(0) et fib(1)."
     }
   ]
 };

@@ -194,10 +194,10 @@ export default {
         "4",
         "3",
         "1",
-        "7"
+        "8"
       ],
       "answer": 0,
-      "explanation": "createElement() crée un élément en mémoire. appendChild() l'ajoute comme dernier enfant de la liste. 3 existants + 1 ajouté = 4 enfants. Répondre 3 supposerait que l'élément créé reste en mémoire sans être inséré, or appendChild l'attache bien au DOM. 1 confond appendChild avec un remplacement du contenu (comme innerHTML = ou replaceChildren). 7 correspondrait à un comptage de childNodes, qui inclut aussi les nœuds texte entre les balises, alors que children ne compte que les éléments.",
+      "explanation": "createElement() crée un élément en mémoire. appendChild() l'ajoute comme dernier enfant de la liste. 3 existants + 1 ajouté = 4 enfants. Répondre 3 supposerait que l'élément créé reste en mémoire sans être inséré, or appendChild l'attache bien au DOM. 1 confond appendChild avec un remplacement du contenu (comme innerHTML = ou replaceChildren). 8 correspondrait à childNodes.length : avec un HTML indenté, les 3 <li> sont entourés de 4 nœuds texte (les retours à la ligne), plus le nouveau <li>. children, lui, ne compte que les éléments.",
       "hint": "createElement crée, appendChild insère. L'élément s'ajoute AUX existants, il ne les remplace pas."
     },
     {
@@ -257,7 +257,7 @@ export default {
       ],
       "answer": 1,
       "explanation": "Les template literals utilisent les backticks ` (accent grave). Ils permettent l'interpolation avec ${expression} et les sauts de ligne sans \\n. C'est l'équivalent des f-strings en Python. Avec des guillemets doubles ou simples, on obtient une chaîne ordinaire : ${nom} s'afficherait tel quel, sans être interprété. Les accolades servent à l'interpolation ${...} À L'INTÉRIEUR du template, elles ne délimitent pas la chaîne elle-même.",
-      "hint": "C'est le caractère sous la touche Échap sur un clavier AZERTY (AltGr + 7)."
+      "hint": "Ce caractère se tape avec AltGr + 7 sur un clavier AZERTY (c'est une touche morte : appuyez ensuite sur Espace), et sous la touche Échap sur un clavier QWERTY."
     },
     {
       "id": "js-14",
@@ -295,7 +295,7 @@ export default {
         "Il faut écouter \"click\" sur le bouton au lieu de \"submit\" sur le formulaire"
       ],
       "answer": 0,
-      "explanation": "Par défaut, un formulaire HTML recharge la page à la soumission. event.preventDefault() empêche ce comportement par défaut. Il faut l'appeler au début du callback, pas dans le if, sinon la page recharge même quand l'email est rempli. stopPropagation() bloque la remontée de l'événement vers les éléments parents, mais pas le comportement par défaut du formulaire. return false ne fonctionne qu'avec les gestionnaires inline (onsubmit=\"...\") ou jQuery, pas avec addEventListener. Et écouter \"click\" ne changerait rien : le formulaire se soumettrait quand même après le clic.",
+      "explanation": "Par défaut, un formulaire HTML recharge la page à la soumission. event.preventDefault() empêche ce comportement par défaut. Ici, on l'appelle dans le if : l'envoi n'est bloqué que si l'email est vide, et le formulaire part normalement sinon. (Dans une application qui envoie les données elle-même avec fetch, on l'appelle au contraire dès le début du callback.) stopPropagation() bloque la remontée de l'événement vers les éléments parents, mais pas le comportement par défaut du formulaire. return false ne fonctionne qu'avec les gestionnaires inline (onsubmit=\"...\") ou jQuery, pas avec addEventListener. Et écouter \"click\" ne changerait rien : le formulaire se soumettrait quand même après le clic.",
       "hint": "Le comportement par défaut d'un <form> à la soumission est de recharger la page. Il faut l'empêcher explicitement."
     }
   ]

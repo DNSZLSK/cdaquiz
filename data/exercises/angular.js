@@ -74,12 +74,12 @@ export default {
       "question": "Que rend le badge ?",
       "options": [
         "Gold",
-        "Rien : le parent n'a pas de propriété nommée Gold",
-        "'Gold' avec les quotes simples affichées",
-        "Erreur : un signal ne peut pas être appelé dans le template"
+        "'Gold'",
+        "Rien",
+        "Une erreur : un signal ne s'appelle pas dans un template"
       ],
       "answer": 0,
-      "explanation": "[niveau]=\"'Gold'\" passe la string 'Gold' au signal input du composant enfant, et niveau() retourne cette valeur dans le template. Sans les quotes simples, Angular chercherait effectivement une propriété Gold dans le parent, mais ici elles font de Gold une string littérale. Ces quotes délimitent la valeur et ne sont jamais affichées. Quant à l'appel niveau(), c'est justement la façon normale de lire un signal dans un template : aucune erreur.",
+      "explanation": "[niveau]=\"'Gold'\" passe la chaîne Gold au signal input de l'enfant, et niveau() renvoie cette valeur dans le template : le badge affiche Gold. Les quotes simples délimitent la valeur dans l'expression : elles ne sont jamais affichées. Sans elles, Angular chercherait une propriété Gold dans le parent, et le badge resterait vide. Quant à l'appel niveau(), c'est justement la façon normale de lire un signal dans un template : aucune erreur.",
       "hint": "Les crochets [attribut] indiquent du property binding. Les quotes simples dans les doubles quotes font que c'est une string."
     },
     {
@@ -90,7 +90,7 @@ export default {
         "service",
         "injection de dépendances"
       ],
-      "code": "@Injectable({\n  providedIn: 'root'\n})\nexport class PanierService {\n  private articles = signal<Article[]>([]);\n  \n  ajouter(article: Article) {\n    this.articles.update(list => [...list, article]);\n  }\n  \n  getArticles() {\n    return this.articles;\n  }\n  \n  total() {\n    return this.articles().reduce((sum, a) => sum + a.prix, 0);\n  }\n}",
+      "code": "@Injectable({\n  providedIn: 'root'\n})\nexport class PanierService {\n  private readonly _articles = signal<Article[]>([]);\n  readonly articles = this._articles.asReadonly();\n  readonly total = computed(() =>\n    this._articles().reduce((sum, a) => sum + a.prix, 0)\n  );\n\n  ajouter(article: Article) {\n    this._articles.update(list => [...list, article]);\n  }\n}",
       "question": "Que signifie providedIn: 'root' ?",
       "options": [
         "Le service ne peut être injecté que dans AppComponent, le composant racine",
@@ -100,7 +100,7 @@ export default {
       ],
       "answer": 1,
       "explanation": "providedIn: 'root' enregistre le service au niveau racine de l'application. Angular crée une seule instance (singleton) partagée par tous les composants, comportement recommandé pour un panier. 'root' désigne l'injecteur racine, pas le seul AppComponent : tout composant, service ou directive peut l'injecter. Une instance par composant correspondrait à un provider déclaré dans le tableau providers d'un composant. Et providedIn: 'root' dispense justement de toute inscription manuelle dans des providers, tout en permettant le tree-shaking.",
-      "hint": "'root' = racine de l'application = disponible partout, une seule instance."
+      "hint": "À quel injecteur 'root' fait-il référence, et combien d'instances un injecteur crée-t-il pour un même service ?"
     },
     {
       "id": "ng-06",
@@ -151,7 +151,7 @@ export default {
         "Observable",
         "subscribe"
       ],
-      "code": "export class RecetteService {\n  http = inject(HttpClient);\n  url = 'http://localhost:3000/recettes';\n  \n  getAll(): Observable<Recette[]> {\n    return this.http.______(this.url);\n  }\n}",
+      "code": "@Injectable({ providedIn: 'root' })\nexport class RecetteService {\n  private http = inject(HttpClient);\n  private url = 'http://localhost:3000/recettes';\n  \n  getAll(): Observable<Recette[]> {\n    return this.http.______(this.url);\n  }\n}",
       "question": "Quelle méthode HTTP complète l'appel ?",
       "options": [
         "post",
@@ -160,8 +160,8 @@ export default {
         "fetch"
       ],
       "answer": 1,
-      "explanation": "Pour récupérer des données, on utilise une requête GET via this.http.get(), qui retourne un Observable qu'on subscribe dans le composant. post() envoie des données pour créer une ressource, pas pour lire. request() existe sur HttpClient mais exige la méthode HTTP en premier argument (this.http.request('GET', url)), la signature ne colle pas ici. fetch appartient à l'API native du navigateur et renvoie une Promise, pas un Observable : ce n'est pas une méthode de HttpClient.",
-      "hint": "CRUD : Create = POST, Read = GET, Update = PUT, Delete = DELETE."
+      "explanation": "Pour récupérer des données, on utilise une requête GET via this.http.get(), qui retourne un Observable qu'on subscribe dans le composant (HttpClient doit être fourni à l'application avec provideHttpClient() dans app.config.ts). post() envoie des données pour créer une ressource, pas pour lire. request() existe sur HttpClient mais exige la méthode HTTP en premier argument (this.http.request('GET', url)), la signature ne colle pas ici. fetch appartient à l'API native du navigateur et renvoie une Promise, pas un Observable : ce n'est pas une méthode de HttpClient.",
+      "hint": "Quel verbe HTTP sert à lire une ressource sans la modifier ?"
     },
     {
       "id": "ng-09",
@@ -172,7 +172,7 @@ export default {
         "FormControl",
         "ReactiveFormsModule"
       ],
-      "code": "// composant\napplyForm = new FormGroup({\n  nom: new FormControl(''),\n  email: new FormControl(''),\n});\n\nsubmitForm() {\n  console.log(this.applyForm.value.nom);\n  console.log(this.applyForm.value.email);\n}\n\n// template\n<form [formGroup]=\"applyForm\" (submit)=\"submitForm()\">\n  <input formControlName=\"nom\" value=\"Jean\" />\n  <input formControlName=\"email\" />\n  <button type=\"submit\">OK</button>\n</form>",
+      "code": "// composant\napplyForm = new FormGroup({\n  nom: new FormControl(''),\n  email: new FormControl(''),\n});\n\nsubmitForm() {\n  console.log(this.applyForm.value.nom);\n  console.log(this.applyForm.value.email);\n}\n\n// template\n<form [formGroup]=\"applyForm\" (ngSubmit)=\"submitForm()\">\n  <input formControlName=\"nom\" value=\"Jean\" />\n  <input formControlName=\"email\" />\n  <button type=\"submit\">OK</button>\n</form>",
       "question": "Si l'utilisateur ne touche pas aux champs et clique OK, que log la console ?",
       "options": [
         "Jean puis une string vide",

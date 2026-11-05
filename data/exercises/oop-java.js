@@ -15,7 +15,7 @@ export default {
       "options": [
         "...",
         "🎸 Gratte gratte",
-        "...\\n🎸 Gratte gratte",
+        "... puis 🎸 Gratte gratte",
         "Erreur de compilation"
       ],
       "answer": 1,
@@ -112,9 +112,9 @@ export default {
       "code": "interface IMessage {\n    String formater();\n}\n\nclass Email implements IMessage {\n    public String formater() {\n        return \"[EMAIL] Nouveau message\";\n    }\n}\n\nclass SMS implements IMessage {\n    public String formater() {\n        return \"[SMS] Nouveau message\";\n    }\n}\n\npublic class Main {\n    static void envoyer(IMessage msg) {\n        System.out.println(msg.formater());\n    }\n    \n    public static void main(String[] args) {\n        IMessage m1 = new Email();\n        IMessage m2 = new SMS();\n        envoyer(m1);\n        envoyer(m2);\n    }\n}",
       "question": "Qu'affiche ce code ?",
       "options": [
-        "[EMAIL] Nouveau message\\n[SMS] Nouveau message",
-        "[SMS] Nouveau message\\n[EMAIL] Nouveau message",
-        "[EMAIL] Nouveau message\\n[EMAIL] Nouveau message",
+        "[EMAIL] Nouveau message puis [SMS] Nouveau message",
+        "[SMS] Nouveau message puis [EMAIL] Nouveau message",
+        "[EMAIL] Nouveau message deux fois",
         "Erreur de compilation"
       ],
       "answer": 0,
@@ -192,7 +192,7 @@ export default {
       "code": "class CompteBancaire {\n    private double solde;\n    \n    CompteBancaire(double soldeInitial) {\n        this.solde = soldeInitial;\n    }\n    \n    public void deposer(double montant) {\n        solde += montant;\n    }\n}\n\npublic class Main {\n    public static void main(String[] args) {\n        CompteBancaire cb = new CompteBancaire(1000);\n        cb.deposer(500);\n        System.out.println(cb.solde);\n    }\n}",
       "question": "Ce code ne compile pas. Pourquoi ?",
       "options": [
-        "solde est private, on ne peut pas y accéder depuis Main",
+        "solde est private : Main ne peut pas y accéder directement",
         "Il manque un constructeur par défaut dans CompteBancaire",
         "CompteBancaire devrait être déclarée public pour être utilisée dans Main",
         "new CompteBancaire(1000) exige un cast car le constructeur attend un double"
@@ -239,7 +239,7 @@ export default {
       ],
       "answer": 1,
       "explanation": "super() appelle le constructeur de la classe parente. C'est obligatoire quand le constructeur parent a des paramètres (pas de constructeur par défaut), et l'appel doit être la première instruction du constructeur enfant. this(\"Chien\", age) appellerait un autre constructeur de Chien lui-même, qui n'existe pas ici. new Animal(\"Chien\", age) créerait un second objet indépendant sans initialiser la partie Animal du Chien en cours de construction. Animal(\"Chien\", age) serait interprété comme l'appel d'une méthode nommée Animal, introuvable : en Java on n'appelle jamais le constructeur parent par son nom, contrairement au C++.",
-      "hint": "En Java, pour appeler le constructeur du parent, on utilise un mot-clé spécial qui signifie 'au-dessus'."
+      "hint": "L'appel doit être la première instruction du constructeur, et il vise la classe dont Chien hérite."
     },
     {
       "id": "oop-13",
@@ -287,7 +287,7 @@ export default {
       "concepts": [
         "multiplicité"
       ],
-      "code": "class Equipe {\n    String nom;\n    List<Joueur> joueurs; // Une équipe a plusieurs joueurs\n    \n    Equipe(String nom) {\n        this.nom = nom;\n        this.joueurs = new ArrayList<>();\n    }\n    \n    void recruter(Joueur j) {\n        joueurs.add(j);\n    }\n}\n\nclass Joueur {\n    String nom;\n    Equipe equipe; // Un joueur appartient à une seule équipe\n    \n    Joueur(String nom) {\n        this.nom = nom;\n    }\n}",
+      "code": "class Equipe {\n    String nom;\n    List<Joueur> joueurs; // Une équipe a plusieurs joueurs\n    \n    Equipe(String nom) {\n        this.nom = nom;\n        this.joueurs = new ArrayList<>();\n    }\n    \n    void recruter(Joueur j) {\n        joueurs.add(j);\n        j.equipe = this; // les deux côtés restent cohérents\n    }\n}\n\nclass Joueur {\n    String nom;\n    Equipe equipe; // Un joueur appartient à une seule équipe\n    \n    Joueur(String nom) {\n        this.nom = nom;\n    }\n}",
       "question": "Quelle est la multiplicité de la relation entre Equipe et Joueur ?",
       "options": [
         "1 - 1 (chaque côté ne détient qu'une seule référence)",

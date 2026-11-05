@@ -9,7 +9,7 @@ export default {
       "concepts": [
         "architecture 3-tiers"
       ],
-      "code": "@RestController\n@RequestMapping(\"/api/cours\")\npublic class CoursController {\n    @Autowired\n    private CoursService coursService;\n    \n    @GetMapping\n    public List<CoursDTO> getAll() {\n        return coursService.findAll();\n    }\n}",
+      "code": "@RestController\n@RequestMapping(\"/api/cours\")\npublic class CoursController {\n    private final CoursService coursService;\n\n    public CoursController(CoursService coursService) {\n        this.coursService = coursService;\n    }\n    \n    @GetMapping\n    public List<CoursDTO> getAll() {\n        return coursService.findAll();\n    }\n}",
       "question": "À quelle couche de l'architecture 3-tiers appartient ce code ?",
       "options": [
         "Couche Métier (Service)",
@@ -55,11 +55,11 @@ export default {
         "CrudRepository uniquement : c'est l'interface que Spring Data exige pour générer l'implémentation",
         "JpaRepository uniquement : les deux autres ne prennent pas en charge les query methods dérivées",
         "Repository uniquement : les interfaces qui en héritent ne sont pas détectées par le scan de Spring",
-        "Les trois fonctionnent, mais JpaRepository est le plus complet"
+        "Les trois fonctionnent : Spring Data accepte toute interface qui hérite de Repository"
       ],
       "answer": 3,
-      "explanation": "JpaRepository étend PagingAndSortingRepository, qui étend CrudRepository, qui étend Repository : les trois permettent à Spring Data de générer l'implémentation, et on choisit JpaRepository car il ajoute la pagination, le tri et des méthodes comme flush() ou deleteAllInBatch(). Spring Data n'exige pas CrudRepository en particulier. Les query methods dérivées comme findByPrixGreaterThan fonctionnent dès l'interface marqueur Repository, pas seulement avec JpaRepository. Et le scan détecte toute interface qui étend Repository, directement ou par héritage.",
-      "hint": "Les trois héritent l'un de l'autre. Le plus complet est le plus utilisé en pratique."
+      "explanation": "Spring Data génère l'implémentation de toute interface qui hérite de Repository, directement ou non : les trois conviennent, et on choisit JpaRepository parce qu'il est le plus complet. Depuis Spring Data 3 (Spring Boot 3), JpaRepository étend ListCrudRepository et ListPagingAndSortingRepository : il apporte le CRUD avec des List, la pagination, le tri et des méthodes JPA comme flush() ou deleteAllInBatch(). Attention, PagingAndSortingRepository n'étend plus CrudRepository depuis cette version. Spring Data n'exige pas CrudRepository en particulier. Les query methods dérivées comme findByPrixGreaterThan fonctionnent dès l'interface marqueur Repository, pas seulement avec JpaRepository. Et le scan détecte toute interface qui étend Repository, directement ou par héritage.",
+      "hint": "Spring Data génère l'implémentation de toute interface qui hérite de Repository. Qu'apporte chaque niveau en plus ?"
     },
     {
       "id": "sb-04",
@@ -113,7 +113,7 @@ export default {
       "question": "Pourquoi utiliser un DTO plutôt que retourner directement l'Entity ?",
       "options": [
         "Pour éviter les LazyInitializationException, seul problème que pose le renvoi direct d'une Entity",
-        "Pour ne pas exposer les données sensibles (mot de passe) et contrôler la forme de la réponse API",
+        "Pour ne pas exposer les données sensibles comme le mot de passe et contrôler la forme de la réponse API",
         "Parce que Jackson ne sait pas sérialiser en JSON une Entity qui contient une relation @ManyToOne",
         "Pour que Hibernate cesse de suivre en base les modifications de l'objet renvoyé au client"
       ],
@@ -149,7 +149,7 @@ export default {
         "@GetMapping",
         "@PathVariable"
       ],
-      "code": "@RestController\n@RequestMapping(\"/api/animaux\")\npublic class AnimalController {\n    @Autowired\n    private AnimalService animalService;\n    \n    @GetMapping(\"/{id}\")\n    public AnimalDTO getById(@PathVariable Long id) {\n        return animalService.findById(id);\n    }\n    \n    @GetMapping\n    public List<AnimalDTO> getAll() {\n        return animalService.findAll();\n    }\n}",
+      "code": "@RestController\n@RequestMapping(\"/api/animaux\")\npublic class AnimalController {\n    private final AnimalService animalService;\n\n    public AnimalController(AnimalService animalService) {\n        this.animalService = animalService;\n    }\n    \n    @GetMapping(\"/{id}\")\n    public AnimalDTO getById(@PathVariable Long id) {\n        return animalService.findById(id);\n    }\n    \n    @GetMapping\n    public List<AnimalDTO> getAll() {\n        return animalService.findAll();\n    }\n}",
       "question": "Quelle URL appeler pour récupérer l'animal avec l'id 42 ?",
       "options": [
         "GET /api/animaux/42",
@@ -169,7 +169,7 @@ export default {
         "@ManyToMany",
         "table de jointure"
       ],
-      "code": "@Entity\npublic class Etudiant {\n    @Id @GeneratedValue\n    private Long id;\n    private String nom;\n    \n    @ManyToMany\n    @JoinTable(\n        name = \"inscription\",\n        joinColumns = @JoinColumn(name = \"etudiant_id\"),\n        inverseJoinColumns = @JoinColumn(name = \"matiere_id\")\n    )\n    private List<Matiere> matieres;\n}\n\n@Entity\npublic class Matiere {\n    @Id @GeneratedValue\n    private Long id;\n    private String intitule;\n    \n    @ManyToMany(mappedBy = \"matieres\")\n    private List<Etudiant> etudiants;\n}",
+      "code": "@Entity\npublic class Etudiant {\n    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)\n    private Long id;\n    private String nom;\n    \n    @ManyToMany\n    @JoinTable(\n        name = \"inscription\",\n        joinColumns = @JoinColumn(name = \"etudiant_id\"),\n        inverseJoinColumns = @JoinColumn(name = \"matiere_id\")\n    )\n    private List<Matiere> matieres;\n}\n\n@Entity\npublic class Matiere {\n    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)\n    private Long id;\n    private String intitule;\n    \n    @ManyToMany(mappedBy = \"matieres\")\n    private List<Etudiant> etudiants;\n}",
       "question": "Combien de tables sont créées en base de données ?",
       "options": [
         "2 (etudiant, matiere)",
@@ -178,7 +178,7 @@ export default {
         "4 (etudiant, matiere, inscription, matiere_etudiant)"
       ],
       "answer": 1,
-      "explanation": "@ManyToMany nécessite une table de jointure, et @JoinTable la nomme explicitement 'inscription' avec les clés étrangères etudiant_id et matiere_id : donc 3 tables. Deux tables ne suffiraient pas : une simple clé étrangère ne peut pas représenter du plusieurs-à-plusieurs. Le nom par défaut etudiant_matiere ne s'applique pas ici, puisque @JoinTable l'a remplacé par 'inscription'. Et le mappedBy = \"matieres\" côté Matiere désigne la relation déjà déclarée au lieu d'en créer une seconde : aucune quatrième table n'est générée.",
+      "explanation": "@ManyToMany nécessite une table de jointure, et @JoinTable la nomme explicitement 'inscription' avec les clés étrangères etudiant_id et matiere_id : donc 3 tables. Deux tables ne suffiraient pas : une simple clé étrangère ne peut pas représenter du plusieurs-à-plusieurs. Le nom par défaut etudiant_matiere ne s'applique pas ici, puisque @JoinTable l'a remplacé par 'inscription'. Et le mappedBy = \"matieres\" côté Matiere désigne la relation déjà déclarée au lieu d'en créer une seconde : aucune quatrième table n'est générée. Remarque : la stratégie IDENTITY compte ici. Avec un @GeneratedValue sans stratégie, Hibernate 6 utilise des séquences ; sur MySQL, qui n'en a pas, il les simule par des tables etudiant_seq et matiere_seq, soit 5 tables au total.",
       "hint": "Une relation Many-to-Many nécessite toujours une table intermédiaire pour stocker les associations."
     },
     {
@@ -192,14 +192,14 @@ export default {
       "code": "@RestController\n@RequestMapping(\"/api/cours\")\npublic class CoursController {\n    \n    private CoursService coursService;\n    \n    @GetMapping\n    public List<CoursDTO> getAll() {\n        return coursService.findAll();\n    }\n}",
       "question": "Ce code compile mais provoque une erreur au runtime. Laquelle et pourquoi ?",
       "options": [
-        "NullPointerException : coursService n'est jamais injecté (il manque @Autowired ou un constructeur)",
+        "NullPointerException au premier appel : rien n'injecte coursService et il reste null",
         "UnsatisfiedDependencyException au démarrage : Spring ne trouve pas de bean CoursService à injecter",
         "NoSuchBeanDefinitionException au premier appel : le bean CoursService n'est instancié que paresseusement",
         "Aucune erreur : Spring injecte automatiquement tout champ dont le type correspond à un bean du contexte"
       ],
       "answer": 0,
       "explanation": "Sans @Autowired ni constructeur, Spring ne considère pas coursService comme un point d'injection : le champ reste null et coursService.findAll() lève une NullPointerException au premier appel HTTP. UnsatisfiedDependencyException supposerait une injection déclarée mais impossible à satisfaire : ici rien n'est déclaré, donc le démarrage se passe sans erreur. NoSuchBeanDefinitionException viendrait d'une recherche explicite d'un bean absent du contexte, pas d'un champ ignoré. Et l'injection par type n'est jamais automatique sur un champ nu : il faut @Autowired, @Inject ou l'injection par constructeur.",
-      "hint": "Comparez avec les autres controllers : qu'ont-ils de plus au-dessus du champ Service ?"
+      "hint": "Comment les autres controllers reçoivent-ils leur Service ? Ici, qui donne une valeur au champ coursService ?"
     }
   ]
 };

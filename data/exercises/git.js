@@ -13,13 +13,13 @@ export default {
       "question": "Que fait cette commande ?",
       "options": [
         "Ajoute le fichier à la zone de staging (prêt à être commité)",
-        "Enregistre un snapshot du fichier dans l'historique local du dépôt",
+        "Enregistre un snapshot du fichier dans l'historique local du dépôt (commit)",
         "Envoie le fichier vers le dépôt distant origin",
         "Restaure le fichier à son dernier état commité"
       ],
       "answer": 0,
-      "explanation": "git add place le fichier dans la zone de staging (index). C'est une étape intermédiaire : le fichier est marqué pour le prochain commit mais pas encore commité. Le workflow complet est : modifier → git add → git commit → git push. Enregistrer un snapshot dans l'historique est le rôle de git commit, pas de add. L'envoi vers le distant origin relève de git push. Et restaurer le fichier à son dernier état commité serait git checkout -- ou git restore, soit l'inverse de ce que fait add.",
-      "hint": "Il y a 3 zones en Git : working directory → staging area → repository. add fait passer de la 1ère à la 2ème."
+      "explanation": "git add place le fichier dans la zone de staging (index). C'est une étape intermédiaire : le fichier est marqué pour le prochain commit mais pas encore commité. Le workflow complet est : modifier → git add → git commit → git push. Enregistrer un snapshot dans l'historique est le rôle de git commit, pas de add. L'envoi vers le distant origin relève de git push. Et restaurer le fichier à son dernier état commité serait git restore (anciennement git checkout --), soit l'inverse de ce que fait add.",
+      "hint": "Il y a 3 zones en Git : working directory → staging area → repository. Quelle commande fait passer un fichier d'une zone à la suivante ?"
     },
     {
       "id": "git-02",
@@ -66,8 +66,8 @@ export default {
       "concepts": [
         "branche"
       ],
-      "code": "git checkout -b feature/inscription\n# ... modifications ...\ngit add .\ngit commit -m \"feat: formulaire d'inscription\"\ngit push origin feature/inscription",
-      "question": "Que fait git checkout -b feature/inscription ?",
+      "code": "git switch -c feature/inscription\n# ... modifications ...\ngit add .\ngit commit -m \"feat: formulaire d'inscription\"\ngit push -u origin feature/inscription",
+      "question": "Que fait git switch -c feature/inscription ?",
       "options": [
         "Crée une nouvelle branche ET se positionne dessus",
         "Crée la branche mais reste positionné sur la branche courante",
@@ -75,8 +75,8 @@ export default {
         "Crée la branche directement sur le dépôt distant origin"
       ],
       "answer": 0,
-      "explanation": "checkout -b = créer ET basculer. C'est un raccourci pour git branch feature/inscription + git checkout feature/inscription. La nouvelle branche part du commit actuel. Les modifications qui suivent n'affectent que cette branche. Créer sans basculer est le comportement de git branch seul. Basculer sur une branche existante correspond à checkout sans -b, qui échouerait ici puisque la branche n'existe pas encore. Et rien n'est créé côté distant à ce stade : c'est le git push origin feature/inscription final qui publie la branche.",
-      "hint": "-b signifie 'créer'. Sans -b, checkout bascule sur une branche existante."
+      "explanation": "switch -c (c pour create) crée la branche ET bascule dessus : c'est la forme moderne de git checkout -b, et un raccourci pour git branch feature/inscription suivi de git switch feature/inscription. La nouvelle branche part du commit actuel, et les commits suivants n'affectent qu'elle. Créer sans basculer est le comportement de git branch seul. Basculer sur une branche existante correspond à git switch sans -c, qui échouerait ici puisque la branche n'existe pas encore. Et rien n'est créé côté distant à ce stade : c'est le git push -u origin feature/inscription final qui publie la branche (et -u la relie à la branche distante pour les prochains push et pull).",
+      "hint": "Comparez avec git branch feature/inscription seul : que fait switch en plus ?"
     },
     {
       "id": "git-05",
@@ -126,14 +126,14 @@ export default {
       "code": "# J'ai modifié App.java mais je veux annuler mes modifications\n# Le fichier N'A PAS encore été stagé (pas de git add)\n\ngit ______ App.java",
       "question": "Quelle commande annule les modifications non stagées ?",
       "options": [
-        "checkout --",
+        "restore",
         "restore --staged",
         "reset --hard",
         "revert"
       ],
       "answer": 0,
-      "explanation": "git checkout -- fichier restaure le fichier à son dernier état commité, annulant les modifications locales. Attention : les modifications sont perdues définitivement. Si le fichier était déjà stagé, il faut d'abord git reset HEAD fichier. restore --staged fait l'inverse du besoin : il retire le fichier de l'index sans toucher aux modifications du working directory. reset --hard refuse un chemin de fichier (Git répond 'Cannot do hard reset with paths') et remettrait de toute façon tout le projet en arrière. Et revert crée un commit qui annule un commit déjà enregistré, pas des modifications non commitées.",
-      "hint": "checkout sert aussi à restaurer des fichiers (pas seulement à changer de branche)."
+      "explanation": "git restore App.java remet le fichier dans son dernier état stagé (ou commité), en annulant les modifications locales : elles sont perdues définitivement. C'est la commande dédiée depuis Git 2.23, qui remplace l'ancien git checkout -- App.java. Si le fichier était déjà stagé, on le retire d'abord de l'index avec git restore --staged App.java. restore --staged seul fait l'inverse du besoin : il désindexe sans toucher au fichier. reset --hard refuse un chemin de fichier (Git répond 'Cannot do hard reset with paths') et remettrait de toute façon tout le projet en arrière. Et revert crée un commit qui annule un commit déjà enregistré, pas des modifications non commitées.",
+      "hint": "On ne veut toucher ni à l'index, ni à l'historique : seulement au fichier dans le working directory."
     },
     {
       "id": "git-08",
@@ -145,10 +145,10 @@ export default {
       "code": "git log --oneline -5",
       "question": "Que montre cette commande ?",
       "options": [
-        "Les 5 derniers commits, chacun sur une seule ligne (hash court + message)",
-        "Les 5 derniers commits avec le détail des lignes modifiées",
-        "Tout l'historique, paginé par blocs de 5 commits",
-        "Les commits des 5 derniers jours au format compact"
+        "Les 5 derniers commits, un par ligne : hash court et message",
+        "Les 5 derniers commits, avec le détail des lignes modifiées (diff)",
+        "Tout l'historique, affiché par pages de 5 commits",
+        "Les commits des 5 derniers jours, au format compact"
       ],
       "answer": 0,
       "explanation": "--oneline affiche chaque commit sur une seule ligne (hash court + message). -5 limite à 5 résultats. C'est un raccourci pour avoir une vue rapide de l'historique récent. Le détail des lignes modifiées demanderait l'option -p (ou --stat pour un résumé), absente ici. -5 n'est pas une pagination : la commande s'arrête après 5 commits au lieu de parcourir tout l'historique par blocs. Et il s'agit d'un nombre de commits, pas d'une période : filtrer par date se ferait avec --since.",
@@ -183,7 +183,7 @@ export default {
       "code": "# fichier .gitignore\nnode_modules/\n*.class\n.env\ntarget/\n.idea/",
       "question": "Quel est le rôle de ce fichier ?",
       "options": [
-        "Dire à Git d'ignorer ces fichiers/dossiers (ne pas les tracker ni commiter)",
+        "Dire à Git de ne pas suivre ces fichiers et dossiers non encore trackés",
         "Retirer ces fichiers de l'historique des commits déjà créés",
         "Empêcher le push de ces fichiers tout en les laissant commités en local",
         "Donner à git clean la liste des fichiers à supprimer du disque"
