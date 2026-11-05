@@ -314,3 +314,9 @@ body:has(.ap-lesson) .progress-bar { visibility: hidden; }
 #restartBtn:hover:not(:disabled) { border-color: var(--ap-ink); background: var(--ap-panel); }
 /* badges du labo (type, difficulte) : etiquettes plates, sans bordure coloree */
 .labo-badges .badge { border: 0; background: var(--ap-panel); color: var(--ap-muted); padding: 5px 9px; }
+
+/* ---------- Nom de l'appli : lien vers l'accueil ---------- */
+.ap-home { display: block; color: inherit; text-decoration: none; border-radius: var(--ap-r); }
+.ap-home p { margin: 0; }
+.ap-home:hover .ap-brand { color: var(--ap-orange); }
+.ap-home:focus-visible { outline: 2px solid var(--ap-orange); outline-offset: 4px; }

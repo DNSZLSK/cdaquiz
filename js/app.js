@@ -72,6 +72,13 @@ function initApp() {
         if (card) startQuiz(card.dataset.module);
     });
 
+    // Nom de l'appli en haut a gauche : retour a l'accueil (onglet Quiz) depuis n'importe quel ecran
+    document.getElementById('homeLink').addEventListener('click', (e) => {
+        e.preventDefault();
+        showScreen('menu');
+        window.scrollTo(0, 0);
+    });
+
     // Boutons statiques de l'ecran resultats
     document.getElementById('saveScoreBtn').addEventListener('click', saveScore);
     document.getElementById('backToMenuBtn').addEventListener('click', () => showScreen('menu'));
