@@ -27,11 +27,9 @@ export function showResults(session) {
 
     const scoreDisplay = document.querySelector('.score-display');
     scoreDisplay.innerHTML = `
-        <div class="score">${session.score}</div>
-        <div class="total">${session.length()} questions</div>
-        <div style="text-align: center; font-style: italic; color: #586069; margin-top: 20px; font-size: 0.9em; padding: 0 20px;">
-            "${glaDOSMessage}"
-        </div>
+        <div class="score">${session.score}<span class="score-of">/${session.length()}</span></div>
+        <div class="total">${session.length() > 1 ? 'réponses justes' : 'réponse juste'}</div>
+        <p class="ap-quote">"${glaDOSMessage}"</p>
     `;
 
     // Stats par module
@@ -112,7 +110,7 @@ function renderLeaderboard() {
         .sort((a, b) => b.pct - a.pct || a.timeSec - b.timeSec)
         .slice(0, 10);
 
-    let html = '<div style="color:#586069; font-size:0.85em; margin-bottom:12px;">Module : ' + escapeHtml(getModuleName(moduleKey)) + '</div>';
+    let html = '<div class="ap-results-meta">Module : ' + escapeHtml(getModuleName(moduleKey)) + '</div>';
 
     if (entries.length === 0) {
         html += '<div class="leaderboard-empty">Aucun score enregistré pour ce module. Soyez le premier !</div>';

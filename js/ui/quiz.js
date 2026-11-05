@@ -128,36 +128,23 @@ async function validateAnswer() {
     if (expl) expl.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
 }
 
+// Fenetre "Erreur de protocole" (aussi utilisee par le Code Lab) : meme style que la
+// fenetre d'identification. Fermeture au clic sur Compris ou sur le fond.
 export function showEmptyAnswerModal() {
-    const errorDiv = document.createElement('div');
-    errorDiv.style.cssText = `
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        background: #fff;
-        border: 1px solid #d1d5da;
-        padding: 30px 40px;
-        box-shadow: 0 4px 20px rgba(0,0,0,0.3);
-        z-index: 1000;
-        text-align: center;
-        max-width: 400px;
-    `;
-    errorDiv.innerHTML = `
-        <div style="font-size: 1.2em; font-weight: 600; color: #24292e; margin-bottom: 15px;">
-            Erreur de protocole
-        </div>
-        <div style="color: #586069; margin-bottom: 20px;">
-            Le Centre d'Enrichissement vous rappelle de sélectionner au moins une réponse avant de continuer.
+    const overlay = document.createElement('div');
+    overlay.className = 'ap-modal-overlay';
+    overlay.innerHTML = `
+        <div class="ap-modal" role="alertdialog" aria-labelledby="apModalTitle">
+            <h3 id="apModalTitle">Erreur de protocole</h3>
+            <p>Le Centre d'Enrichissement vous rappelle de sélectionner au moins une réponse avant de continuer.</p>
+            <button class="btn-primary" data-close>Compris</button>
         </div>
     `;
-    const okBtn = document.createElement('button');
-    okBtn.className = 'btn-primary';
-    okBtn.style.width = '100%';
-    okBtn.textContent = 'Compris';
-    okBtn.addEventListener('click', () => errorDiv.remove());
-    errorDiv.appendChild(okBtn);
-    document.body.appendChild(errorDiv);
+    overlay.addEventListener('click', (e) => {
+        if (e.target === overlay || e.target.closest('[data-close]')) overlay.remove();
+    });
+    document.body.appendChild(overlay);
+    overlay.querySelector('[data-close]').focus();
 }
 
 function nextQuestion() {
