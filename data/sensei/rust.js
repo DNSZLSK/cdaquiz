@@ -291,7 +291,7 @@ r1.push('b');`
         },
         {
           type: "cloze",
-          sentence: "Une fonction qui peut échouer retourne un ___.",
+          sentence: "Une fonction qui peut échouer et dire pourquoi retourne un ___.",
           options: ["Result", "Option", "match"],
           correct: 0,
           why: [

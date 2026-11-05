@@ -630,12 +630,12 @@ average(null)   // pas de tableau du tout ?`,
         {
           type: "cloze",
           sentence: "Un tableau vide passé à une fonction est un cas ___.",
-          options: ["limite", "d'utilisation", "de test unitaire"],
+          options: ["limite", "d'utilisation", "nominal"],
           correct: 0,
           why: [
             "",
             "Un cas d'utilisation est une action d'un utilisateur (UML).",
-            "Un test unitaire vérifie une fonction. Le tableau vide est le **cas** testé."
+            "Le cas **nominal**, c'est l'inverse : l'entrée normale, attendue (le happy path). Un tableau vide est au **bord** de ce qui est prévu."
           ]
         }
       ]
