@@ -229,6 +229,30 @@ function termTyped(v){
   if(!TERM_NORM){ TERM_NORM={}; TERMS.forEach(t=>[t.term, coreTerm(t)].forEach(x=>{ const k=norm(x); if(!TERM_NORM[k]) TERM_NORM[k]=t; })); }
   return TERM_NORM[norm(v)]||null;
 }
+/* Comparaison tolerante pour "ecrivez le terme" : sans les mots de liaison
+   (en, par, de, du, des, le, la, les, l', d', a), puis avec une petite faute de
+   frappe permise (1 lettre des 6 caracteres, 2 des 12). */
+const LINK_WORDS = new Set(["en","par","de","du","des","le","la","les","l","d","a","un","une","et"]);
+const words = s => fold(s).replace(/[’'`]/g," ").replace(/[^a-z0-9+#²³]+/g," ").trim().split(/\s+/).filter(w=>w && !LINK_WORDS.has(w));
+function editDistance(a, b){
+  const d=Array.from({length:a.length+1},(_,i)=>[i]);
+  for(let j=1;j<=b.length;j++) d[0][j]=j;
+  for(let i=1;i<=a.length;i++) for(let j=1;j<=b.length;j++)
+    d[i][j]=Math.min(d[i-1][j]+1, d[i][j-1]+1, d[i-1][j-1]+(a[i-1]===b[j-1]?0:1));
+  return d[a.length][b.length];
+}
+function looseMatch(expected, typed){
+  const e=words(expected).join(""), t=words(typed).join("");
+  if(!e || !t) return false;
+  if(e===t) return true;
+  const allowed = e.length>=12 ? 2 : e.length>=6 ? 1 : 0;
+  const dist = editDistance(e,t);
+  if(!(allowed>0 && dist<=allowed)) return false;
+  // une faute de frappe n'est acceptee que si aucun AUTRE terme n'est aussi proche
+  // (sinon "lisibilite" passerait pour "visibilite")
+  const ef = fold(expected);
+  return !TERMS.some(x=>{ const o=words(x.term).join(""); return fold(x.term)!==ef && o!==e && editDistance(o,t)<=dist; });
+}
 function distractors(t, n){
   const ch=LESSON[t.lessonId].chIdx, avoid=fold(t.term);
   const ok=x=>x.id!==t.id && fold(x.term)!==avoid && !related(t,x);
@@ -433,7 +457,7 @@ function stepPredict(s){
     body:`<article class="card">${codeView(s.code)}
       <label class="small muted" for="pred">${esc(s.label||"Ce qui s'affiche :")}</label>
       <input class="field" id="pred" autocomplete="off" autocapitalize="off" spellcheck="false" value="${esc(st.val||"")}" ${st.final?"disabled":""}>${hint}</article>`,
-    sheet: st.final ? resultSheet(st.ok, st.skip, md(pick(s.explain)) + (!st.ok&&st.other&&TERM[st.other] ? `<p>Vous avez écrit « ${esc(TERM[st.other].term)} » : ${md(shortDef(pick(TERM[st.other].def)))}</p>` : "")) : {kind:"idle", actions:btn("check-pred","Vérifier","full")+btn("skip-pred","Je ne sais pas","ghost")}};
+    sheet: st.final ? resultSheet(st.ok, st.skip, (st.ok&&st.loose&&target ? `<p>Accepté. Le terme exact : <strong>${esc(target.term)}</strong>.</p>` : "") + md(pick(s.explain)) + (!st.ok&&st.other&&TERM[st.other] ? `<p>Vous avez écrit « ${esc(TERM[st.other].term)} » : ${md(shortDef(pick(TERM[st.other].def)))}</p>` : "")) : {kind:"idle", actions:btn("check-pred","Vérifier","full")+btn("skip-pred","Je ne sais pas","ghost")}};
 }
 function firstOpenRow(s){ const st=L.st; if(st.row===undefined) st.row=s.rows.findIndex(r=>r.c.some(c=>typeof c==="object")); return st.row; }
 function stepTrace(s){
@@ -721,7 +745,11 @@ app.addEventListener("click", e=>{
       const v=$("#pred").value; st.val=v;
       if(!v.trim()){ $("#pred").focus(); return; }
       const vv = s.vocab ? v.replace(/^\s*(le|la|les|un|une|des|du)\s+|^\s*l['’]\s*/i,"") : v;
-      const ok=pick(s.answers).some(a=>norm(a)===norm(vv));
+      // Strict d'abord ; pour "ecrivez le terme", on tolere les mots de liaison
+      // (architecture PAR couches = EN couches) et une petite faute de frappe
+      let ok=pick(s.answers).some(a=>norm(a)===norm(vv));
+      st.loose=false;
+      if(!ok && s.vocab && pick(s.answers).some(a=>looseMatch(a, vv))){ ok=true; st.loose=true; }
       const other = s.vocab && !ok ? termTyped(vv) : null, target = s.vocab ? TERM[s.terms[0]] : null;
       st.other = other ? other.id : null;
       if(other && related(other,target) && !st.nearUsed){ st.nearUsed=true; st.near=other.id; render(); $("#pred").focus(); break; }
