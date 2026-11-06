@@ -15,3 +15,5 @@
 .module-card.agile { --module-color: #009688; }
 .module-card.architecture { --module-color: #6DB33F; }
 .module-card.docker { --module-color: #2496ED; }
+.module-card.securite { --module-color: #B03A2E; }
+.module-card.http { --module-color: #16A085; }

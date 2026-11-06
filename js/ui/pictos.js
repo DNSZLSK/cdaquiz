@@ -17,6 +17,10 @@ export const PICTO = {
     agile: svg('<path d="M4 12a8 8 0 0 1 13.7-5.6L20 8.5"/><path d="M20 4v4.5h-4.5"/><path d="M20 12a8 8 0 0 1-13.7 5.6L4 15.5"/><path d="M4 20v-4.5h4.5"/>'),
     architecture: svg('<path d="M12 3l9 5-9 5-9-5z"/><path d="M3 12.5l9 5 9-5M3 16.5l9 5 9-5"/>'),
     docker: svg('<rect x="3" y="11" width="18" height="8" rx="1"/><path d="M6 11V8h4v3M10 11V8h4v3M14 11V8h4v3M8 8V5h4v3"/>'),
+    // bouclier coche (module Securite du quiz)
+    securite: svg('<path d="M12 3l7.5 3v5.5c0 4.5-3.2 8-7.5 9.5-4.3-1.5-7.5-5-7.5-9.5V6z"/><path d="M9 12l2.2 2.2L15.5 10"/>'),
+    // requete et reponse : deux fleches opposees (module HTTP du quiz)
+    http: svg('<path d="M4 8h14M14 4l4 4-4 4"/><path d="M20 16H6M10 12l-4 4 4 4"/>'),
     lock: svg('<rect x="5" y="11" width="14" height="10" rx="1.5"/><path d="M8 11V8a4 4 0 0 1 8 0v3M12 15v2"/>'),
     // composant : un bloc decoupe en trois zones (Angular)
     component: svg('<rect x="3.5" y="3.5" width="17" height="17" rx="1.5"/><path d="M3.5 9h17M10 9v11.5"/><path d="M13 13h4.5M13 16.5h4.5"/>'),

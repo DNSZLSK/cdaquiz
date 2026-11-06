@@ -59,5 +59,13 @@ export const modules = {
     docker: {
         name: "Docker",
         description: "Conteneurisation, images, compose, volumes, réseau",
+    },
+    securite: {
+        name: "Sécurité",
+        description: "XSS, CSRF, injection, mots de passe, OWASP",
+    },
+    http: {
+        name: "HTTP",
+        description: "Méthodes, codes de statut, en-têtes, CORS, REST",
     }
 };
