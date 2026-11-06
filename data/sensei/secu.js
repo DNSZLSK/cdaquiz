@@ -297,6 +297,61 @@ const API_KEY = process.env.API_KEY;` },
           ]
         }
       ]
+    },
+    {
+      id: "web-secu",
+      title: "Les attaques du web",
+      sub: "CSRF, CORS, sel, IDOR, rate limiting",
+      steps: [
+        {
+          type: "concept",
+          term: "CSRF",
+          def: "Un site piégé fait envoyer à votre navigateur une requête vers un site où vous êtes **connecté** : le navigateur joint le cookie de session, et l'action part en votre nom. Parades : jeton anti-CSRF, cookie SameSite.",
+          phrase: "Le formulaire de virement est protégé contre le CSRF par un jeton."
+        },
+        {
+          type: "concept",
+          term: "CORS",
+          def: "Une règle du **navigateur** : un script chargé depuis un site A ne peut pas lire la réponse d'une API sur un domaine B, sauf si B l'autorise avec l'en-tête `Access-Control-Allow-Origin`. Ce n'est pas une protection du serveur : un script hors navigateur (curl) l'ignore.",
+          phrase: "L'appel échoue à cause du CORS : l'API n'autorise pas localhost:4200."
+        },
+        {
+          type: "concept",
+          term: "Sel",
+          def: "Une **valeur aléatoire** ajoutée à chaque mot de passe avant le hachage. Deux utilisateurs avec le même mot de passe ont alors deux empreintes différentes, et les tables précalculées ne servent plus à rien.",
+          phrase: "bcrypt ajoute un sel différent à chaque mot de passe."
+        },
+        {
+          type: "concept",
+          term: "IDOR",
+          def: "Accéder à une ressource d'un autre utilisateur **en changeant un identifiant** dans l'URL : `/factures/123` devient `/factures/124`. L'authentification est correcte, c'est le contrôle d'accès qui manque.",
+          phrase: "En changeant l'id dans l'URL, on lit les factures des autres : c'est une faille IDOR."
+        },
+        {
+          type: "concept",
+          term: "Rate limiting",
+          def: "**Limiter le nombre de requêtes** qu'un même client peut faire, par exemple 5 tentatives de connexion par minute. Ça freine le bruteforce des mots de passe et les abus d'API. Réponse HTTP : 429 Too Many Requests.",
+          phrase: "On a ajouté du rate limiting sur la route de connexion."
+        },
+        {
+          type: "cloze",
+          sentence: "Un site piégé déclenche un virement en utilisant le cookie de session de la victime : c'est une attaque ___.",
+          options: ["XSS", "CSRF", "IDOR"],
+          correct: 1,
+          why: [
+            "Une XSS injecte du script dans une page du site attaqué. Ici, la requête part d'un autre site.",
+            "",
+            "Une IDOR, c'est changer un identifiant pour lire les données d'un autre. Ici, on fait agir la victime à son insu."
+          ]
+        },
+        {
+          type: "qcm",
+          q: "Un attaquant essaie 10 000 mots de passe par minute sur /login. Quelle protection répond directement à ce problème ?",
+          options: ["Le CORS, en refusant les autres origines", "Le sel ajouté aux mots de passe hachés", "Le rate limiting sur la route de connexion"],
+          correct: 2,
+          explain: "Le **rate limiting** bloque le nombre de tentatives. Le CORS ne concerne que les scripts dans un navigateur : un script d'attaque l'ignore. Le sel protège une base de mots de passe volée, pas l'écran de connexion."
+        }
+      ]
     }
   ]
 };

@@ -377,6 +377,88 @@ cargo audit`,
           explain: "Il analyse **les dépendances** : c'est de la **SCA**."
         }
       ]
+    },
+    {
+      id: "rs-traits",
+      title: "Traits et références",
+      sub: "Trait, lifetime, Copy, unwrap, shadowing",
+      steps: [
+        {
+          type: "concept",
+          term: "Trait",
+          def: "Un **ensemble de méthodes** qu'un type s'engage à fournir, comme une interface. `impl Parler for Chat` donne la méthode `parler` au type Chat.",
+          code: {
+            rs: `trait Parler {
+    fn parler(&self) -> String;
+}
+struct Chat;
+impl Parler for Chat {
+    fn parler(&self) -> String { String::from("Miaou") }
+}`
+          },
+          phrase: "Le type Chat implémente le trait Parler."
+        },
+        {
+          type: "concept",
+          term: "Lifetime",
+          def: "La **durée pendant laquelle une référence est valide**. Le compilateur vérifie qu'aucune référence ne vit plus longtemps que la valeur qu'elle emprunte. Parfois, on l'écrit avec `'a`.",
+          code: {
+            rs: `fn plus_long<'a>(a: &'a str, b: &'a str) -> &'a str {
+    if a.len() > b.len() { a } else { b }
+}`
+          },
+          phrase: "Le compilateur refuse : la lifetime de la référence est trop courte."
+        },
+        {
+          type: "concept",
+          term: "Copy",
+          def: "Un trait des types **simples** (`i32`, `f64`, `bool`, `char`) : `let b = a;` fait une copie au lieu d'un move, et a reste utilisable. String et Vec ne sont pas Copy : ils sont déplacés.",
+          code: {
+            rs: `let a = 5;
+let b = a;               // copie : i32 est Copy
+println!("{} {}", a, b);   // ✅ a reste utilisable`
+          },
+          phrase: "Un i32 est Copy : on peut le réutiliser après l'affectation."
+        },
+        {
+          type: "concept",
+          term: "unwrap",
+          def: "Récupère la valeur d'une `Option` ou d'un `Result`, et **fait planter** le programme (panic) si c'est `None` ou `Err`. Pratique en test ou en prototype ; en production, on préfère `?`, `match` ou `unwrap_or`.",
+          code: {
+            rs: `let port: u16 = "8080".parse().unwrap();   // ok ici
+let x: u16 = "abc".parse().unwrap();      // ❌ panic à l'exécution`
+          },
+          phrase: "Ce unwrap fait paniquer le serveur si le fichier n'existe pas."
+        },
+        {
+          type: "concept",
+          term: "Shadowing",
+          def: "Redéclarer une variable avec `let` sous le **même nom** : la nouvelle cache l'ancienne, et peut même changer de type. Ce n'est pas une modification : aucun `mut` n'est nécessaire.",
+          code: {
+            rs: `let x = "42";
+let x: i32 = x.parse().unwrap();   // shadowing : nouveau x, nouveau type`
+          },
+          phrase: "On utilise le shadowing pour convertir le texte en nombre."
+        },
+        {
+          type: "cloze",
+          sentence: "Un i32 n'est pas déplacé par let b = a; parce qu'il implémente le trait ___.",
+          options: ["Clone", "Debug", "Copy"],
+          correct: 2,
+          why: ["Clone fournit une copie explicite, avec .clone(). Ici, la copie est implicite.", "Debug sert à afficher la valeur avec {:?}.", ""]
+        },
+        {
+          type: "qcm",
+          q: "Que fait ce code ?",
+          code: {
+            rs: `let nom: Option<&str> = None;
+println!("{}", nom.unwrap());`
+          },
+          options: ["Il affiche une ligne vide, car None vaut une chaîne vide", "Il panique : unwrap sur None arrête le programme", "Il ne compile pas : unwrap n'existe pas sur une Option"],
+          correct: 1,
+          explain: "`unwrap()` sur `None` déclenche un **panic** à l'exécution : le programme s'arrête avec un message. Le code compile, et None n'est pas une chaîne vide. Pour une valeur par défaut : `nom.unwrap_or(\"anonyme\")`."
+        }
+      ]
     }
   ]
 };

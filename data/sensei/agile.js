@@ -166,6 +166,65 @@ alors il voit le numéro de suivi.`,
           why: ["Le daily sert à se synchroniser chaque jour.", "La sprint review sert à montrer le produit.", ""]
         }
       ]
+    },
+    {
+      id: "agile-mesure",
+      title: "Estimer et suivre",
+      sub: "Epic, story points, vélocité, limite WIP, refinement",
+      steps: [
+        {
+          type: "concept",
+          term: "Epic",
+          def: "Une **grosse user story**, trop grosse pour un sprint, qu'on découpe en plusieurs stories. Exemple : « Gérer le paiement » se découpe en « payer par carte », « rembourser »…",
+          phrase: "On découpe l'epic Paiement en quatre stories."
+        },
+        {
+          type: "concept",
+          term: "Story points",
+          def: "Une **estimation relative** de l'effort d'une story (complexité, incertitude), pas un nombre d'heures. Une story à 8 points est environ deux fois plus lourde qu'une story à 3 ou 5.",
+          phrase: "L'équipe estime cette story à 5 story points."
+        },
+        {
+          type: "concept",
+          term: "Vélocité",
+          def: "Le nombre de **story points terminés** par l'équipe en un sprint, en moyenne. Elle sert à prévoir combien prendre au prochain sprint, jamais à comparer des équipes ou des personnes.",
+          phrase: "Notre vélocité est d'environ 30 points par sprint."
+        },
+        {
+          type: "concept",
+          term: "Limite WIP",
+          def: "Le nombre maximal de tâches **en cours en même temps** dans une colonne du tableau Kanban (WIP : Work In Progress). Quand la limite est atteinte, on aide à finir avant de commencer autre chose.",
+          phrase: "La colonne En revue a atteint sa limite WIP."
+        },
+        {
+          type: "concept",
+          term: "Refinement",
+          def: "La séance où l'équipe et le Product Owner **préparent les prochaines stories** : on les clarifie, on les découpe, on les estime. Le Scrum Guide parle d'affinage du Product Backlog.",
+          phrase: "On clarifiera cette story au prochain refinement."
+        },
+        {
+          type: "cloze",
+          sentence: "L'équipe termine en moyenne 30 story points par sprint : c'est sa ___.",
+          options: ["vélocité", "Definition of Done", "limite WIP"],
+          correct: 0,
+          why: [
+            "",
+            "La Definition of Done, ce sont les critères pour dire qu'un élément est terminé.",
+            "La limite WIP plafonne les tâches en cours en même temps, elle ne mesure pas ce qui est terminé."
+          ]
+        },
+        {
+          type: "qcm",
+          q: "Le manager veut comparer la vélocité de deux équipes pour savoir laquelle travaille le mieux. Que lui répond un senior ?",
+          options: [
+            "« Chaque équipe estime à sa façon : leurs points ne se comparent pas. »",
+            "« Bonne idée : l'équipe avec la plus forte vélocité est la plus productive. »",
+            "« Il faut d'abord convertir les points en heures pour pouvoir comparer. »"
+          ],
+          correct: 0,
+          explain: "Les story points sont **relatifs** à chaque équipe : 5 points chez l'une ne valent pas 5 points chez l'autre. La vélocité sert à **prévoir**, pas à juger. Convertir en heures ferait perdre tout l'intérêt de l'estimation relative."
+        }
+      ]
     }
   ]
 };

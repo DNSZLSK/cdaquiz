@@ -367,6 +367,70 @@ export default {
           model: "J'ai choisi une simple fonction parce que le besoin actuel est simple : c'est plus lisible et plus facile à tester. En revanche, si on ajoute d'autres cas plus tard, on pourra la refactoriser vers un pattern Strategy. YAGNI pour l'instant."
         }
       ]
+    },
+    {
+      id: "senior-archi",
+      title: "Parler d'architecture",
+      sub: "Idempotent, couplage, cohésion, contrat d'API",
+      steps: [
+        {
+          type: "concept",
+          term: "Idempotent",
+          def: "Une opération qu'on peut **rejouer** sans changer le résultat : la faire 1 fois ou 5 fois donne le même état. `DELETE /commandes/42` est idempotent ; un `POST /paiements` rejoué crée deux paiements, sauf avec une clé d'idempotence.",
+          phrase: "Le webhook peut arriver deux fois, le traitement doit être idempotent."
+        },
+        {
+          type: "concept",
+          term: "Couplage",
+          def: "À quel point deux modules **dépendent l'un de l'autre**. Couplage fort : changer l'un oblige à changer l'autre. On vise un couplage **faible**.",
+          phrase: "Ce service lit les tables de l'autre : le couplage est trop fort."
+        },
+        {
+          type: "concept",
+          term: "Cohésion",
+          def: "À quel point un module est **centré sur une seule responsabilité**. Forte cohésion : tout ce qu'il contient sert le même but. On vise une cohésion **forte**.",
+          phrase: "La classe Utils mélange tout : sa cohésion est faible."
+        },
+        {
+          type: "concept",
+          term: "Contrat d'API",
+          def: "Ce que l'API **promet** à ceux qui l'appellent : les routes, les paramètres, le format des réponses, les codes d'erreur. Le changer sans prévenir, c'est un breaking change.",
+          phrase: "On a respecté le contrat d'API : le champ est toujours là."
+        },
+        {
+          type: "cloze",
+          sentence: "Rejouer deux fois la même requête ne doit pas créer deux paiements : le traitement doit être ___.",
+          options: ["idempotent", "asynchrone", "rétrocompatible"],
+          correct: 0,
+          why: [
+            "",
+            "Asynchrone, c'est ne pas bloquer en attendant le résultat. Ici, la question est : que se passe-t-il si on rejoue ?",
+            "Rétrocompatible parle d'une nouvelle version qui marche avec l'ancien code."
+          ]
+        },
+        {
+          type: "qcm",
+          q: "Une classe Utils contient l'envoi d'emails, le calcul de la TVA et le format des dates. Que dit un senior ?",
+          options: [
+            "« Son couplage est faible : elle ne dépend d'aucune autre classe du projet. »",
+            "« Elle est idempotente : on peut l'appeler plusieurs fois sans risque. »",
+            "« Sa cohésion est faible : elle mélange trois responsabilités sans rapport. »"
+          ],
+          correct: 2,
+          explain: "Il **nomme** le problème (cohésion faible) et **explique** pourquoi (trois responsabilités). Un faible couplage serait une qualité, mais il ne dit rien du mélange de rôles ; l'idempotence concerne une opération qu'on rejoue, pas une classe."
+        },
+        {
+          type: "qcm",
+          q: "Le service Facturation lit directement les tables du service Commandes. Quel est le problème ?",
+          options: [
+            "Une cohésion trop forte : Facturation est trop centré sur un seul rôle",
+            "Un couplage fort : un changement de table chez Commandes casse Facturation",
+            "Un problème d'idempotence : lire les tables modifie les données de Commandes"
+          ],
+          correct: 1,
+          explain: "Facturation dépend des **détails internes** de Commandes : renommer une colonne chez Commandes casse Facturation. C'est un **couplage fort**. On passe plutôt par le **contrat d'API** de Commandes. Une cohésion forte est une qualité, et une lecture ne modifie rien."
+        }
+      ]
     }
   ]
 };

@@ -270,7 +270,12 @@ const ALIASES = {
   "Breaking change":["changement cassant"], "Race condition":["condition de concurrence"],
   "Asynchrone":["asynchronous"], "État":["state"], "Lisibilité":["readability"], "Interface publique":["public interface"],
   "Besoin fonctionnel":["exigence fonctionnelle","functional requirement"],
-  "Besoin non fonctionnel":["exigence non fonctionnelle","non-functional requirement"]
+  "Besoin non fonctionnel":["exigence non fonctionnelle","non-functional requirement"],
+  "Portée":["scope"], "Itérateur":["iterator"], "Cause racine":["root cause"], "Contournement":["workaround"],
+  "Couplage":["coupling"], "Cohésion":["cohesion"], "Contrat d'API":["API contract"], "Test double":["doublure de test"],
+  "Couverture de code":["code coverage"], "Sel":["salt"], "Déploiement canary":["canary deployment","canary release"],
+  "Vélocité":["velocity"], "Limite WIP":["WIP limit"], "Refinement":["affinage du backlog","backlog refinement"],
+  "Lifetime":["durée de vie"], "Shadowing":["masquage"]
 };
 /* Comparaison tolerante pour "ecrivez le terme" : sans les mots de liaison
    (en, par, de, du, des, le, la, les, l', d', a), puis avec une petite faute de

@@ -266,6 +266,65 @@ npm install express   # ✅ le vrai`,
           ]
         }
       ]
+    },
+    {
+      id: "git-livraison",
+      title: "Git avancé et livraisons",
+      sub: "Rebase, cherry-pick, revert, SemVer, canary",
+      steps: [
+        {
+          type: "concept",
+          term: "Rebase",
+          def: "**Rejouer** ses commits par-dessus une autre base, souvent la dernière version de `main`. L'historique devient linéaire, mais les commits sont réécrits : on ne rebase jamais une branche déjà partagée.",
+          code: `git switch ma-branche
+git rebase main   # rejoue mes commits par-dessus main`,
+          phrase: "Je fais un rebase sur main avant d'ouvrir la pull request."
+        },
+        {
+          type: "concept",
+          term: "Cherry-pick",
+          def: "Copier **un commit précis** d'une branche vers une autre, sans fusionner toute la branche. Exemple : récupérer un correctif sur la branche de production.",
+          code: "git cherry-pick a1b2c3d   # copie ce commit sur la branche courante",
+          phrase: "J'ai fait un cherry-pick du correctif sur la branche release."
+        },
+        {
+          type: "concept",
+          term: "Revert",
+          def: "Un **nouveau commit** qui annule les changements d'un commit précédent. L'historique n'est pas réécrit : c'est la bonne façon d'annuler un commit déjà poussé.",
+          code: "git revert a1b2c3d   # crée un commit inverse",
+          phrase: "On fait un revert du commit fautif plutôt qu'un reset."
+        },
+        {
+          type: "concept",
+          term: "SemVer",
+          def: "La convention de numérotation **MAJEUR.MINEUR.CORRECTIF** : 2.0.0 signale un breaking change, 1.5.0 une nouveauté compatible, 1.4.3 une correction de bug.",
+          phrase: "En SemVer, ce breaking change impose une version 3.0.0."
+        },
+        {
+          type: "concept",
+          term: "Déploiement canary",
+          def: "Déployer la nouvelle version pour **une petite partie** des utilisateurs (par exemple 5 %), surveiller les erreurs, puis élargir. Si ça casse, peu de monde est touché, et on revient en arrière.",
+          phrase: "Le déploiement canary ne touche que 5 % des utilisateurs."
+        },
+        {
+          type: "cloze",
+          sentence: "Le correctif est sur la branche dev, mais je n'en veux qu'un seul commit en production : je fais un ___.",
+          options: ["rebase", "cherry-pick", "merge"],
+          correct: 1,
+          why: ["Un rebase rejoue toute une branche sur une autre base, pas un seul commit.", "", "Un merge intégrerait toute la branche dev, avec tous ses autres commits."]
+        },
+        {
+          type: "qcm",
+          q: "Une bibliothèque passe de 1.4.2 à 1.5.0. Que vous promet SemVer ?",
+          options: [
+            "Un changement cassant : il faut adapter votre code",
+            "Une simple correction de bug, sans nouvelle fonction",
+            "Une nouveauté compatible : votre code doit continuer à marcher"
+          ],
+          correct: 2,
+          explain: "Le chiffre du **milieu** (MINEUR) augmente : nouvelle fonctionnalité **compatible**. Un changement cassant ferait passer à 2.0.0, une simple correction à 1.4.3."
+        }
+      ]
     }
   ]
 };

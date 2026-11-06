@@ -736,6 +736,76 @@ average(null)   // pas de tableau du tout ?` },
           why: ["", "O(1), c'est un temps constant : le coût ne dépend pas de la taille.", "O(n), c'est une seule boucle."]
         }
       ]
+    },
+    {
+      id: "tests-avances",
+      title: "Des tests fiables",
+      sub: "Test double, fixture, test flaky, couverture, linter",
+      steps: [
+        {
+          type: "concept",
+          term: "Test double",
+          def: "Un **faux objet** qui remplace une vraie dépendance pendant un test (base, API, horloge). Un **stub** renvoie des réponses préparées ; un **mock** vérifie en plus comment il a été appelé.",
+          phrase: "On remplace l'API de paiement par un test double."
+        },
+        {
+          type: "concept",
+          term: "Fixture",
+          def: "Les **données ou l'état préparés** avant un test : un utilisateur de test, une base remplie, un fichier d'exemple. Partagée par plusieurs tests, elle évite de tout recréer à la main.",
+          code: {
+            js: `beforeEach(() => {
+  panier = new Panier();   // fixture : un panier vide pour chaque test
+});`,
+            py: `@pytest.fixture
+def panier():
+    return Panier()   # fixture : un panier vide pour chaque test`,
+            rs: `fn panier() -> Panier {
+    Panier::new()   // fixture : un panier vide pour chaque test
+}`
+          },
+          phrase: "Chaque test repart de la même fixture."
+        },
+        {
+          type: "concept",
+          term: "Test flaky",
+          def: "Un test qui passe **ou échoue au hasard**, sans que le code ait changé : il dépend de l'heure, de l'ordre des tests, du réseau. On le corrige vite, sinon plus personne ne croit les tests rouges.",
+          phrase: "Ce test flaky échoue une fois sur dix à cause de l'heure."
+        },
+        {
+          type: "concept",
+          term: "Couverture de code",
+          def: "La part du code **exécutée** par les tests, en lignes ou en branches. 80 % de couverture ne prouve pas l'absence de bug : un test sans assertion couvre du code sans rien vérifier.",
+          phrase: "La couverture de code est à 85 %, mais il manque les cas d'erreur."
+        },
+        {
+          type: "concept",
+          term: "Linter",
+          def: "Un outil qui **analyse le code sans l'exécuter** et signale les erreurs probables et les écarts de style : ESLint en JavaScript, Ruff en Python, Clippy en Rust. Le formateur (Prettier, Black, rustfmt), lui, ne fait que remettre en forme.",
+          phrase: "Le linter signale une variable jamais utilisée."
+        },
+        {
+          type: "cloze",
+          sentence: "Ce test passe sur ma machine mais échoue une fois sur dix dans la CI, sans changement de code : c'est un test ___.",
+          options: ["unitaire", "de régression", "flaky"],
+          correct: 2,
+          why: [
+            "Un test unitaire vérifie une seule fonction ; il peut être flaky ou non. Le problème ici, c'est le résultat aléatoire.",
+            "Un test de régression vérifie qu'un ancien bug ne revient pas. Ici, le test échoue sans que le code ait changé.",
+            ""
+          ]
+        },
+        {
+          type: "qcm",
+          q: "La couverture de code est à 100 %. Que pouvez-vous en conclure ?",
+          options: [
+            "Le code ne contient plus aucun bug, puisque tout est testé",
+            "Chaque ligne a été exécutée par un test, pas forcément vérifiée",
+            "Tous les cas limites ont été testés, y compris les erreurs"
+          ],
+          correct: 1,
+          explain: "La couverture mesure ce qui a été **exécuté**, pas ce qui a été **vérifié** : un test sans assertion fait monter la couverture. Et 100 % des lignes ne veut pas dire tous les cas : une liste vide ou une division par zéro peuvent passer par les mêmes lignes."
+        }
+      ]
     }
   ]
 };

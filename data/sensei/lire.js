@@ -1529,6 +1529,152 @@ hello();                            // appel → affiche salut`
           ]
         }
       ]
+    },
+    {
+      id: "portee",
+      title: "Portée et mutabilité",
+      sub: "Portée, mutable, itérateur, closure",
+      steps: [
+        {
+          type: "concept",
+          term: "Portée",
+          def: "La **zone du code** où un nom existe et peut être utilisé. Une variable déclarée dans une fonction ou un bloc n'existe pas en dehors. En anglais : scope.",
+          beginner: "Ça me dit que total n'existe pas, alors que je l'ai créé.",
+          code: {
+            js: `function calculer() {
+  const total = 5;   // total existe ici
+}
+console.log(total);  // ❌ ReferenceError : hors de sa portée`,
+            py: `def calculer():
+    total = 5   # total existe ici
+
+print(total)    # ❌ NameError : hors de sa portée`,
+            rs: `{
+    let total = 5;   // total existe dans ce bloc
+}
+println!("{}", total);   // ❌ refusé à la compilation : hors de portée`
+          },
+          phrase: "La variable total est hors de portée à cet endroit."
+        },
+        {
+          type: "concept",
+          term: "Mutable",
+          def: "Une valeur **mutable** peut être modifiée sur place. Une valeur **immuable** ne change jamais : pour « la modifier », on en crée une nouvelle.",
+          code: {
+            js: `const nums = [1, 2];
+nums.push(3);          // tableau mutable : modifié sur place
+const nom = "ada";
+nom.toUpperCase();     // chaîne immuable : nom vaut toujours "ada"`,
+            py: `nums = [1, 2]
+nums.append(3)         # liste mutable : modifiée sur place
+nom = "ada"
+nom.upper()            # str immuable : nom vaut toujours "ada"`,
+            rs: `let mut nums = vec![1, 2];
+nums.push(3);          // modifiable grâce à mut
+let nom = String::from("ada");
+// nom.push('!');      // ❌ refusé : nom n'est pas mut`
+          },
+          phrase: "Ce tableau est mutable, la chaîne ne l'est pas."
+        },
+        {
+          type: "concept",
+          term: "Itérateur",
+          def: {
+            js: "Un objet qui donne les éléments **un par un**, à la demande. `for...of` utilise un itérateur pour parcourir un tableau, une chaîne ou une Map.",
+            py: "Un objet qui donne les éléments **un par un**, à la demande, avec `next()`. La boucle `for` utilise un itérateur pour parcourir une liste, une chaîne, un fichier…",
+            rs: "Un objet qui donne les éléments **un par un** avec `next()`. `.iter()` en crée un sur un Vec, et les adaptateurs comme `.map()` ne calculent rien avant qu'on consomme l'itérateur."
+          },
+          code: {
+            js: `const it = [10, 20][Symbol.iterator]();
+it.next();   // { value: 10, done: false }
+it.next();   // { value: 20, done: false }
+it.next();   // { value: undefined, done: true }`,
+            py: `it = iter([10, 20])
+next(it)   # 10
+next(it)   # 20
+next(it)   # StopIteration : plus rien`,
+            rs: `let mut it = vec![10, 20].into_iter();
+it.next();   // Some(10)
+it.next();   // Some(20)
+it.next();   // None : plus rien`
+          },
+          phrase: "La boucle for parcourt la liste grâce à un itérateur."
+        },
+        {
+          type: "concept",
+          term: "Closure",
+          def: "Une fonction qui **se souvient** des variables de l'endroit où elle a été créée, même après la fin de la fonction qui l'a créée.",
+          code: {
+            js: `function compteur() {
+  let n = 0;
+  return () => ++n;   // la closure garde n
+}
+const suivant = compteur();
+suivant();   // 1
+suivant();   // 2`,
+            py: `def compteur():
+    n = 0
+    def suivant():
+        nonlocal n
+        n += 1
+        return n
+    return suivant   # la closure garde n
+
+suivant = compteur()
+suivant()   # 1
+suivant()   # 2`,
+            rs: `let mut n = 0;
+let mut suivant = || { n += 1; n };   // la closure capture n
+suivant();   // 1
+suivant();   // 2`
+          },
+          phrase: "Le callback est une closure qui garde le compteur."
+        },
+        {
+          type: "cloze",
+          sentence: "On ne peut pas utiliser total ici : la variable est hors de sa ___.",
+          options: ["durée de vie", "portée", "valeur de retour"],
+          correct: 1,
+          why: [
+            "La durée de vie, c'est combien de temps la valeur existe en mémoire. Ici, il s'agit de la zone du code où le nom est visible.",
+            "",
+            "La valeur de retour, c'est ce qu'une fonction renvoie."
+          ]
+        },
+        {
+          type: "qcm",
+          q: "Que contient `nums` à la fin ?",
+          code: {
+            js: `const nums = [1, 2];
+const autre = nums;
+autre.push(3);`,
+            py: `nums = [1, 2]
+autre = nums
+autre.append(3)`,
+            rs: `let mut nums = vec![1, 2];
+let autre = &mut nums;
+autre.push(3);`
+          },
+          options: {
+            js: ["[1, 2]", "Une erreur : nums est déclaré avec const", "[1, 2, 3]"],
+            py: ["[1, 2]", "Une erreur : une liste ne peut pas avoir deux noms", "[1, 2, 3]"],
+            rs: ["[1, 2]", "Une erreur : on ne peut pas emprunter un Vec", "[1, 2, 3]"]
+          },
+          correct: 2,
+          explain: {
+            js: "Un tableau est **mutable**, et `autre` désigne le même tableau que `nums` : le push se voit des deux côtés. `const` interdit seulement de réaffecter `nums`, pas de modifier le tableau.",
+            py: "Une liste est **mutable**, et `autre` désigne la même liste que `nums` : l'append se voit des deux côtés.",
+            rs: "`autre` est un **emprunt mutable** de `nums` : le push modifie le même Vec. Une fois l'emprunt fini, `nums` vaut `[1, 2, 3]`."
+          }
+        },
+        {
+          type: "qcm",
+          q: "Avec la fonction compteur de la closure, que renvoie le troisième appel à `suivant()` ?",
+          options: ["1", "0", "3"],
+          correct: 2,
+          explain: "La closure **garde** `n` entre les appels : 1, puis 2, puis **3**. Elle ne repart pas de 0 à chaque appel : c'est tout l'intérêt de la closure."
+        }
+      ]
     }
   ]
 };

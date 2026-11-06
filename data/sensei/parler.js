@@ -208,6 +208,61 @@ Ce truc-là dans le code → Cette fonction / ce paramètre.`,
           explain: "Poser la question calmement montre que vous êtes **sûr de vous**. Et souvent, d'autres personnes ne le savaient pas non plus."
         }
       ]
+    },
+    {
+      id: "incident",
+      title: "Analyser un problème",
+      sub: "Cause racine, contournement, repro minimale, escalader",
+      steps: [
+        {
+          type: "concept",
+          term: "Cause racine",
+          def: "La **vraie raison** d'un problème, pas son symptôme. Symptôme : « la page plante ». Cause racine : « la date arrive au format américain, et le parsing échoue ».",
+          beginner: "J'ai relancé, ça remarche.",
+          phrase: "On a trouvé la cause racine : le fuseau horaire du serveur."
+        },
+        {
+          type: "concept",
+          term: "Contournement",
+          def: "Une **solution provisoire** qui évite le problème sans le corriger. En anglais : workaround. On le dit clairement, et on planifie la vraie correction.",
+          phrase: "En attendant le correctif, j'ai mis un contournement."
+        },
+        {
+          type: "concept",
+          term: "Repro minimale",
+          def: "Le **plus petit code** possible qui reproduit le bug : 10 lignes au lieu de toute l'application. Elle isole la cause, et elle se partage facilement (ticket, forum).",
+          beginner: "Ça plante quand je lance tout le projet.",
+          phrase: "Voici une repro minimale du bug, en douze lignes."
+        },
+        {
+          type: "concept",
+          term: "Escalader",
+          def: "**Faire remonter** un problème à la bonne personne (lead, équipe responsable, astreinte) quand il dépasse ce qu'on peut régler seul, ou qu'il est urgent. Ce n'est pas un échec : c'est savoir à qui s'adresser.",
+          phrase: "Le paiement est bloqué en production : il faut escalader au lead."
+        },
+        {
+          type: "cloze",
+          sentence: "Relancer le serveur a fait disparaître le bug, mais on ne connaît toujours pas sa ___.",
+          options: ["repro minimale", "régression", "cause racine"],
+          correct: 2,
+          why: [
+            "La repro minimale, c'est le petit code qui reproduit le bug, pas son origine.",
+            "Une régression, c'est quelque chose qui marchait et qui ne marche plus. Ici, on cherche l'origine du problème.",
+            ""
+          ]
+        },
+        {
+          type: "qcm",
+          q: "Le client ne peut plus payer, et la vraie correction prendra deux jours. Que dit un senior ?",
+          options: [
+            "« Je corrige tout proprement d'ici deux jours, pour ne pas bricoler une solution provisoire. »",
+            "« Je mets un contournement aujourd'hui pour débloquer les paiements, puis la vraie correction. »",
+            "« J'ai relancé le serveur, ça a l'air de remarcher, je referme le ticket tout de suite. »"
+          ],
+          correct: 1,
+          explain: "Il **débloque** les clients tout de suite (contournement), **annonce** que c'est provisoire et **planifie** la vraie correction. Attendre deux jours bloque les paiements ; relancer sans comprendre laisse la cause racine en place."
+        }
+      ]
     }
   ]
 };
