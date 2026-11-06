@@ -334,7 +334,8 @@ function validateAction() {
 
     if (verdict.correct) {
         record('sql', ex.id, 'ok', sql);
-        feedback.innerHTML = `<div class="sql-banner sql-banner-ok">${pick(GLADOS_OK)}</div>`;
+        feedback.innerHTML = `<div class="sql-banner sql-banner-ok">${pick(GLADOS_OK)}</div>`
+            + (verdict.warning ? `<div class="sql-banner sql-banner-warn">${escapeHtml(verdict.warning)}</div>` : '');
         if (prevStatus !== 'ok') {
             const done = getDomainStats('sql', scenarioPrefix()).ok === state.scenario.exercises.length;
             done ? playComplete() : playSuccess();

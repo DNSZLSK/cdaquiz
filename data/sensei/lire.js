@@ -1544,15 +1544,15 @@ hello();                            // appel → affiche salut`
             js: `function calculer() {
   const total = 5;   // total existe ici
 }
-console.log(total);  // ❌ ReferenceError : hors de sa portée`,
+console.log(total);  // ❌ ReferenceError`,
             py: `def calculer():
     total = 5   # total existe ici
 
-print(total)    # ❌ NameError : hors de sa portée`,
+print(total)    # ❌ NameError`,
             rs: `{
     let total = 5;   // total existe dans ce bloc
 }
-println!("{}", total);   // ❌ refusé à la compilation : hors de portée`
+println!("{}", total); // ❌ hors de portée`
           },
           phrase: "La variable total est hors de portée à cet endroit."
         },

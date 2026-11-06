@@ -216,7 +216,7 @@ console.log(rex.presenter());` },
         {
           type: "concept",
           term: "Composition",
-          def: "Un objet **contient** d'autres objets. Relation « **a un** » : une Voiture **a un** Moteur.",
+          def: "Un objet **contient** d'autres objets. Relation « **a un** » : une Voiture **a un** Moteur. En UML, elle se note par un losange **plein** ◆ du côté du « tout ».",
           code: { js: `class Voiture {
   constructor() {
     this.moteur = new Moteur();   // composition

@@ -249,12 +249,12 @@ export default {
       "code": "Règles métier d'une boutique :\n- Un produit a un prix, qui change plusieurs fois par an\n- Une commande contient plusieurs produits, en quantités variables\n- La facture d'une commande passée doit toujours afficher le prix payé ce jour-là",
       "question": "Où faut-il stocker le prix pour respecter la dernière règle ?",
       "options": [
-        "Uniquement dans PRODUIT : la facture relit le prix du produit au moment de l'afficher",
         "Dans LIGNE_COMMANDE aussi : le prix unitaire payé y est copié au moment de la commande",
+        "Uniquement dans PRODUIT : la facture relit le prix du produit au moment de l'afficher",
         "Dans une table PRIX sans lien avec les commandes, qui garde tous les anciens prix",
         "Nulle part : on recalcule le prix payé à partir du prix actuel et de la date"
       ],
-      "answer": 1,
+      "answer": 0,
       "explanation": "La ligne de commande doit garder une copie du prix unitaire au moment de la vente : si le produit passe de 20 € à 25 €, une facture de janvier affiche toujours 20 €. Relire le prix dans PRODUIT afficherait le prix du jour, donc une facture fausse. Ce n'est pas de la redondance à éliminer : le prix payé est une donnée différente du prix actuel. Une table d'historique des prix est utile pour suivre les évolutions, mais sans lien avec la commande elle ne dit pas quel prix a été payé ; et aucun calcul ne retrouve un prix qui n'a pas été enregistré.",
       "hint": "Le prix payé lors d'une commande et le prix affiché aujourd'hui sont-ils la même donnée ?"
     }

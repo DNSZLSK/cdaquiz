@@ -213,10 +213,10 @@ export default {
       "options": [
         "1 1 puis [1, 2]",
         "1 2 puis [1, 2]",
-        "1 2 puis []",
-        "1 2 puis une erreur StopIteration"
+        "1 2 puis une erreur StopIteration",
+        "1 2 puis []"
       ],
-      "answer": 2,
+      "answer": 3,
       "explanation": "Appeler compter() n'exécute pas la fonction : cela crée un générateur. Chaque next(g) reprend l'exécution jusqu'au yield suivant : 1, puis 2. Le générateur est alors épuisé. list(g) consomme ce qui reste, c'est-à-dire rien : []. Un générateur ne se rembobine pas, il faudrait rappeler compter() pour recommencer. list() gère la fin du générateur sans lever StopIteration ; seul un next(g) de trop la lèverait.",
       "hint": "Un générateur se consomme : une fois les deux yield passés, que reste-t-il ?"
     }

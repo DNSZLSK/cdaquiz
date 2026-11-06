@@ -181,7 +181,7 @@ alors il voit le numéro de suivi.`,
         {
           type: "concept",
           term: "Story points",
-          def: "Une **estimation relative** de l'effort d'une story (complexité, incertitude), pas un nombre d'heures. Une story à 8 points est environ deux fois plus lourde qu'une story à 3 ou 5.",
+          def: "Une **estimation relative** de l'effort d'une story (complexité, incertitude), pas un nombre d'heures. Sur l'échelle courante (1, 2, 3, 5, 8, 13), une story à 2 est estimée deux fois plus lourde qu'une story à 1.",
           phrase: "L'équipe estime cette story à 5 story points."
         },
         {
@@ -199,7 +199,7 @@ alors il voit le numéro de suivi.`,
         {
           type: "concept",
           term: "Refinement",
-          def: "La séance où l'équipe et le Product Owner **préparent les prochaines stories** : on les clarifie, on les découpe, on les estime. Le Scrum Guide parle d'affinage du Product Backlog.",
+          def: "L'activité où l'équipe et le Product Owner **préparent les prochaines stories** : on les clarifie, on les découpe, on les estime. Ce n'est pas un événement Scrum : le Scrum Guide 2020 en fait une **activité continue**, l'affinage du Product Backlog (Product Backlog refinement).",
           phrase: "On clarifiera cette story au prochain refinement."
         },
         {

@@ -131,11 +131,11 @@ export default {
       "question": "Un client connecté appelle /api/factures/124 au lieu de sa facture 123. Quelle faille ce code laisse-t-il passer ?",
       "options": [
         "Une injection SQL, parce que l'id vient directement de l'URL",
-        "Une faille XSS, parce que la facture est renvoyée sans échappement",
         "Un IDOR : rien ne vérifie que la facture 124 appartient au client",
+        "Une faille XSS, parce que la facture est renvoyée sans échappement",
         "Une faille CSRF, parce que la requête GET n'a pas de jeton anti-CSRF"
       ],
-      "answer": 2,
+      "answer": 1,
       "explanation": "Le code vérifie que l'utilisateur est authentifié, mais pas qu'il a le droit de voir CETTE facture : en changeant l'id, n'importe quel client lit les factures des autres. C'est un IDOR (Insecure Direct Object Reference), une forme de contrôle d'accès défaillant, A01 de l'OWASP Top 10:2025. Correction : chercher la facture du client connecté (findByIdAndClientId(id, clientConnecte)) ou vérifier son propriétaire, et renvoyer 404 sinon. Ce n'est pas une injection : findById passe l'id en paramètre. Le JSON renvoyé n'exécute rien, et le CSRF concerne les requêtes qui modifient des données avec un cookie de session.",
       "hint": "L'utilisateur est bien authentifié. Mais qui vérifie que cette facture est la sienne ?"
     }

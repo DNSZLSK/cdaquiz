@@ -173,12 +173,12 @@ export default {
       "code": "#titre { color: blue; }\n.titre.important { color: red; }\nh1 { color: green; }\n\n<h1 id=\"titre\" class=\"titre important\">Bonjour</h1>",
       "question": "De quelle couleur s'affiche le titre ?",
       "options": [
+        "Bleu, car un sélecteur d'id l'emporte sur des classes",
         "Vert, car la règle sur la balise h1 est écrite en dernier",
         "Rouge, car deux classes l'emportent sur un seul id",
-        "Bleu, car un sélecteur d'id l'emporte sur des classes",
         "Noir, car les trois règles s'annulent entre elles"
       ],
-      "answer": 2,
+      "answer": 0,
       "explanation": "Quand plusieurs règles visent le même élément, la plus spécifique gagne, quel que soit leur ordre. La spécificité se compte en trois colonnes (id, classes, balises) : #titre vaut (1, 0, 0), .titre.important (0, 2, 0), h1 (0, 0, 1). Un id l'emporte sur n'importe quel nombre de classes : le titre est bleu. L'ordre d'écriture ne départage que deux règles de même spécificité. D'où le conseil de styler avec des classes plutôt qu'avec des id, plus difficiles à surcharger.",
       "hint": "Comparez la spécificité : combien d'id, de classes et de balises dans chaque sélecteur ?"
     }

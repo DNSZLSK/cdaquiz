@@ -174,12 +174,12 @@ export default {
       "code": "ligne = 'Alice,\"Paris, France\",32'\nprint(ligne.split(','))",
       "question": "Qu'affiche ce code ?",
       "options": [
+        "['Alice', '\"Paris', ' France\"', '32']",
         "['Alice', 'Paris, France', '32']",
         "['Alice', '\"Paris, France\"', '32']",
-        "['Alice', '\"Paris', ' France\"', '32']",
         "['Alice,\"Paris, France\",32']"
       ],
-      "answer": 2,
+      "answer": 0,
       "explanation": "split(',') coupe à chaque virgule, sans rien savoir des guillemets du format CSV : la virgule de « Paris, France » coupe aussi, d'où 4 morceaux, guillemets compris. C'est pourquoi on lit un CSV avec le module csv : next(csv.reader([ligne])) donne bien ['Alice', 'Paris, France', '32']. Le résultat d'un seul élément correspondrait à un séparateur absent de la ligne.",
       "hint": "split() connaît-il les guillemets du format CSV ? Comptez les virgules."
     }

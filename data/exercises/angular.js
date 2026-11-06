@@ -216,11 +216,11 @@ export default {
       "question": "Qu'affiche ajouter() ?",
       "options": [
         "20, car un computed est calculé une seule fois, à sa création",
-        "30, car total est recalculé à partir des nouvelles valeurs",
         "NaN, car un signal ne peut pas être multiplié directement",
+        "30, car total est recalculé à partir des nouvelles valeurs",
         "Une erreur : un computed ne se lit que dans un template"
       ],
-      "answer": 1,
+      "answer": 2,
       "explanation": "computed() crée un signal dérivé : Angular sait qu'il dépend de prix et de quantite. Quand quantite passe à 3, total est marqué « à recalculer », et la prochaine lecture total() renvoie 10 × 3 = 30. Un computed n'est donc pas figé à sa création. On lit bien les valeurs avec prix() et quantite(), pas les signaux eux-mêmes, et un computed se lit partout : dans le code comme dans le template.",
       "hint": "computed() se souvient des signaux qu'il lit. Que se passe-t-il quand l'un d'eux change ?"
     }

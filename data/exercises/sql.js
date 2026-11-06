@@ -670,7 +670,7 @@ export default {
         {
           "id": "tym-16",
           "question": "Pour chaque client, affichez son nom, l'id et la date de sa commande la plus récente, triés par nom de client.",
-          "hint": "Numérotez les commandes de chaque client de la plus récente à la plus ancienne (ROW_NUMBER() OVER (PARTITION BY … ORDER BY …)), puis gardez le numéro 1. Une sous-requête avec MAX() marche aussi.",
+          "hint": "Numérotez les commandes de chaque client de la plus récente à la plus ancienne (ROW_NUMBER() OVER (PARTITION BY … ORDER BY …)), puis gardez le numéro 1. Une sous-requête corrélée avec MAX() marche aussi ; un simple GROUP BY avec des colonnes non agrégées, non.",
           "concepts": [
             "fonction de fenêtre",
             "ROW_NUMBER",

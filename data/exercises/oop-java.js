@@ -312,11 +312,11 @@ export default {
       "question": "Qu'affiche ce code ?",
       "options": [
         "true, true, puis Point@1b6d3586",
-        "false, false, puis Point@1b6d3586",
         "false, true, puis Point[x=1, y=2]",
+        "false, false, puis Point@1b6d3586",
         "true, true, puis Point[x=1, y=2]"
       ],
-      "answer": 2,
+      "answer": 1,
       "explanation": "Un record génère automatiquement le constructeur, les accesseurs x() et y(), equals(), hashCode() et toString(). a == b compare les références : deux objets créés avec new sont distincts, donc false. a.equals(b) compare les composants : true. Et toString() affiche Point[x=1, y=2], pas l'adresse en hexadécimal d'une classe ordinaire. Un record est aussi immuable : ses champs sont final.",
       "hint": "== compare-t-il les références ou le contenu ? Et que génère un record à votre place ?"
     }

@@ -242,6 +242,7 @@ body:has(.ap-lesson) .progress-bar { visibility: hidden; }
 .sql-banner { border: 0; border-radius: var(--ap-r); font-weight: 500; }
 .sql-banner-ok { background: #EEF8E6; color: #2F7500; }
 .sql-banner-ko { background: #FCEDED; color: #B42525; }
+.sql-banner-warn { background: #FFF4E0; color: #7A4A00; margin-top: 8px; }
 .sql-banner-info { background: var(--ap-panel); color: var(--ap-ink); }
 .sql-glados { font-style: italic; color: var(--ap-muted); }
 .sql-table { background: var(--ap-panel); border: 0; border-radius: var(--ap-r); }

@@ -303,13 +303,12 @@ def create_order():
           phrase: "Équipe agrège des joueurs."
         },
         {
-          type: "concept",
-          term: "Losange plein",
-          def: "En UML, le losange **plein** ◆, côté « tout », note une **composition** : l'objet est **fait de** parties qui **meurent avec lui**.",
-          code: `Commande ◆──────── 1..* LigneDeCommande
-// si on supprime la commande, ses lignes disparaissent`,
-          rule: "◇ vide = agrégation : les parties survivent. ◆ plein = composition : les parties meurent avec le tout.",
-          phrase: "Le losange plein entre Commande et LigneDeCommande indique une composition."
+          type: "qcm",
+          q: "Dans ce diagramme, que signifie le losange plein ◆ du côté de Commande ?",
+          code: `Commande ◆──────── 1..* LigneDeCommande`,
+          options: ["Une agrégation : les lignes survivent à la commande", "Un héritage : une ligne de commande est une commande", "Une composition : les lignes meurent avec la commande"],
+          correct: 2,
+          explain: "Losange **plein** ◆ = **composition** : si on supprime la commande, ses lignes disparaissent avec elle. Losange **vide** ◇ = **agrégation** : les parties survivent au tout (un joueur survit à son équipe). L'héritage se note autrement : une flèche à triangle vide vers la classe mère."
         },
         {
           type: "concept",
@@ -421,37 +420,37 @@ Admin ──┼── (Gérer le catalogue)  │
           type: "concept",
           term: "Diagramme de séquence",
           def: "Qui envoie **quel message** à qui, et **dans quel ordre**. Chaque participant a une ligne verticale (sa **ligne de vie**). Le temps descend. Un message se dessine en trait plein, sa réponse en **pointillés**.",
-          code: `Client           API            BDD
-  │  POST /login  │              │
-  │──────────────▶│              │
-  │               │    SELECT    │
-  │               │─────────────▶│
-  │               │◀╌╌╌╌╌╌╌╌╌╌╌╌╌│
-  │    200 OK     │              │
-  │◀╌╌╌╌╌╌╌╌╌╌╌╌╌╌│              │`,
+          code: `Client         API        BDD
+  │ POST /login │          │
+  │────────────▶│          │
+  │             │  SELECT  │
+  │             │─────────▶│
+  │             │◀╌╌╌╌╌╌╌╌╌│
+  │   200 OK    │          │
+  │◀╌╌╌╌╌╌╌╌╌╌╌╌│          │`,
           phrase: "Le diagramme de séquence montre que l'API interroge la base avant de répondre."
         },
         {
           type: "label",
           intro: "Nommez chaque morceau du diagramme.",
-          code: `Client           API            BDD
-  │  POST /login  │              │
-  │──────────────▶│              │
-  │               │    SELECT    │
-  │               │─────────────▶│
-  │               │◀╌╌╌╌╌╌╌╌╌╌╌╌╌│
-  │    200 OK     │              │
-  │◀╌╌╌╌╌╌╌╌╌╌╌╌╌╌│              │`,
+          code: `Client         API        BDD
+  │ POST /login │          │
+  │────────────▶│          │
+  │             │  SELECT  │
+  │             │─────────▶│
+  │             │◀╌╌╌╌╌╌╌╌╌│
+  │   200 OK    │          │
+  │◀╌╌╌╌╌╌╌╌╌╌╌╌│          │`,
           options: ["participant", "message (requête)", "réponse"],
           marks: [
             {line:1, text:"API", answer:"participant", why:"En haut, les participants : chacun a sa ligne de vie."},
             {
               line: 3,
-              text: "──────────────▶",
+              text: "────────────▶",
               answer: "message (requête)",
               why: "Flèche pleine vers la droite : un message envoyé."
             },
-            {line:8, text:"◀╌╌╌╌╌╌╌╌╌╌╌╌╌╌", answer:"réponse", why:"Flèche en pointillés qui revient vers le client : la réponse."}
+            {line:8, text:"◀╌╌╌╌╌╌╌╌╌╌╌╌", answer:"réponse", why:"Flèche en pointillés qui revient vers le client : la réponse."}
           ],
           traps: ["cas d'utilisation", "message asynchrone"]
         },
@@ -471,14 +470,14 @@ Admin ──┼── (Gérer le catalogue)  │
         {
           type: "explain",
           q: "Racontez ce diagramme. Essayez d'utiliser : client, requête, API, base de données, réponse.",
-          code: `Client           API            BDD
-  │  POST /login  │              │
-  │──────────────▶│              │
-  │               │    SELECT    │
-  │               │─────────────▶│
-  │               │◀╌╌╌╌╌╌╌╌╌╌╌╌╌│
-  │    200 OK     │              │
-  │◀╌╌╌╌╌╌╌╌╌╌╌╌╌╌│              │`,
+          code: `Client         API        BDD
+  │ POST /login │          │
+  │────────────▶│          │
+  │             │  SELECT  │
+  │             │─────────▶│
+  │             │◀╌╌╌╌╌╌╌╌╌│
+  │   200 OK    │          │
+  │◀╌╌╌╌╌╌╌╌╌╌╌╌│          │`,
           keywords: ["client", "requête", "API", "base de données", "réponse"],
           model: "Le client envoie une requête POST /login à l'API. L'API interroge la base de données avec un SELECT pour trouver l'utilisateur. La base répond, puis l'API renvoie une réponse 200 OK au client."
         }
