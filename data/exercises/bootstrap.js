@@ -118,6 +118,26 @@ export default {
       "answer": 0,
       "explanation": "En Bootstrap 5, mb-3 (margin-bottom: 1rem) est la méthode standard pour espacer les champs de formulaire. form-group était justement la classe dédiée de Bootstrap 4, mais elle a été supprimée en v5 au profit des utilitaires d'espacement. input-group sert à accoler un texte ou un bouton directement à l'input (comme un @ devant un champ), pas à espacer un bloc label + champ. form-floating existe aussi mais crée un label flottant à l'intérieur du champ et impose de placer le label après l'input, ce qui ne correspond pas à ce code.",
       "hint": "En Bootstrap 5, l'espacement utilise des classes utilitaires : m = margin, b = bottom, 3 = taille."
+    },
+    {
+      "id": "bs-07",
+      "type": "predict",
+      "difficulty": "beginner",
+      "concepts": [
+        "utilitaires d'affichage",
+        "responsive"
+      ],
+      "code": "<div class=\"d-none d-md-block\">\n  Menu complet\n</div>",
+      "question": "Sur quels écrans ce bloc est-il visible ?",
+      "options": [
+        "Sur tous les écrans, car d-md-block annule d-none",
+        "Seulement sur les écrans de moins de 768px",
+        "Seulement à partir de 768px, le breakpoint md",
+        "Sur aucun écran, car d-none l'emporte toujours"
+      ],
+      "answer": 2,
+      "explanation": "Bootstrap est mobile-first : d-none s'applique dès le plus petit écran (display: none), puis d-md-block prend le relais à partir du breakpoint md, soit 768px (display: block). Le bloc est donc caché sur mobile et visible à partir de 768px. Pour l'inverse (visible seulement sur mobile) : d-block d-md-none.",
+      "hint": "Sans préfixe, une classe s'applique dès le plus petit écran ; avec md, à partir de 768px."
     }
   ]
 };

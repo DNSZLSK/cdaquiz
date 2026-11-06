@@ -191,6 +191,27 @@ export default {
       "answer": 0,
       "explanation": ".gitignore liste les fichiers et dossiers que Git doit ignorer. node_modules/ (dépendances npm), *.class (compilés Java), .env (secrets), target/ (build Maven), .idea/ (config IDE) ne doivent JAMAIS être commités. C'est une des premières choses à configurer dans un projet. Il n'agit que sur les fichiers non encore trackés : un fichier déjà commité reste dans l'historique tant qu'on ne fait pas git rm --cached. Il ne filtre rien au moment du push : tout commit local part vers le distant. Et git clean fait l'inverse de cette lecture : par défaut il épargne les fichiers ignorés au lieu de les cibler.",
       "hint": "Ces fichiers sont soit générés automatiquement, soit contiennent des secrets, soit sont trop volumineux."
+    },
+    {
+      "id": "git-11",
+      "type": "complete",
+      "difficulty": "advanced",
+      "concepts": [
+        "reflog",
+        "reset --hard",
+        "récupération"
+      ],
+      "code": "git reset --hard HEAD~2   # oups : deux commits disparaissent de la branche\ngit ______                # retrouver l'id des commits perdus\ngit reset --hard HEAD@{1}  # revenir à l'état d'avant le reset",
+      "question": "Quelle commande liste les positions récentes de HEAD, y compris celle d'avant le reset ?",
+      "options": [
+        "log",
+        "reflog",
+        "revert",
+        "stash list"
+      ],
+      "answer": 1,
+      "explanation": "git reflog enregistre chaque déplacement de HEAD (commit, reset, checkout…) dans le dépôt local, pendant 90 jours par défaut. Les commits « perdus » après un reset --hard y sont toujours : HEAD@{1} désigne la position d'avant le dernier déplacement. git log ne montre que les commits accessibles depuis la branche actuelle, donc plus ceux-là. revert crée un commit inverse, et stash list liste les modifications mises de côté.",
+      "hint": "git log suit la branche. Quelle commande suit les mouvements de HEAD lui-même ?"
     }
   ]
 };

@@ -203,6 +203,26 @@ export default {
       "answer": 1,
       "explanation": ".set(0) écrase la valeur par 0 sans considérer l'ancienne valeur. .update(v => v + 1) prend l'ancienne valeur (v) et retourne la nouvelle (v + 1). Utilisez .update() quand la nouvelle valeur dépend de l'ancienne. Les deux méthodes notifient les consommateurs du signal exactement de la même façon. Le type de la valeur n'entre pas en jeu : .set() accepte aussi bien des objets et des tableaux que des primitives. Enfin .update() ne mute pas en place, il retourne une nouvelle valeur, et la méthode .mutate() a d'ailleurs été retirée de l'API des signals.",
       "hint": "Pensez à la différence entre x = 0 (set) et x = x + 1 (update)."
+    },
+    {
+      "id": "ng-11",
+      "type": "predict",
+      "difficulty": "intermediate",
+      "concepts": [
+        "signal",
+        "computed"
+      ],
+      "code": "prix = signal(10);\nquantite = signal(2);\ntotal = computed(() => this.prix() * this.quantite());\n\najouter() {\n  this.quantite.set(3);\n  console.log(this.total());\n}",
+      "question": "Qu'affiche ajouter() ?",
+      "options": [
+        "20, car un computed est calculé une seule fois, à sa création",
+        "30, car total est recalculé à partir des nouvelles valeurs",
+        "NaN, car un signal ne peut pas être multiplié directement",
+        "Une erreur : un computed ne se lit que dans un template"
+      ],
+      "answer": 1,
+      "explanation": "computed() crée un signal dérivé : Angular sait qu'il dépend de prix et de quantite. Quand quantite passe à 3, total est marqué « à recalculer », et la prochaine lecture total() renvoie 10 × 3 = 30. Un computed n'est donc pas figé à sa création. On lit bien les valeurs avec prix() et quantite(), pas les signaux eux-mêmes, et un computed se lit partout : dans le code comme dans le template.",
+      "hint": "computed() se souvient des signaux qu'il lit. Que se passe-t-il quand l'un d'eux change ?"
     }
   ]
 };

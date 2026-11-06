@@ -236,6 +236,27 @@ export default {
       "answer": 0,
       "explanation": "C'est de l'héritage en MCD (spécialisation/généralisation) : ANIMAL porte les attributs communs, chaque sous-entité porte ses attributs spécifiques. En MLD, on choisira ensuite entre table unique avec NULL, une table par sous-type ou 4 tables avec FK, selon les requêtes prévues. L'entité unique avec discriminant correspond justement à l'une de ces implémentations MLD, pas à la modélisation conceptuelle : au niveau MCD elle mélange tous les attributs. Trois entités indépendantes dupliqueraient nom, âge et poids et feraient perdre la généralisation. Et une entité TYPE_ANIMAL reliée par association ne fonctionne pas : une entité a une structure fixe, elle ne peut pas porter une période de gestation pour l'un et une envergure pour l'autre.",
       "hint": "Quand des entités partagent des attributs communs mais ont aussi des attributs propres, c'est de l'héritage."
+    },
+    {
+      "id": "mcd-13",
+      "type": "identify",
+      "difficulty": "advanced",
+      "concepts": [
+        "historisation",
+        "MLD",
+        "prix au moment de la vente"
+      ],
+      "code": "Règles métier d'une boutique :\n- Un produit a un prix, qui change plusieurs fois par an\n- Une commande contient plusieurs produits, en quantités variables\n- La facture d'une commande passée doit toujours afficher le prix payé ce jour-là",
+      "question": "Où faut-il stocker le prix pour respecter la dernière règle ?",
+      "options": [
+        "Uniquement dans PRODUIT : la facture relit le prix du produit au moment de l'afficher",
+        "Dans LIGNE_COMMANDE aussi : le prix unitaire payé y est copié au moment de la commande",
+        "Dans une table PRIX sans lien avec les commandes, qui garde tous les anciens prix",
+        "Nulle part : on recalcule le prix payé à partir du prix actuel et de la date"
+      ],
+      "answer": 1,
+      "explanation": "La ligne de commande doit garder une copie du prix unitaire au moment de la vente : si le produit passe de 20 € à 25 €, une facture de janvier affiche toujours 20 €. Relire le prix dans PRODUIT afficherait le prix du jour, donc une facture fausse. Ce n'est pas de la redondance à éliminer : le prix payé est une donnée différente du prix actuel. Une table d'historique des prix est utile pour suivre les évolutions, mais sans lien avec la commande elle ne dit pas quel prix a été payé ; et aucun calcul ne retrouve un prix qui n'a pas été enregistré.",
+      "hint": "Le prix payé lors d'une commande et le prix affiché aujourd'hui sont-ils la même donnée ?"
     }
   ]
 };

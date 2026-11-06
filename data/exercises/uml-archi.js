@@ -154,6 +154,26 @@ export default {
       "answer": 0,
       "explanation": "A : tout le code est dans un seul projet déployé ensemble → monolithique (architecture 3-tiers classique). B : chaque domaine métier est un service indépendant avec sa propre BDD, communiquant via l'API Gateway → microservices. Les couches Controller/Service/Repository de A ne sont pas des microservices : ce sont des couches logiques d'un même déploiement, pas des services autonomes. B n'est pas un monolithe distribué : ce terme désigne des services séparés mais fortement couplés (souvent une BDD partagée), or ici chaque service possède la sienne. Une API Gateway n'est pas un ESB : elle route les requêtes sans centraliser d'orchestration ni de transformation, ce qui distingue les microservices de la SOA classique. Enfin A compte bien trois tiers (présentation, métier, données), pas deux.",
       "hint": "Monolithique = un seul déploiement. Microservices = plusieurs services indépendants."
+    },
+    {
+      "id": "uml-09",
+      "type": "identify",
+      "difficulty": "intermediate",
+      "concepts": [
+        "SOLID",
+        "responsabilité unique"
+      ],
+      "code": "public class CommandeService {\n    public void valider(Commande c) {\n        // 1. calcule le total TTC\n        // 2. enregistre la commande en base (JDBC)\n        // 3. génère la facture PDF\n        // 4. envoie l'email de confirmation (SMTP)\n    }\n}",
+      "question": "Quel principe SOLID cette classe enfreint-elle le plus clairement ?",
+      "options": [
+        "Le principe de responsabilité unique : elle a quatre raisons de changer",
+        "Le principe de substitution de Liskov : elle ne peut pas remplacer sa classe mère",
+        "Le principe de ségrégation des interfaces : elle implémente trop d'interfaces",
+        "Aucun : un service est justement fait pour regrouper toute la logique"
+      ],
+      "answer": 0,
+      "explanation": "Le principe de responsabilité unique (le S de SOLID) dit qu'une classe ne doit avoir qu'une raison de changer. Ici, un changement de règle de TVA, de base de données, de modèle de facture ou de serveur mail oblige à modifier la même classe. On extrait plutôt un calculateur, un Repository, un générateur de PDF et un service d'email, que CommandeService orchestre. Liskov concerne l'héritage, absent ici, et la ségrégation des interfaces concerne les interfaces trop larges, absentes aussi. Un service orchestre la logique métier, il ne fait pas tout lui-même.",
+      "hint": "Listez ce qui pourrait obliger à modifier cette classe. Combien de raisons différentes trouvez-vous ?"
     }
   ]
 };

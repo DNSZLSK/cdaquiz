@@ -159,6 +159,26 @@ export default {
       "answer": 1,
       "explanation": "testAdulte : 18 n'est PAS < 18, donc on passe au if suivant. 18 < 65 = true → \"adulte\". Le test passe. testSenior : 64 < 65 = true → \"adulte\" (pas \"senior\"). Le test échoue car il attend \"senior\" mais reçoit \"adulte\". La valeur limite est 65, pas 64. Croire que testAdulte échoue revient à lire la borne 18 < 18 comme vraie, or elle est stricte : 18 tombe bien dans \"adulte\". Croire que les deux passent revient à classer 64 en senior alors que 64 < 65 le classe adulte. Et les deux n'échouent pas : seul testSenior a mal choisi sa valeur limite.",
       "hint": "Pour chaque test, suivez les if dans l'ordre avec la valeur passée : où s'arrête 18 ? Où s'arrête 64 ?"
+    },
+    {
+      "id": "tu-09",
+      "type": "predict",
+      "difficulty": "intermediate",
+      "concepts": [
+        "test paramétré",
+        "valeurs limites"
+      ],
+      "code": "static boolean estMajeur(int age) {\n    return age > 18;\n}\n\n@ParameterizedTest\n@ValueSource(ints = {18, 30})\nvoid majeur(int age) {\n    assertTrue(estMajeur(age));\n}",
+      "question": "Quel est le résultat des tests ?",
+      "options": [
+        "Les deux cas passent",
+        "Les deux cas échouent",
+        "Le cas 18 échoue, le cas 30 passe",
+        "Le cas 30 échoue, le cas 18 passe"
+      ],
+      "answer": 2,
+      "explanation": "@ParameterizedTest lance la même méthode une fois par valeur de @ValueSource : deux cas, 18 et 30. estMajeur(30) vaut true, ce cas passe. estMajeur(18) vaut false, car 18 > 18 est faux : ce cas échoue. Le bug est un > au lieu de >= : c'est exactement pour ça qu'on teste la valeur limite (18) et pas seulement une valeur confortable (30).",
+      "hint": "Calculez estMajeur(18) et estMajeur(30) séparément : 18 > 18 est-il vrai ?"
     }
   ]
 };

@@ -298,6 +298,27 @@ export default {
       "answer": 1,
       "explanation": "Une Equipe possède une List<Joueur> (plusieurs joueurs), et un Joueur a une seule Equipe : c'est une relation 1 vers N, bidirectionnelle car chaque côté référence l'autre. Le 1 - 1 ignorerait la List<Joueur>, qui porte justement le côté N. Le N - N exigerait que le Joueur détienne lui aussi une collection (List<Equipe>), or il n'a qu'une référence simple : la navigabilité dans les deux sens ne fait pas une relation N - N. Et le 0 - 1 ne décrit qu'un seul côté (un joueur sans équipe au départ), il ne qualifie pas la multiplicité globale de la relation.",
       "hint": "Regardez les types des attributs : List<> = plusieurs, simple référence = un seul."
+    },
+    {
+      "id": "oop-16",
+      "type": "predict",
+      "difficulty": "intermediate",
+      "concepts": [
+        "record",
+        "equals",
+        "Java 16+"
+      ],
+      "code": "record Point(int x, int y) {}\n\npublic class Main {\n    public static void main(String[] args) {\n        Point a = new Point(1, 2);\n        Point b = new Point(1, 2);\n        System.out.println(a == b);\n        System.out.println(a.equals(b));\n        System.out.println(a);\n    }\n}",
+      "question": "Qu'affiche ce code ?",
+      "options": [
+        "true, true, puis Point@1b6d3586",
+        "false, false, puis Point@1b6d3586",
+        "false, true, puis Point[x=1, y=2]",
+        "true, true, puis Point[x=1, y=2]"
+      ],
+      "answer": 2,
+      "explanation": "Un record génère automatiquement le constructeur, les accesseurs x() et y(), equals(), hashCode() et toString(). a == b compare les références : deux objets créés avec new sont distincts, donc false. a.equals(b) compare les composants : true. Et toString() affiche Point[x=1, y=2], pas l'adresse en hexadécimal d'une classe ordinaire. Un record est aussi immuable : ses champs sont final.",
+      "hint": "== compare-t-il les références ou le contenu ? Et que génère un record à votre place ?"
     }
   ]
 };

@@ -161,6 +161,26 @@ export default {
       "answer": 1,
       "explanation": ":hover s'active quand la souris survole l'élément, sans qu'aucun clic ne soit nécessaire. :active existe mais ne s'applique que pendant le clic, tant que le bouton de la souris reste enfoncé. :focus cible l'élément qui détient le focus, obtenu au clavier (Tab) ou après un clic, pas au simple survol. :visited ne concerne que les liens déjà visités, jamais un bouton.",
       "hint": "Cette pseudo-classe réagit au simple passage du pointeur, sans clic ni focus."
+    },
+    {
+      "id": "hc-09",
+      "type": "predict",
+      "difficulty": "intermediate",
+      "concepts": [
+        "spécificité",
+        "cascade"
+      ],
+      "code": "#titre { color: blue; }\n.titre.important { color: red; }\nh1 { color: green; }\n\n<h1 id=\"titre\" class=\"titre important\">Bonjour</h1>",
+      "question": "De quelle couleur s'affiche le titre ?",
+      "options": [
+        "Vert, car la règle sur la balise h1 est écrite en dernier",
+        "Rouge, car deux classes l'emportent sur un seul id",
+        "Bleu, car un sélecteur d'id l'emporte sur des classes",
+        "Noir, car les trois règles s'annulent entre elles"
+      ],
+      "answer": 2,
+      "explanation": "Quand plusieurs règles visent le même élément, la plus spécifique gagne, quel que soit leur ordre. La spécificité se compte en trois colonnes (id, classes, balises) : #titre vaut (1, 0, 0), .titre.important (0, 2, 0), h1 (0, 0, 1). Un id l'emporte sur n'importe quel nombre de classes : le titre est bleu. L'ordre d'écriture ne départage que deux règles de même spécificité. D'où le conseil de styler avec des classes plutôt qu'avec des id, plus difficiles à surcharger.",
+      "hint": "Comparez la spécificité : combien d'id, de classes et de balises dans chaque sélecteur ?"
     }
   ]
 };

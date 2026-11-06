@@ -200,6 +200,28 @@ export default {
       "answer": 0,
       "explanation": "Sans @Autowired ni constructeur, Spring ne considère pas coursService comme un point d'injection : le champ reste null et coursService.findAll() lève une NullPointerException au premier appel HTTP. UnsatisfiedDependencyException supposerait une injection déclarée mais impossible à satisfaire : ici rien n'est déclaré, donc le démarrage se passe sans erreur. NoSuchBeanDefinitionException viendrait d'une recherche explicite d'un bean absent du contexte, pas d'un champ ignoré. Et l'injection par type n'est jamais automatique sur un champ nu : il faut @Autowired, @Inject ou l'injection par constructeur.",
       "hint": "Comment les autres controllers reçoivent-ils leur Service ? Ici, qui donne une valeur au champ coursService ?"
+    },
+    {
+      "id": "sb-11",
+      "type": "predict",
+      "difficulty": "advanced",
+      "concepts": [
+        "JPA",
+        "LAZY",
+        "problème N+1",
+        "JOIN FETCH"
+      ],
+      "code": "@Entity\npublic class Commande {\n    @Id private Long id;\n    @ManyToOne(fetch = FetchType.LAZY)\n    private Client client;\n    // getters\n}\n\n// dans un service, avec 100 commandes en base\nList<Commande> commandes = commandeRepository.findAll();\nfor (Commande c : commandes) {\n    System.out.println(c.getClient().getNom());\n}",
+      "question": "Combien de requêtes SQL ce code envoie-t-il, si les 100 commandes ont 100 clients différents ?",
+      "options": [
+        "1 requête, grâce à la jointure faite par findAll()",
+        "2 requêtes : une pour les commandes, une pour tous les clients",
+        "100 requêtes : une par commande, pour charger son client",
+        "101 requêtes : une pour les commandes, puis une par client"
+      ],
+      "answer": 3,
+      "explanation": "findAll() charge les 100 commandes en une requête. Avec fetch = LAZY, chaque client n'est chargé qu'au premier accès : c.getClient().getNom() déclenche une requête par commande, soit 1 + 100 = 101. C'est le problème N+1. On le corrige en chargeant les clients avec les commandes : une requête @Query avec JOIN FETCH, ou @EntityGraph(attributePaths = \"client\") sur la méthode du Repository. findAll() ne fait aucune jointure automatique, et Hibernate ne regroupe pas tout seul les clients en une requête sans configuration (batch fetching).",
+      "hint": "LAZY : quand le client est-il réellement chargé ? Comptez la requête de départ, puis celles déclenchées dans la boucle."
     }
   ]
 };

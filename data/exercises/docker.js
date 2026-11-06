@@ -136,6 +136,27 @@ export default {
       "answer": 0,
       "explanation": "Chaque instruction d'un Dockerfile crée un layer mis en cache. Quand les fichiers copiés changent, le layer du COPY ET tous les layers suivants sont invalidés et reconstruits. Ici RUN apt install est placé après COPY : à chaque modification du jar, Docker refait aussi l'installation de Java. L'ordre correct : les instructions stables d'abord (FROM, RUN install), puis le COPY du jar qui change souvent. Docker ne consulte jamais les dépôts apt distants pour décider de rejouer un RUN : le cache se fonde sur la chaîne de commande, inchangée ici, c'est bien l'invalidation en cascade qui le force. ENTRYPOINT est déclaratif (exécuté au lancement du container, pas au build) : sa position n'affecte pas le cache, le mettre en dernier est une convention de lisibilité. Enfin le cache de layers est actif par défaut : --cache-from sert seulement à importer le cache d'une autre machine (en CI par exemple), pas à l'activer.",
       "hint": "Chaque instruction crée un layer Docker mis en cache. Un layer invalidé invalide tous les suivants."
+    },
+    {
+      "id": "dk-08",
+      "type": "debug",
+      "difficulty": "advanced",
+      "concepts": [
+        "compose.yaml",
+        "depends_on",
+        "healthcheck"
+      ],
+      "code": "services:\n  db:\n    image: postgres:17\n    environment:\n      POSTGRES_PASSWORD: secret\n  api:\n    build: .\n    depends_on:\n      - db",
+      "question": "Au premier docker compose up, l'API plante avec « Connection refused » vers la base, puis fonctionne si on la relance. Pourquoi ?",
+      "options": [
+        "depends_on attend que le conteneur db soit démarré, pas que Postgres accepte les connexions",
+        "depends_on ne fonctionne qu'avec docker run, Compose l'ignore complètement",
+        "Les deux services ne sont pas sur le même réseau, il faut en déclarer un",
+        "L'image postgres:17 met plusieurs minutes à se télécharger, il faut l'épingler"
+      ],
+      "answer": 0,
+      "explanation": "depends_on sous sa forme simple n'attend que le démarrage du conteneur db, pas que Postgres ait fini de s'initialiser : l'API tente de se connecter trop tôt. Correction : un healthcheck sur db (test: [\"CMD-SHELL\", \"pg_isready -U postgres\"]) et depends_on: db: condition: service_healthy. Compose prend bien en compte depends_on, et place tous les services d'un fichier sur un réseau commun par défaut : l'API joint db par son nom. Enfin, l'image est téléchargée avant le démarrage des conteneurs, ce n'est pas la cause.",
+      "hint": "« Conteneur démarré » et « base prête à accepter des connexions » : est-ce la même chose ?"
     }
   ]
 };

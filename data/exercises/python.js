@@ -198,6 +198,27 @@ export default {
       "answer": 0,
       "explanation": "La suite de Fibonacci : fib(0)=0, fib(1)=1, fib(2)=1, fib(3)=2, fib(4)=3, fib(5)=5, fib(6)=8. Chaque valeur est la somme des deux précédentes. 13 est fib(7) : le terme suivant, obtenu en comptant une étape de trop. 5 est fib(5) : une étape de moins, typique d'un décompte commencé à 1 au lieu de 0. 12 serait la somme cumulée des termes fib(0) à fib(5) : la définition additionne seulement les deux termes précédents, pas toute la suite.",
       "hint": "Calculez fib(2), fib(3)… à la main, en partant des deux cas de base fib(0) et fib(1)."
+    },
+    {
+      "id": "py-11",
+      "type": "predict",
+      "difficulty": "intermediate",
+      "concepts": [
+        "générateur",
+        "yield",
+        "itérateur"
+      ],
+      "code": "def compter():\n    yield 1\n    yield 2\n\ng = compter()\nprint(next(g), next(g))\nprint(list(g))",
+      "question": "Qu'affiche ce code ?",
+      "options": [
+        "1 1 puis [1, 2]",
+        "1 2 puis [1, 2]",
+        "1 2 puis []",
+        "1 2 puis une erreur StopIteration"
+      ],
+      "answer": 2,
+      "explanation": "Appeler compter() n'exécute pas la fonction : cela crée un générateur. Chaque next(g) reprend l'exécution jusqu'au yield suivant : 1, puis 2. Le générateur est alors épuisé. list(g) consomme ce qui reste, c'est-à-dire rien : []. Un générateur ne se rembobine pas, il faudrait rappeler compter() pour recommencer. list() gère la fin du générateur sans lever StopIteration ; seul un next(g) de trop la lèverait.",
+      "hint": "Un générateur se consomme : une fois les deux yield passés, que reste-t-il ?"
     }
   ]
 };

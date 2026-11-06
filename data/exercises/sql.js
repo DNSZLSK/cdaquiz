@@ -341,6 +341,16 @@ export default {
             "ORDER BY"
           ],
           "solution": "SELECT DISTINCT ville FROM benevole ORDER BY ville;"
+        },
+        {
+          "id": "fbr-21",
+          "question": "Affichez le nom et le prénom des bénévoles qui ne sont affectés à aucune scène couverte.",
+          "hint": "Un bénévole affecté à une scène couverte ET à une scène en plein air ne doit pas apparaître. Filtrer les lignes avec couverte = 0 ne suffit donc pas : il faut vérifier l'absence de toute affectation couverte.",
+          "concepts": [
+            "NOT EXISTS",
+            "sous-requête corrélée"
+          ],
+          "solution": "SELECT nom, prenom FROM benevole WHERE NOT EXISTS (SELECT 1 FROM affectation JOIN scene ON affectation.id_scene = scene.id WHERE affectation.id_benevole = benevole.id AND scene.couverte = 1);"
         }
       ]
     },
@@ -656,6 +666,18 @@ export default {
             "WHERE"
           ],
           "solution": "DELETE FROM ligne_commande WHERE id_commande IN (SELECT id FROM commande WHERE statut = 'annulée'); DELETE FROM commande WHERE statut = 'annulée';"
+        },
+        {
+          "id": "tym-16",
+          "question": "Pour chaque client, affichez son nom, l'id et la date de sa commande la plus récente, triés par nom de client.",
+          "hint": "Numérotez les commandes de chaque client de la plus récente à la plus ancienne (ROW_NUMBER() OVER (PARTITION BY … ORDER BY …)), puis gardez le numéro 1. Une sous-requête avec MAX() marche aussi.",
+          "concepts": [
+            "fonction de fenêtre",
+            "ROW_NUMBER",
+            "PARTITION BY",
+            "sous-requête"
+          ],
+          "solution": "SELECT nom, id_commande, date_commande FROM (SELECT client.nom AS nom, commande.id AS id_commande, commande.date_commande AS date_commande, ROW_NUMBER() OVER (PARTITION BY client.id ORDER BY commande.date_commande DESC) AS rang FROM commande JOIN client ON commande.id_client = client.id) WHERE rang = 1 ORDER BY nom;"
         }
       ]
     }

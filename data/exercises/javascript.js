@@ -297,6 +297,28 @@ export default {
       "answer": 0,
       "explanation": "Par défaut, un formulaire HTML recharge la page à la soumission. event.preventDefault() empêche ce comportement par défaut. Ici, on l'appelle dans le if : l'envoi n'est bloqué que si l'email est vide, et le formulaire part normalement sinon. (Dans une application qui envoie les données elle-même avec fetch, on l'appelle au contraire dès le début du callback.) stopPropagation() bloque la remontée de l'événement vers les éléments parents, mais pas le comportement par défaut du formulaire. return false ne fonctionne qu'avec les gestionnaires inline (onsubmit=\"...\") ou jQuery, pas avec addEventListener. Et écouter \"click\" ne changerait rien : le formulaire se soumettrait quand même après le clic.",
       "hint": "Le comportement par défaut d'un <form> à la soumission est de recharger la page. Il faut l'empêcher explicitement."
+    },
+    {
+      "id": "js-16",
+      "type": "predict",
+      "difficulty": "advanced",
+      "concepts": [
+        "event loop",
+        "microtâche",
+        "setTimeout",
+        "Promise"
+      ],
+      "code": "console.log(\"A\");\nsetTimeout(() => console.log(\"B\"), 0);\nPromise.resolve().then(() => console.log(\"C\"));\nconsole.log(\"D\");",
+      "question": "Dans quel ordre s'affichent les lettres ?",
+      "options": [
+        "A, B, C, D",
+        "A, D, B, C",
+        "A, C, B, D",
+        "A, D, C, B"
+      ],
+      "answer": 3,
+      "explanation": "Le code synchrone s'exécute d'abord : A puis D. Ensuite, la boucle d'événements (event loop) vide la file des microtâches, où se trouvent les callbacks des Promises : C. Seulement après vient la file des tâches, où setTimeout a déposé son callback, même avec un délai de 0 : B. D'où A, D, C, B. Un setTimeout de 0 ne veut pas dire « tout de suite » : il passe après tout le code synchrone et après les microtâches.",
+      "hint": "Trois files : le code synchrone, puis les microtâches (Promise), puis les tâches (setTimeout)."
     }
   ]
 };

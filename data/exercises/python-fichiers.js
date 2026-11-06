@@ -161,6 +161,27 @@ export default {
       "answer": 0,
       "explanation": "sorted() trie la liste. key=lambda j: j['temps'] dit de trier par le champ 'temps'. Par défaut c'est croissant. Bob (32.8) < Alice (45.2) < Charlie (51.0). classement[0] = Bob (le plus rapide). Alice ne serait première que si la liste gardait son ordre initial ou si le tri portait sur le nom. Charlie sortirait en tête avec reverse=True (tri décroissant). Et sorted() ne trie pas en place : c'est list.sort() qui modifie la liste et retourne None, sorted() renvoie bien une nouvelle liste que l'on peut indexer.",
       "hint": "sorted() par défaut = croissant. Le premier élément est celui avec le plus petit 'temps'."
+    },
+    {
+      "id": "pyf-09",
+      "type": "predict",
+      "difficulty": "intermediate",
+      "concepts": [
+        "CSV",
+        "split",
+        "module csv"
+      ],
+      "code": "ligne = 'Alice,\"Paris, France\",32'\nprint(ligne.split(','))",
+      "question": "Qu'affiche ce code ?",
+      "options": [
+        "['Alice', 'Paris, France', '32']",
+        "['Alice', '\"Paris, France\"', '32']",
+        "['Alice', '\"Paris', ' France\"', '32']",
+        "['Alice,\"Paris, France\",32']"
+      ],
+      "answer": 2,
+      "explanation": "split(',') coupe à chaque virgule, sans rien savoir des guillemets du format CSV : la virgule de « Paris, France » coupe aussi, d'où 4 morceaux, guillemets compris. C'est pourquoi on lit un CSV avec le module csv : next(csv.reader([ligne])) donne bien ['Alice', 'Paris, France', '32']. Le résultat d'un seul élément correspondrait à un séparateur absent de la ligne.",
+      "hint": "split() connaît-il les guillemets du format CSV ? Comptez les virgules."
     }
   ]
 };

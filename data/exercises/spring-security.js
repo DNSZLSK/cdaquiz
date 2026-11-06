@@ -117,6 +117,27 @@ export default {
       "answer": 0,
       "explanation": "UserDetailsService est l'interface que Spring Security appelle pour trouver un utilisateur par son identifiant. loadUserByUsername() cherche en BDD et retourne un UserDetails (email, mdp hashé, rôles). La comparaison du mot de passe n'est pas son rôle : c'est le DaoAuthenticationProvider qui la fait ensuite via le PasswordEncoder. L'interception des requêtes et le contrôle des rôles reviennent à la chaîne de filtres et aux règles d'autorisation, pas à cette classe. Et la gestion de la session ou du SecurityContext intervient après l'authentification, ailleurs dans le framework.",
       "hint": "Spring Security ne sait pas où sont stockés vos utilisateurs. Cette classe fait le pont avec votre BDD."
+    },
+    {
+      "id": "sec-07",
+      "type": "identify",
+      "difficulty": "intermediate",
+      "concepts": [
+        "IDOR",
+        "contrôle d'accès",
+        "OWASP A01"
+      ],
+      "code": "@GetMapping(\"/api/factures/{id}\")\npublic FactureDTO getFacture(@PathVariable Long id) {\n    // l'utilisateur est authentifié (JWT valide)\n    Facture f = factureRepository.findById(id).orElseThrow();\n    return FactureMapper.toDto(f);\n}",
+      "question": "Un client connecté appelle /api/factures/124 au lieu de sa facture 123. Quelle faille ce code laisse-t-il passer ?",
+      "options": [
+        "Une injection SQL, parce que l'id vient directement de l'URL",
+        "Une faille XSS, parce que la facture est renvoyée sans échappement",
+        "Un IDOR : rien ne vérifie que la facture 124 appartient au client",
+        "Une faille CSRF, parce que la requête GET n'a pas de jeton anti-CSRF"
+      ],
+      "answer": 2,
+      "explanation": "Le code vérifie que l'utilisateur est authentifié, mais pas qu'il a le droit de voir CETTE facture : en changeant l'id, n'importe quel client lit les factures des autres. C'est un IDOR (Insecure Direct Object Reference), une forme de contrôle d'accès défaillant, A01 de l'OWASP Top 10:2025. Correction : chercher la facture du client connecté (findByIdAndClientId(id, clientConnecte)) ou vérifier son propriétaire, et renvoyer 404 sinon. Ce n'est pas une injection : findById passe l'id en paramètre. Le JSON renvoyé n'exécute rien, et le CSRF concerne les requêtes qui modifient des données avec un cookie de session.",
+      "hint": "L'utilisateur est bien authentifié. Mais qui vérifie que cette facture est la sienne ?"
     }
   ]
 };
