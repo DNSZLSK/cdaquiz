@@ -208,6 +208,7 @@ println!("{}", x);`
     ch: "rust",
     step: {
       type: "qcm",
+      only: "rs",
       q: "Ce code Rust compile-t-il ?",
       code: {
         rs: `let x = 5;

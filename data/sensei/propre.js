@@ -272,7 +272,8 @@ while (i > 0) {
         {
           type: "concept",
           term: "ReferenceError",
-          def: "Erreur quand on utilise un **nom qui n'existe pas**. Le plus souvent : une faute de frappe.",
+          only: "js",
+          def: "Erreur JavaScript quand on utilise un **nom qui n'existe pas**. Le plus souvent : une faute de frappe. En Python, la même faute lève une `NameError`. En Rust, le code ne compile même pas : erreur `E0425` (cannot find value).",
           code: { js: `const total = 10;
 console.log(totl);
 // ReferenceError: totl is not defined` },
@@ -437,10 +438,31 @@ const adults = users.filter(user => user.age > 17);` },
         {
           type: "concept",
           term: "camelCase",
-          def: "La convention de nommage en JavaScript : premier mot en minuscule, puis **chaque mot suivant commence par une majuscule**.",
-          code: { js: `const totalPrice = 0;    // ✅ camelCase
+          def: {
+            js: "La convention de nommage en JavaScript : premier mot en minuscule, puis **chaque mot suivant commence par une majuscule**.",
+            py: "La convention de JavaScript : premier mot en minuscule, puis **chaque mot suivant commence par une majuscule** (`totalPrice`). Python suit une autre convention, fixée par la PEP 8 : **snake_case** pour les variables et les fonctions (`total_price`), **PascalCase** pour les classes (`UserService`).",
+            rs: "La convention de JavaScript : premier mot en minuscule, puis **chaque mot suivant commence par une majuscule** (`totalPrice`). Rust suit une autre convention : **snake_case** pour les variables et les fonctions (`total_price`), **PascalCase** pour les types : struct, enum, trait (`UserService`). Le compilateur avertit si on s'en écarte."
+          },
+          code: {
+            js: `const totalPrice = 0;    // ✅ camelCase
 const total_price = 0;   // snake_case (Python)
-class UserService {} // PascalCase (pour les classes)` },
+class UserService {} // PascalCase (pour les classes)`,
+            py: `total_price = 0          # ✅ snake_case : variables et fonctions
+
+def calculate_total():
+    return total_price
+
+class UserService:       # PascalCase : classes
+    pass`,
+            rs: `fn calculate_total() -> i32 { 0 }   // ✅ snake_case : fonctions
+
+struct UserService;                 // PascalCase : types (struct, enum, trait)
+
+fn main() {
+    let total_price = calculate_total();   // snake_case : variables
+    // let totalPrice = 0;   → warning : should have a snake case name
+}`
+          },
           phrase: "On respecte la convention camelCase."
         },
         {

@@ -12,6 +12,7 @@ export default {
       steps: [
         {
           type: "concept",
+          only: "rs",
           term: "Immuable par défaut",
           def: "En Rust, une variable **ne peut pas changer** sauf si on écrit `mut`. C'est l'inverse de JavaScript et Python.",
           code: {
@@ -43,6 +44,7 @@ let nom: String = String::from("Bob");`
         },
         {
           type: "qcm",
+          only: "rs",
           q: "Ce code compile-t-il ?",
           code: {
             rs: `let total = 0;
@@ -54,6 +56,7 @@ total = total + 5;`
         },
         {
           type: "label",
+          only: "rs",
           intro: "Nommez chaque morceau.",
           code: {rs:"let mut score: i32 = 10;"},
           options: ["mot-clé de déclaration", "rend modifiable", "type", "valeur"],
@@ -108,6 +111,7 @@ total = total + 5;`
         },
         {
           type: "concept",
+          only: "rs",
           term: "Move",
           def: "`let b = a;` sur une String **déplace** la valeur : b devient propriétaire, et a **n'est plus utilisable**. On ne copie pas les données du heap. Les types simples (`i32`, `f64`, `bool`…) implémentent le trait **Copy** : pour eux, `let b = a;` fait une copie, et a reste utilisable.",
           code: {
@@ -119,6 +123,7 @@ println!("{}", a);    // ❌ erreur : a a été déplacé`
         },
         {
           type: "qcm",
+          only: "rs",
           q: "Que se passe-t-il ?",
           code: {
             rs: `let a = String::from("hi");
@@ -166,6 +171,7 @@ println!("{} {}", a, b);   // ✅ les deux existent`
       steps: [
         {
           type: "concept",
+          only: "rs",
           term: "Emprunt",
           def: "Avec `&`, on **prête** une valeur sans donner la propriété. La fonction peut la lire, puis le propriétaire la récupère.",
           code: {
@@ -180,6 +186,7 @@ println!("{}", nom);      // ✅ nom est toujours là`
         },
         {
           type: "concept",
+          only: "rs",
           term: "Emprunt mutable",
           def: "Avec `&mut`, on prête la valeur **pour la modifier**.",
           code: {
@@ -200,6 +207,7 @@ ajouter(&mut nums);   // nums vaut [1, 2, 3, 4]`
         },
         {
           type: "qcm",
+          only: "rs",
           q: "Ce code compile-t-il ?",
           code: {
             rs: `let mut s = String::from("a");
@@ -231,6 +239,7 @@ r1.push('b');`
       steps: [
         {
           type: "concept",
+          only: "rs",
           term: "Option",
           def: "Une valeur **qui peut manquer**. `Some(valeur)` : il y a une valeur. `None` : il n'y en a pas. Rust n'a pas de `null`.",
           code: {
@@ -242,6 +251,7 @@ r1.push('b');`
         },
         {
           type: "concept",
+          only: "rs",
           term: "Result",
           def: "Le résultat d'une opération **qui peut échouer**. `Ok(valeur)` : succès. `Err(erreur)` : échec. Rust n'a pas d'exceptions classiques.",
           code: {
@@ -266,6 +276,7 @@ r1.push('b');`
         },
         {
           type: "predict",
+          only: "rs",
           q: "Qu'affiche ce code ?",
           code: {
             rs: `match diviser(10.0, 0.0) {
@@ -279,6 +290,7 @@ r1.push('b');`
         },
         {
           type: "concept",
+          only: "rs",
           term: "Opérateur ?",
           def: "`?` après un Result veut dire : « si c'est Err, **arrête la fonction et renvoie l'erreur** ; si c'est Ok, donne-moi la valeur ».",
           code: {
@@ -302,6 +314,7 @@ r1.push('b');`
         },
         {
           type: "label",
+          only: "rs",
           intro: "Nommez chaque morceau.",
           code: {
             rs: `match trouver(2) {
@@ -326,6 +339,7 @@ r1.push('b');`
       steps: [
         {
           type: "concept",
+          only: "rs",
           term: "Cargo",
           def: "L'outil officiel de Rust : il **crée** le projet, **installe** les dépendances, **compile**, **teste**.",
           code: {
@@ -385,6 +399,7 @@ cargo audit`,
       steps: [
         {
           type: "concept",
+          only: "rs",
           term: "Trait",
           def: "Un **ensemble de méthodes** qu'un type s'engage à fournir, comme une interface. `impl Parler for Chat` donne la méthode `parler` au type Chat.",
           code: {
@@ -400,6 +415,7 @@ impl Parler for Chat {
         },
         {
           type: "concept",
+          only: "rs",
           term: "Lifetime",
           def: "La **durée pendant laquelle une référence est valide**. Le compilateur vérifie qu'aucune référence ne vit plus longtemps que la valeur qu'elle emprunte. Parfois, on l'écrit avec `'a`.",
           code: {
@@ -411,6 +427,7 @@ impl Parler for Chat {
         },
         {
           type: "concept",
+          only: "rs",
           term: "Copy",
           def: "Un trait des types **simples** (`i32`, `f64`, `bool`, `char`) : `let b = a;` fait une copie au lieu d'un move, et a reste utilisable. String et Vec ne sont pas Copy : ils sont déplacés.",
           code: {
@@ -422,6 +439,7 @@ println!("{} {}", a, b);   // ✅ a reste utilisable`
         },
         {
           type: "concept",
+          only: "rs",
           term: "unwrap",
           def: "Récupère la valeur d'une `Option` ou d'un `Result`, et **fait planter** le programme (panic) si c'est `None` ou `Err`. Pratique en test ou en prototype ; en production, on préfère `?`, `match` ou `unwrap_or`.",
           code: {
@@ -449,6 +467,7 @@ let x: i32 = x.parse().unwrap();   // shadowing : nouveau x, nouveau type`
         },
         {
           type: "qcm",
+          only: "rs",
           q: "Que fait ce code ?",
           code: {
             rs: `let nom: Option<&str> = None;

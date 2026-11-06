@@ -47,9 +47,43 @@ const u = new User("Alice");   // u.name vaut "Alice"` },
         {
           type: "concept",
           term: "this",
-          def: "Dans une méthode, `this` veut dire « **l'objet sur lequel on travaille en ce moment** ».",
-          code: { js: `a.increment();   // dans increment, this = a
-b.increment();   // dans increment, this = b` },
+          def: {
+            js: "Dans une méthode, `this` veut dire « **l'objet sur lequel on travaille en ce moment** ».",
+            py: "En Python, c'est `self` : dans une méthode, il veut dire « **l'objet sur lequel on travaille en ce moment** ». On l'écrit en premier paramètre de chaque méthode. C'est l'équivalent de `this` en JavaScript.",
+            rs: "En Rust, c'est `self` : dans une méthode d'un bloc `impl`, il veut dire « **l'objet sur lequel on travaille en ce moment** ». On l'écrit en premier paramètre : `&self` pour lire, `&mut self` pour modifier. C'est l'équivalent de `this` en JavaScript."
+          },
+          code: {
+            js: `a.increment();   // dans increment, this = a
+b.increment();   // dans increment, this = b`,
+            py: `class Counter:
+    def __init__(self):
+        self.value = 0
+
+    def increment(self):
+        self.value += 1   # self = l'objet qui appelle
+
+a, b = Counter(), Counter()
+a.increment()   # dans increment, self = a
+a.increment()
+b.increment()   # dans increment, self = b
+print(a.value, b.value)   # 2 1`,
+            rs: `struct Counter { value: i32 }
+
+impl Counter {
+    fn increment(&mut self) {
+        self.value += 1;   // self = l'objet qui appelle
+    }
+}
+
+fn main() {
+    let mut a = Counter { value: 0 };
+    let mut b = Counter { value: 0 };
+    a.increment();   // dans increment, self = a
+    a.increment();
+    b.increment();   // dans increment, self = b
+    println!("{} {}", a.value, b.value);   // 2 1
+}`
+          },
           phrase: "this désigne l'instance courante."
         },
         {
