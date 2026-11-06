@@ -1,7 +1,7 @@
 // Service worker CDA Quiz — strategie network-first : en ligne on sert
 // toujours la version fraiche (les mises a jour arrivent toutes seules),
 // le cache ne sert que de filet hors-ligne.
-const CACHE = 'cdaquiz-v10'; // incremente quand ASSETS change : force le re-pre-cache complet
+const CACHE = 'cdaquiz-v11'; // incremente quand ASSETS change : force le re-pre-cache complet
 
 const ASSETS = [
     '.',

@@ -1,4 +1,4 @@
-// Test de positionnement Sensei : 2 questions par chapitre (champ ch).
+// Test de positionnement Sensei : 2 a 4 questions par chapitre (champ ch). Ajouter a la fin, ne pas reordonner.
 export default [
   {
     ch: "lire",
@@ -41,9 +41,14 @@ println!("{}", x);`
     step: {
       type: "qcm",
       q: "Quelle phrase aide le plus un collègue ?",
-      options: ["« Avec un email en majuscules, l'API renvoie 401 au lieu de 200. »","« Le login ne marche plus pour certains utilisateurs, depuis ce matin. »"],
-      correct: 0,
-      explain: "Étapes, observé, attendu : le collègue peut agir."
+      options: [
+        "« Le login ne marche plus pour certains utilisateurs, depuis ce matin. »",
+        "« Je pense que le bug vient de l'API, quelqu'un peut regarder ? »",
+        "« Avec un email en majuscules, l'API renvoie 401 au lieu de 200. »",
+        "« Il y a un souci sur la connexion, c'est assez urgent. »"
+      ],
+      correct: 2,
+      explain: "Elle donne le cas qui déclenche le bug (un email en majuscules), ce qui est **observé** (401) et ce qui est **attendu** (200) : le collègue peut reproduire tout de suite. Les autres disent qu'il y a un problème, sans dire lequel."
     }
   },
   {
@@ -149,9 +154,9 @@ println!("{}", x);`
     step: {
       type: "qcm",
       q: "Bob est connecté mais reçoit un 403 sur la page admin. Quel contrôle l'a bloqué ?",
-      options: ["Authentification", "Autorisation"],
+      options: ["L'authentification", "L'autorisation", "Le rate limiting", "Le CORS"],
       correct: 1,
-      explain: "On sait qui il est, mais il n'a pas le droit : **autorisation**."
+      explain: "On sait qui il est (il est connecté), mais il n'a pas le droit : **autorisation**. Le rate limiting répond 429 quand on envoie trop de requêtes. Le CORS est une règle du navigateur sur les appels entre domaines."
     }
   },
   {
@@ -168,10 +173,10 @@ println!("{}", x);`
     ch: "devsecops",
     step: {
       type: "qcm",
-      q: "Image et conteneur : lequel est en train de tourner ?",
-      options: ["Le conteneur", "L'image"],
-      correct: 0,
-      explain: "L'image est le modèle figé, le **conteneur** est l'image qui tourne."
+      q: "Avec Docker, qu'est-ce qui est en train de tourner ?",
+      options: ["L'image", "Le Dockerfile", "Le registre", "Le conteneur"],
+      correct: 3,
+      explain: "Le Dockerfile est la recette, l'image est le modèle figé qu'on en construit, le registre est l'endroit où l'on stocke les images. Le **conteneur** est l'image qui tourne."
     }
   },
   {
@@ -188,10 +193,10 @@ println!("{}", x);`
     ch: "agile",
     step: {
       type: "qcm",
-      q: "« La page charge en moins de 2 secondes » est un besoin…",
-      options: ["fonctionnel", "non fonctionnel"],
-      correct: 1,
-      explain: "C'est une qualité (performance) : **non fonctionnel**."
+      q: "« La page charge en moins de 2 secondes. » Qu'est-ce que c'est ?",
+      options: ["Un besoin fonctionnel", "Une user story", "Un besoin non fonctionnel", "La Definition of Done"],
+      correct: 2,
+      explain: "C'est une qualité du système (la performance), pas une fonction : **besoin non fonctionnel**. Une user story suit le format « En tant que…, je veux…, afin de… ». La Definition of Done est la liste commune qui dit qu'un élément est terminé."
     }
   },
   {
@@ -214,9 +219,9 @@ println!("{}", x);`
         rs: `let x = 5;
 x = 6;`
       },
-      options: ["Non", "Oui"],
+      options: ["Non : x est immuable", "Oui : x vaut 6 ensuite", "Oui, avec un avertissement"],
       correct: 0,
-      explain: "`x` n'est pas `mut` : il est immuable."
+      explain: "`x` n'est pas `mut` : il est immuable, et le compilateur refuse le code (erreur E0384, cannot assign twice to immutable variable)."
     }
   },
   {
@@ -227,6 +232,90 @@ x = 6;`
       options: ["Option", "Result", "match"],
       correct: 0,
       explain: "**Option** : Some(valeur) ou None."
+    }
+  },
+  {
+    ch: "devsecops",
+    step: {
+      type: "qcm",
+      q: "Rejouer les commits de votre branche au-dessus de main, pour garder un historique en ligne droite, c'est…",
+      options: ["un merge", "un cherry-pick", "un revert", "un rebase"],
+      correct: 3,
+      explain: "Le **rebase** rejoue vos commits un par un au-dessus de main. Un merge garde les deux branches et ajoute un commit de fusion. Un cherry-pick copie un commit choisi, pas toute la branche. Un revert crée un commit qui annule un commit précédent."
+    }
+  },
+  {
+    ch: "devsecops",
+    step: {
+      type: "qcm",
+      q: "À chaque push, un serveur compile le code et lance les tests automatiquement. Comment s'appelle cette pratique ?",
+      options: ["L'intégration continue", "Le déploiement continu", "La code review", "Le déploiement canary"],
+      correct: 0,
+      explain: "**Intégration continue** (CI) : chaque push est construit et testé. Le déploiement continu va plus loin et met en production automatiquement. Le déploiement canary envoie une nouvelle version à une petite partie des utilisateurs. La code review est une relecture humaine."
+    }
+  },
+  {
+    ch: "agile",
+    step: {
+      type: "qcm",
+      q: "Laquelle de ces phrases est une user story ?",
+      options: [
+        "« En tant que client, je veux suivre ma commande, afin de savoir quand elle arrive. »",
+        "« Le système doit répondre en moins de 2 secondes sur la page de suivi. »",
+        "« Étant donné une commande expédiée, quand j'ouvre le suivi, alors je vois la date. »",
+        "« Créer la table commande et l'API de suivi des colis. »"
+      ],
+      correct: 0,
+      explain: "Une **user story** dit qui (le rôle), quoi (l'action) et pourquoi (le bénéfice). « Étant donné, quand, alors » est un critère d'acceptation. Une limite de temps est un besoin non fonctionnel. « Créer la table… » est une tâche technique."
+    }
+  },
+  {
+    ch: "prod",
+    step: {
+      type: "qcm",
+      q: "La moyenne est de 120 ms, mais 5 % des requêtes durent 3 s ou plus. Quelle mesure le montre ?",
+      options: ["La moyenne", "Le débit", "Le p95", "Le SLA"],
+      correct: 2,
+      explain: "Le **p95** est la durée sous laquelle passent 95 % des requêtes : ici 3 s. La moyenne noie les requêtes lentes. Le débit compte les requêtes par seconde. Le SLA est un engagement écrit dans le contrat."
+    }
+  },
+  {
+    ch: "prod",
+    step: {
+      type: "cloze",
+      sentence: "Le contrat promet 99,5 % de disponibilité au client, avec des pénalités : c'est le ___.",
+      options: ["SLA", "SLO", "p95"],
+      correct: 0,
+      why: [
+        "",
+        "Le SLO est l'objectif interne de l'équipe. La promesse écrite dans le contrat, c'est le SLA.",
+        "Le p95 est une mesure de latence, pas un engagement."
+      ]
+    }
+  },
+  {
+    ch: "capot",
+    step: {
+      type: "qcm",
+      q: "Deux threads attendent chacun le verrou que tient l'autre, et le programme se fige. C'est…",
+      options: ["une race condition", "un deadlock", "une fuite mémoire", "un timeout"],
+      correct: 1,
+      explain: "Chacun tient un verrou et attend l'autre : aucun n'avance, c'est un **deadlock**. Une race condition donne un résultat qui dépend de l'ordre d'arrivée, mais le programme avance. Un timeout est justement un moyen de ne pas attendre sans fin."
+    }
+  },
+  {
+    ch: "capot",
+    step: {
+      type: "qcm",
+      q: "En JavaScript, pourquoi `setTimeout(f, 0)` n'exécute-t-il pas `f` tout de suite ?",
+      options: [
+        "Le délai minimum de setTimeout est d'une seconde",
+        "Le hoisting déplace f après les autres instructions",
+        "f est une Promise qui doit d'abord être résolue",
+        "f passe par la file de l'event loop après le code en cours"
+      ],
+      correct: 3,
+      explain: "Le callback passe par la file de l'**event loop** : il ne s'exécute qu'une fois le code en cours terminé, même avec 0 ms. Le hoisting concerne les déclarations, pas l'ordre d'exécution des callbacks, et `f` est une simple fonction."
     }
   }
 ];

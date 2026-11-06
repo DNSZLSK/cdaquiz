@@ -400,7 +400,9 @@ function finishRun(){
   }
   let levels=null;
   if(L.mode==="placement"){
-    levels={}; L.results.forEach(r=>{ levels[r.ch]=(levels[r.ch]||0)+(r.ok?1:0); });
+    // niveau sur 2 quel que soit le nombre de questions du chapitre : 2 = tout juste, 1 = en partie, 0 = rien
+    const ok={}, tot={}; L.results.forEach(r=>{ ok[r.ch]=(ok[r.ch]||0)+(r.ok?1:0); tot[r.ch]=(tot[r.ch]||0)+1; });
+    levels={}; Object.keys(tot).forEach(k=>{ levels[k]= ok[k]===tot[k] ? 2 : ok[k]>0 ? 1 : 0; });
     CHAPTERS.forEach(c=>{ if(levels[c.id]===undefined) levels[c.id]=0; });
     P.placement={date:today(), levels, score:L.results.filter(r=>r.ok).length, total:L.results.length};
   }
