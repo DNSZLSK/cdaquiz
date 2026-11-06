@@ -50,11 +50,12 @@ const ICON = {
 
 /* Un champ peut être une valeur, ou {js, py, rs} selon le langage choisi */
 const isVar = v => v && typeof v==="object" && !Array.isArray(v) && Object.keys(v).length>0 && Object.keys(v).every(k=>LANGS.includes(k));
-function pickInfo(v){
+/* order : langages de repli, dans l'ordre (par defaut js, py, rs) */
+function pickInfo(v, order){
   if(!isVar(v)) return {val:v, lang:null};
   const l=P.lang;
   if(v[l]!==undefined) return {val:v[l], lang:l};
-  for(const k of ["js","py","rs"]) if(v[k]!==undefined) return {val:v[k], lang:k, fallback:true};
+  for(const k of order||["js","py","rs"]) if(v[k]!==undefined) return {val:v[k], lang:k, fallback:true};
   return {val:undefined, lang:null};
 }
 const pick = v => pickInfo(v).val;
@@ -74,11 +75,16 @@ function hlLine(line, lang){
     out+=`<span class="${cls}">${esc(m[0])}</span>`; last=re.lastIndex; if(m[0]==="")re.lastIndex++; }
   return out+esc(line.slice(last));
 }
-function codeView(v, marksFn){
-  const info=pickInfo(v); if(info.val==null) return "";
+/* Champs facultatifs de l'etape s :
+   only: "py"     notion propre a ce langage : son exemple sert de repli, mention « Notion propre a Python. »
+   fallback: "rs" langage de repli prefere quand l'exemple n'existe pas dans le langage choisi */
+function codeView(v, marksFn, s){
+  const order = s&&(s.only||s.fallback) ? [...new Set([s.only, s.fallback, "js", "py", "rs"].filter(Boolean))] : null;
+  const info=pickInfo(v, order); if(info.val==null) return "";
   const lang=info.lang||P.lang;
   const lines=String(info.val).split("\n").map((line,i)=>`<span class="ln">${(marksFn?marksFn(line,i+1,lang):hlLine(line,lang))||" "}</span>`).join("");
-  const note = info.fallback ? `<span class="fallback">Exemple en ${LANG_NAME[info.lang]} (pas encore écrit en ${LANG_NAME[P.lang]}).</span>` : "";
+  const note = !info.fallback ? "" : s&&s.only===info.lang ? `<span class="fallback">Notion propre à ${LANG_NAME[info.lang]}.</span>`
+    : `<span class="fallback">Exemple en ${LANG_NAME[info.lang]} (pas encore écrit en ${LANG_NAME[P.lang]}).</span>`;
   return `<div class="codewrap"><pre class="code" aria-label="Code">${lines}</pre>${note}</div>`;
 }
 
@@ -420,7 +426,7 @@ function stepConcept(s){
     body:`<article class="card">
       <div class="term"><mark>${esc(s.term)}</mark></div>
       <p class="def">${md(pick(s.def))}</p>
-      ${s.code?codeView(s.code):""}
+      ${s.code?codeView(s.code,null,s):""}
       ${s.rule?`<div class="rule"><b>À retenir</b>${md(pick(s.rule))}</div>`:""}
       ${before}
     </article>`,
@@ -437,7 +443,7 @@ function optionsHtml(opts, correct, st){
 function stepQcm(s){
   const st=L.st, opts=pick(s.options), correct=pick(s.correct);
   return {mood:st.answered?(st.ok?"content":"calme"):"calme", bubble:md(pick(s.q)),
-    body:`<article class="card">${s.code?codeView(s.code):""}${optionsHtml(opts,correct,st)}</article>`,
+    body:`<article class="card">${s.code?codeView(s.code,null,s):""}${optionsHtml(opts,correct,st)}</article>`,
     sheet: st.answered ? resultSheet(st.ok, st.skip, md(pick(s.explain)||"")) : checkSheet(st.sel!=null,"check-qcm","skip-qcm")};
 }
 function stepCloze(s){
@@ -484,7 +490,7 @@ function stepLabel(s){
   }).join("");
   const all=marks.every((m,i)=>st.sel[i]);
   return {mood:"pensif", bubble:md(pick(s.intro)||"Touchez chaque morceau surligné et nommez-le."),
-    body:`<article class="card">${codeView(s.code, marksFn)}<div class="labels">${rows}</div></article>`,
+    body:`<article class="card">${codeView(s.code, marksFn, s)}<div class="labels">${rows}</div></article>`,
     sheet: checked ? resultSheet(st.allOk, st.skip, st.allOk?"Chaque morceau porte le bon nom.":"Relisez les explications sous chaque morceau : ce sont les mots à retenir.") : checkSheet(all,"check-label","skip-label")};
 }
 function stepBuild(s){
@@ -496,7 +502,7 @@ function stepBuild(s){
   const hint = !done&&st.tries ? `<div class="note bad"><p class="small">Les ${st.goodPrefix} premières étiquettes sont bien placées. Retirez les autres et réessayez.</p></div>` : "";
   const text = st.ok ? md(pick(s.explain)||"La phrase est parfaite.") : `<p>« ${esc(answer.join(" "))} »</p>${s.explain?`<p>${md(pick(s.explain))}</p>`:""}`;
   return {mood:"calme", bubble:md(pick(s.intro)||"Remettez les étiquettes dans l'ordre."),
-    body:`<article class="card">${s.code?codeView(s.code):""}
+    body:`<article class="card">${s.code?codeView(s.code,null,s):""}
       <div class="tray ${done?(st.ok?"ok":"ko"):""}" aria-label="Votre phrase">${tray||`<span class="small muted">Touchez les étiquettes ci-dessous.</span>`}</div>
       <div class="bank" aria-label="Étiquettes">${bank}</div>${hint}</article>`,
     sheet: done ? resultSheet(st.ok, st.skip, text) : checkSheet(st.picked.length>0,"check-build","skip-build")};
@@ -507,7 +513,7 @@ function stepPredict(s){
   const near = nearT ? `<div class="note"><h4>Presque : « ${esc(nearT.term)} » est un mot proche</h4><p>${kindOf(nearT,target) ? `« ${esc(nearT.term)} » est un <strong>cas particulier</strong>. Ici, on cherche le mot plus général.` : kindOf(target,nearT) ? `« ${esc(nearT.term)} » est <strong>plus général</strong>. Ici, on cherche un mot plus précis.` : `Les deux vont ensemble, mais ce n'est pas le même mot.`}</p><p class="small"><strong>${esc(nearT.term)}</strong> : ${md(shortDef(pick(nearT.def)))}</p><p class="small muted">Ce n'est pas compté comme une erreur. Réessayez.</p></div>` : "";
   const hint = near || (!st.final&&st.tries ? `<div class="note bad"><p><strong>Indice :</strong> ${md(pick(s.hint))}</p></div>` : "");
   return {mood:"pensif", bubble:md(pick(s.q)),
-    body:`<article class="card">${codeView(s.code)}
+    body:`<article class="card">${codeView(s.code,null,s)}
       <label class="small muted" for="pred">${esc(s.label||"Ce qui s'affiche :")}</label>
       <input class="field" id="pred" autocomplete="off" autocapitalize="off" spellcheck="false" value="${esc(st.val||"")}" ${st.final?"disabled":""}>${hint}</article>`,
     sheet: st.final ? resultSheet(st.ok, st.skip, (st.ok&&st.loose&&target ? `<p>Accepté. Le terme exact : <strong>${esc(target.term)}</strong>.</p>` : "") + md(pick(s.explain)) + (!st.ok&&st.other&&TERM[st.other] ? `<p>Vous avez écrit « ${esc(TERM[st.other].term)} » : ${md(shortDef(pick(TERM[st.other].def)))}</p>` : "")) : {kind:"idle", actions:btn("check-pred","Vérifier","full")+btn("skip-pred","Je ne sais pas","ghost")}};
@@ -531,7 +537,7 @@ function stepTrace(s){
   }).join("");
   const hint = !finished&&st.showHint ? `<div class="note ${st.reveal?"":"bad"}"><h4>${st.reveal?"Voici la ligne":"Regardez bien"}</h4><p>${md(s.rows[cr].hint||"")}</p></div>` : "";
   return {mood:"pensif", bubble:md(pick(s.intro)),
-    body:`<article class="card">${codeView(s.code)}
+    body:`<article class="card">${codeView(s.code,null,s)}
       <div class="trace-wrap"><table class="trace"><thead><tr>${s.cols.map(c=>`<th scope="col">${esc(c)}</th>`).join("")}</tr></thead><tbody>${rows}</tbody></table></div>${hint}</article>`,
     sheet: finished ? {kind:"good", title:line("good"), text:md(s.after), actions:contBtn("good")} : {kind:"idle", actions:btn("check-row","Vérifier la ligne","full")+btn("reveal-row","Montrez-moi","ghost")}};
 }
@@ -549,7 +555,7 @@ function stepExplain(s){
     : {kind:"idle", actions:btn("model-check","Voir la formulation de référence","full")};
   return {mood:st.result?"content":"calme",
     bubble:`${md(pick(s.q))}<span class="sub">Dites-le d'abord à voix haute, puis écrivez-le. Quoi, comment, pourquoi.</span>`,
-    body:`<article class="card">${s.code?codeView(s.code):""}
+    body:`<article class="card">${s.code?codeView(s.code,null,s):""}
       <label class="small muted" for="expl">Votre réponse :</label>
       <textarea class="field" id="expl" ${st.result?"disabled":""}>${esc(st.text||"")}</textarea>${res}</article>`,
     sheet};
@@ -565,7 +571,7 @@ function stepSenior(s){
     : {kind:"idle", actions:btn("senior-model","Voir la réponse de référence","full")};
   return {mood:f?"content":"pensif",
     bubble:`<span class="sub" style="margin:0 0 4px">Question ${qi+1}/${qs.length} · revue de code</span>« ${md(pick(q.q))} »`,
-    body:`<article class="card">${codeView(s.code)}
+    body:`<article class="card">${codeView(s.code,null,s)}
       <label class="small muted" for="senior">Votre réponse, comme à un collègue :</label>
       <textarea class="field" id="senior" ${f?"disabled":""}>${esc(st.ans[qi]||"")}</textarea>${res}</article>`,
     sheet};
@@ -671,7 +677,7 @@ function renderReview(){
   const back = v.revealed ? `<hr style="width:100%;border:0;border-top:2px dashed var(--line)">
       ${v.mode==="term"?`<p class="def">${md(pick(t.def))}</p>`:`<div class="term"><mark>${esc(t.term)}</mark></div>`}
       ${v.mode==="ctx"?`<p class="small">${md(pick(t.def))}</p>`:""}
-      ${t.code?`<div style="width:100%;text-align:left">${codeView(t.code)}</div>`:""}
+      ${t.code?`<div style="width:100%;text-align:left">${codeView(t.code,null,t)}</div>`:""}
       <div class="quote" style="text-align:left;width:100%"><b>${t.beginner?"Le senior dit":"En contexte"}</b>« ${esc(t.phrase)} »</div>` : "";
   return `${header()}
   <p class="small muted" style="text-align:center">Carte ${v.i+1} sur ${v.q.length} · <span class="boxes" aria-label="Niveau ${c.box} sur 6">${[1,2,3,4,5,6].map(b=>`<i class="${b<=c.box?"on":""}"></i>`).join("")}</span></p>

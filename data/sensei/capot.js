@@ -256,6 +256,7 @@ try {
         {
           type: "concept",
           term: "GIL",
+          only: "py",
           def: "Global Interpreter Lock : dans CPython, l'interpréteur Python standard, un **verrou** qui ne laisse qu'**un seul thread exécuter du code Python à la fois**. Des threads accélèrent donc l'attente (réseau, disque), pas le calcul pur : pour calculer en parallèle, on lance plusieurs processus (`multiprocessing`). Depuis Python 3.13, il existe un build sans GIL, dit **free-threaded**. Depuis Python 3.14, il est officiellement supporté mais reste optionnel : il s'installe en plus de l'interpréteur standard, qui garde le GIL. Sources : docs.python.org/3/howto/free-threading-python.html et docs.python.org/3/whatsnew/3.14.html.",
           code: {
             py: `import threading, time
@@ -277,6 +278,7 @@ print(f"2 threads  : {time.perf_counter() - t:.1f} s")   # pas plus rapide : le 
         {
           type: "concept",
           term: "Deadlock",
+          fallback: "rs",
           def: "Un **interblocage** : deux tâches s'attendent l'une l'autre, et aucune ne peut avancer. A tient le verrou 1 et attend le verrou 2 ; B tient le verrou 2 et attend le verrou 1. Le programme ne plante pas : il **se fige**. Le remède classique : toujours prendre les verrous dans le même ordre.",
           code: {
             py: `import threading, time
