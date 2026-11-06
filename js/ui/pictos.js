@@ -21,6 +21,10 @@ export const PICTO = {
     securite: svg('<path d="M12 3l7.5 3v5.5c0 4.5-3.2 8-7.5 9.5-4.3-1.5-7.5-5-7.5-9.5V6z"/><path d="M9 12l2.2 2.2L15.5 10"/>'),
     // requete et reponse : deux fleches opposees (module HTTP du quiz)
     http: svg('<path d="M4 8h14M14 4l4 4-4 4"/><path d="M20 16H6M10 12l-4 4 4 4"/>'),
+    // accolades d'un bloc de code (domaine JavaScript du Labo)
+    javascript: svg('<path d="M9 4H8a2 2 0 0 0-2 2v3.5A2.5 2.5 0 0 1 3.5 12 2.5 2.5 0 0 1 6 14.5V18a2 2 0 0 0 2 2h1"/><path d="M15 4h1a2 2 0 0 1 2 2v3.5a2.5 2.5 0 0 0 2.5 2.5 2.5 2.5 0 0 0-2.5 2.5V18a2 2 0 0 1-2 2h-1"/>'),
+    // deux entites reliees par une association (domaine MCD / MLD du Labo)
+    mcd: svg('<rect x="2" y="8" width="5" height="8" rx="1"/><rect x="17" y="8" width="5" height="8" rx="1"/><path d="M2 10.5h5M17 10.5h5"/><ellipse cx="12" cy="12" rx="2.6" ry="2"/><path d="M7 12h2.4M14.6 12H17"/>'),
     lock: svg('<rect x="5" y="11" width="14" height="10" rx="1.5"/><path d="M8 11V8a4 4 0 0 1 8 0v3M12 15v2"/>'),
     // composant : un bloc decoupe en trois zones (Angular)
     component: svg('<rect x="3.5" y="3.5" width="17" height="17" rx="1.5"/><path d="M3.5 9h17M10 9v11.5"/><path d="M13 13h4.5M13 16.5h4.5"/>'),

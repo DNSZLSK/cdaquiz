@@ -25,8 +25,8 @@ registerScreen('labo-hub', {
 
 // Pictogramme de chaque domaine (memes dessins que les modules du quiz)
 const DOMAIN_PICTO = {
-    'sql': 'bdd', 'mcd-mld': 'uml', 'oop-java': 'poo', 'tests-junit': 'tests', 'spring-boot': 'architecture',
-    'spring-security': 'lock', 'angular': 'component', 'javascript': 'python', 'html-css': 'markup', 'bootstrap': 'conception',
+    'sql': 'bdd', 'mcd-mld': 'mcd', 'oop-java': 'poo', 'tests-junit': 'tests', 'spring-boot': 'architecture',
+    'spring-security': 'lock', 'angular': 'component', 'javascript': 'javascript', 'html-css': 'markup', 'bootstrap': 'conception',
     'python': 'python', 'python-fichiers': 'documentation', 'git': 'git', 'docker': 'docker', 'uml-archi': 'uml'
 };
 
