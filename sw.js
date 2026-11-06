@@ -1,7 +1,7 @@
 // Service worker CDA Quiz — strategie network-first : en ligne on sert
 // toujours la version fraiche (les mises a jour arrivent toutes seules),
 // le cache ne sert que de filet hors-ligne.
-const CACHE = 'cdaquiz-v8'; // incremente quand ASSETS change : force le re-pre-cache complet
+const CACHE = 'cdaquiz-v9'; // incremente quand ASSETS change : force le re-pre-cache complet
 
 const ASSETS = [
     '.',
@@ -48,6 +48,8 @@ const ASSETS = [
     'data/sensei/objets.js',
     'data/sensei/parler.js',
     'data/sensei/placement.js',
+    'data/sensei/prod.js',
+    'data/sensei/capot.js',
     'data/sensei/propre.js',
     'data/sensei/rust.js',
     'data/sensei/secu.js',

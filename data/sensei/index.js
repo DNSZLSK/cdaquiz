@@ -9,7 +9,9 @@ import secu from './secu.js';
 import devsecops from './devsecops.js';
 import agile from './agile.js';
 import rust from './rust.js';
+import prod from './prod.js';
+import capot from './capot.js';
 import placement from './placement.js';
 
-export const CHAPTERS = [lire, parler, senior, objets, uml, propre, secu, devsecops, agile, rust];
+export const CHAPTERS = [lire, parler, senior, objets, uml, propre, secu, devsecops, agile, rust, prod, capot];
 export const PLACEMENT = placement;

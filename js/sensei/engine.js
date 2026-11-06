@@ -157,7 +157,7 @@ function greeting(rec){
   return {mood:n>2?"fier":"calme", html, actions: rec?`<button class="btn" data-start="${rec.gi}">Entrer dans la chambre</button>${due?`<button class="btn ghost" data-go="review">Réviser d'abord</button>`:""}`:(due?`<button class="btn" data-go="review">Réviser</button>`:"")};
 }
 /* Couleur de chaque chapitre : meme palette que les modules du quiz (css/modules.css) */
-const CH_COLOR = {lire:"#3572A5", parler:"#009688", senior:"#6f42c1", objets:"#E67E22", uml:"#3498DB", propre:"#27AE60", secu:"#E74C3C", devsecops:"#2496ED", agile:"#9B59B6", rust:"#CE422B"};
+const CH_COLOR = {lire:"#3572A5", parler:"#009688", senior:"#6f42c1", objets:"#E67E22", uml:"#3498DB", propre:"#27AE60", secu:"#E74C3C", devsecops:"#2496ED", agile:"#9B59B6", rust:"#CE422B", prod:"#D4A017", capot:"#5D6D7E"};
 const chamberNum = gi => String(gi+1).padStart(2,"0");
 const OFFSETS=[0,44,64,44,0,-44,-64,-44];
 function renderPath(){
@@ -273,6 +273,11 @@ const ALIASES = {
   "Besoin non fonctionnel":["exigence non fonctionnelle","non-functional requirement"],
   "Portée":["scope"], "Itérateur":["iterator"], "Cause racine":["root cause"], "Contournement":["workaround"],
   "Couplage":["coupling"], "Cohésion":["cohesion"], "Contrat d'API":["API contract"], "Test double":["doublure de test"],
+  "Latence":["latency"], "Débit":["throughput"], "p95":["95e percentile"],
+  "SLO":["service level objective","objectif de niveau de service"], "SLA":["service level agreement","accord de niveau de service"],
+  "Observabilité":["observability"], "Post-mortem sans reproche":["blameless post-mortem"], "Problème N+1":["N+1 query problem"],
+  "Event loop":["boucle d'événements"], "Promise":["promesse"], "Hoisting":["remontée"], "Générateur":["generator"],
+  "Context manager":["gestionnaire de contexte"], "GIL":["global interpreter lock"], "Deadlock":["interblocage"],
   "Couverture de code":["code coverage"], "Sel":["salt"], "Déploiement canary":["canary deployment","canary release"],
   "Vélocité":["velocity"], "Limite WIP":["WIP limit"], "Refinement":["affinage du backlog","backlog refinement"],
   "Lifetime":["durée de vie"], "Shadowing":["masquage"]
