@@ -144,16 +144,6 @@ body {
     font-weight: 500;
 }
 
-.module-card .module-progress {
-    margin-top: 6px;
-    font-size: 0.8em;
-    font-weight: 600;
-    letter-spacing: 0.3px;
-}
-.module-card .module-progress.good { color: #FF6700; }
-.module-card .module-progress.medium { color: #0098FF; }
-.module-card .module-progress.bad { color: #959da5; }
-
 .answer-hint {
     font-size: 0.85em;
     color: #586069;
@@ -191,37 +181,6 @@ body {
 
 .question-container.active {
     display: block;
-}
-
-.question-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 30px;
-    padding-bottom: 20px;
-    border-bottom: 1px solid #e1e4e8;
-}
-
-.question-number {
-    background: #f6f8fa;
-    color: #24292e;
-    padding: 8px 16px;
-    border-radius: 6px;
-    font-size: 0.9em;
-    font-weight: 600;
-    border: 1px solid #e1e4e8;
-}
-
-.module-tag {
-    background: #fff;
-    border: 1px solid #e1e4e8;
-    padding: 8px 14px;
-    border-radius: 6px;
-    font-size: 0.85em;
-    color: #586069;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    font-weight: 600;
 }
 
 .question-text {
@@ -536,32 +495,6 @@ button:disabled {
 
 .footer p:last-child:hover {
     opacity: 0.7;
-}
-
-/* Portal Cake Easter Egg */
-.portal-cake {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    width: 40px;
-    height: auto;
-    opacity: 0.35;
-    transition: opacity 0.3s ease;
-    animation: float 3s ease-in-out infinite;
-}
-
-.portal-cake:hover {
-    opacity: 0.7;
-}
-
-.portal-cake img {
-    width: 100%;
-    height: auto;
-}
-
-@keyframes float {
-    0%, 100% { transform: translateY(0px); }
-    50% { transform: translateY(-10px); }
 }
 
 @media (max-width: 768px) {
