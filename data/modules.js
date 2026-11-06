@@ -34,7 +34,7 @@ export const modules = {
     },
     uml: {
         name: "UML",
-        description: "Diagrammes de classes",
+        description: "Diagrammes de classes et de séquence",
     },
      bdd: {
         name: "Base de données",
