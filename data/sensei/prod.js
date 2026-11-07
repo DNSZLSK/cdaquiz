@@ -50,14 +50,14 @@ println!("{} {}", moyenne, p95);   // 290 2000`
         },
         {
           type: "qcm",
-          q: "Sur la route /recherche, la moyenne est de 120 ms et le p95 de 3 s. Que dit un dev senior ?",
+          q: "Sur la route /recherche, la moyenne est de 250 ms et le p95 de 3 s. Que dit un dev senior ?",
           options: [
-            "« Tout va bien : la moyenne reste sous les 200 ms, les utilisateurs ne voient rien. »",
+            "« Tout va bien : la moyenne reste sous les 300 ms, les utilisateurs ne voient rien. »",
             "« Le serveur est lent pour tout le monde : chaque recherche prend environ 3 s. »",
-            "« La plupart des recherches sont rapides, mais 5 % prennent 3 s ou plus. »"
+            "« La plupart des recherches sont rapides, mais 5 % prennent plus de 3 s. »"
           ],
           correct: 2,
-          explain: "Le p95 dit que 95 % des requêtes durent moins de 3 s : les 5 % restantes durent 3 s ou plus. Sur 10 000 recherches par jour, ça fait **500 recherches lentes**. La moyenne de 120 ms les noie dans la masse."
+          explain: "Le p95 dit que 95 % des requêtes ne dépassent pas 3 s : les 5 % restantes durent plus de 3 s. Sur 10 000 recherches par jour, ça fait **500 recherches lentes**. La moyenne de 250 ms les noie dans la masse."
         },
         {
           type: "cloze",
