@@ -67,7 +67,7 @@ println!("{} {}", moyenne, p95);   // 290 2000`
           why: [
             "Le temps de réponse, c'est la latence : combien de temps attend une requête, pas combien on en traite.",
             "",
-            "Le p95 est une mesure de latence : la durée sous laquelle passent 95 % des requêtes."
+            "Le p95 est une mesure de latence : la durée que 95 % des requêtes ne dépassent pas."
           ]
         }
       ]
