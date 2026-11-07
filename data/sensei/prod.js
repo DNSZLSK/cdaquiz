@@ -26,7 +26,7 @@ export default {
         {
           type: "concept",
           term: "p95",
-          def: "Le **95e percentile** : 95 % des requêtes sont plus rapides que cette valeur, 5 % plus lentes. La moyenne masque les requêtes lentes, le p95 les montre. Exemple : 18 requêtes à 100 ms et 2 à 2 000 ms donnent une moyenne de 290 ms, mais un p95 de 2 000 ms.",
+          def: "Le **95e percentile** : 95 % des requêtes ne dépassent pas cette valeur. La moyenne masque les requêtes lentes, le p95 les montre. Exemple : 18 requêtes à 100 ms et 2 à 2 000 ms donnent une moyenne de 290 ms, mais un p95 de 2 000 ms.",
           code: {
             js: `const ms = [...Array(18).fill(100), 2000, 2000];   // 20 requêtes
 const moyenne = ms.reduce((a, b) => a + b) / ms.length;
