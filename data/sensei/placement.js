@@ -273,10 +273,10 @@ x = 6;`
     ch: "prod",
     step: {
       type: "qcm",
-      q: "La moyenne est de 120 ms, mais 5 % des requêtes durent 3 s ou plus. Quelle mesure le montre ?",
+      q: "La moyenne est de 250 ms, mais 5 % des requêtes durent plus de 3 s. Quelle mesure le montre ?",
       options: ["La moyenne", "Le débit", "Le p95", "Le SLA"],
       correct: 2,
-      explain: "Le **p95** est la durée sous laquelle passent 95 % des requêtes : ici 3 s. La moyenne noie les requêtes lentes. Le débit compte les requêtes par seconde. Le SLA est un engagement écrit dans le contrat."
+      explain: "Le **p95** est la durée que 95 % des requêtes ne dépassent pas : ici 3 s. La moyenne noie les requêtes lentes. Le débit compte les requêtes par seconde. Le SLA est un engagement écrit dans le contrat."
     }
   },
   {
