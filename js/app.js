@@ -90,7 +90,7 @@ function initApp() {
         if (e.target.closest('[data-action="retry"]')) startRetry();
     });
 
-    // Bouton son de l'en-tete : unique reglage des voix (labo, vocabulaire, gateau)
+    // Bouton son de l'en-tete : unique reglage des voix du labo et du vocabulaire (pas du gateau)
     const soundBtn = document.getElementById('soundToggle');
     const paintSound = () => {
         soundBtn.textContent = muteButtonLabel();
