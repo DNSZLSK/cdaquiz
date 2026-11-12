@@ -4,7 +4,7 @@ import { codeQcmType } from '../exercises/code-qcm.js';
 import { registerScreen, showScreen } from '../screens.js';
 import { showEmptyAnswerModal } from '../ui/quiz.js';
 import { getStatus, getEntry, record, getDomainStats } from './progress.js';
-import { playSuccess, playFail, playComplete, toggleMuted, muteButtonLabel } from './sounds.js';
+import { playSuccess, playFail, playComplete } from './sounds.js';
 import { recapHtml } from './recap.js';
 
 // Les banques utilisent type: predict|complete|identify|debug — tous rendus par code-qcm.
@@ -63,7 +63,6 @@ function renderExercise() {
         <div class="labo-topbar">
             <button data-action="back">← Labo</button>
             <span class="labo-title">${entry.title}</span>
-            <button class="labo-mute" data-action="mute">${muteButtonLabel()}</button>
             <span class="labo-counter">${index + 1}/${exercises.length}</span>
         </div>
         <div class="labo-chips">${chips}</div>
@@ -202,7 +201,6 @@ function wire() {
             case 'retry-exercise': retryExercise(); break;
             case 'finish': renderRecap(); break;
             case 'review': state.index = 0; renderExercise(); break;
-            case 'mute': toggleMuted(); btn.textContent = muteButtonLabel(); break;
         }
     });
 }

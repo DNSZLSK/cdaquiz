@@ -44,5 +44,5 @@ export function playComplete() {
 }
 
 export function muteButtonLabel() {
-    return isMuted() ? 'SON : OFF' : 'SON : ON';
+    return isMuted() ? 'Son : off' : 'Son : on';
 }

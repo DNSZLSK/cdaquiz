@@ -4,7 +4,7 @@ import { escapeHtml } from '../utils.js';
 import { loadSqlJs, createDb, execUser } from './sql-engine.js';
 import { validate, failureMessage } from './sql-compare.js';
 import { getStatus, getEntry, record, getDomainStats } from './progress.js';
-import { playSuccess, playFail, playSqlError, playComplete, toggleMuted, muteButtonLabel } from './sounds.js';
+import { playSuccess, playFail, playSqlError, playComplete } from './sounds.js';
 import { recapHtml } from './recap.js';
 import { getDraft, setDraft } from './drafts.js';
 import { highlightCode, isSqlKeyword } from './highlight.js';
@@ -171,7 +171,6 @@ function renderPlayer() {
         <div class="labo-topbar">
             <button data-action="back-scenarios">← Scénarios</button>
             <span class="labo-title">${escapeHtml(sc.title)}</span>
-            <button class="labo-mute" data-action="mute">${muteButtonLabel()}</button>
             <span class="labo-counter">${state.index + 1}/${sc.exercises.length}</span>
         </div>
         <div class="labo-chips">${chips}</div>
@@ -420,7 +419,6 @@ function wire() {
             case 'solution': showSolution(); break;
             case 'finish': renderRecap(); break;
             case 'review': state.index = 0; resetDb(); renderPlayer(); break;
-            case 'mute': toggleMuted(); btn.textContent = muteButtonLabel(); break;
             case 'next':
                 if (state.index < state.scenario.exercises.length - 1) {
                     state.index++;

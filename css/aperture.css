@@ -123,6 +123,9 @@ button:disabled { opacity: .35; cursor: not-allowed; }
 .ap-btn-ghost { color: var(--ap-ink); }
 .mode-tabs-buttons button, .module-card, .ap-btn, .link-badge, .labo-reset { box-shadow: none; }
 .link-badge { text-transform: none; letter-spacing: .02em; padding: 6px 10px; font-size: .74em; font-weight: 500; }
+.sound-toggle { font-family: var(--ap-font); text-transform: none; letter-spacing: .02em; padding: 6px 10px; font-size: .74em; font-weight: 500; color: var(--ap-muted); background: transparent; border: 1px solid var(--ap-hair); border-radius: var(--ap-r); box-shadow: none; }
+.sound-toggle:hover:not(:disabled) { background: transparent; color: var(--ap-ink); border-color: var(--ap-ink); }
+.sound-toggle.is-off { color: var(--ap-subtle); }
 
 /* ---------- Question (quiz et labo code) : une question par ecran ---------- */
 .ap-lesson { padding-bottom: 170px; max-width: 760px; margin: 0 auto; }
@@ -225,7 +228,6 @@ body:has(.ap-lesson) .progress-bar { visibility: hidden; }
 .labo-topbar > button:first-child:hover:not(:disabled) { color: var(--ap-ink); background: transparent; }
 .labo-title { font-weight: 600; font-size: 1.05em; color: var(--ap-ink); }
 .labo-counter { background: none; border: 0; padding: 0; font-size: 1.5em; font-weight: 200; color: var(--ap-ink); font-variant-numeric: tabular-nums; }
-.labo-mute { background: none; border: 1px solid var(--ap-hair); font-size: .68em; color: var(--ap-subtle); padding: 6px 10px; }
 .labo-chips { gap: 2px; }
 .labo-chip { border: 0; border-radius: 0; background: var(--ap-panel); color: var(--ap-subtle); font-weight: 500; font-size: .85em; letter-spacing: 0; padding: 0; min-width: 38px; height: 38px; }
 .labo-chip:hover:not(:disabled) { background: #FAFAFB; color: var(--ap-ink); }

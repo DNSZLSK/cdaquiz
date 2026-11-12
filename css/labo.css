@@ -199,16 +199,6 @@
     margin-bottom: 12px;
 }
 
-/* Bouton muet (topbar des players) */
-.labo-mute {
-    font-size: 0.7em;
-    font-weight: 700;
-    letter-spacing: 1px;
-    padding: 6px 10px;
-    color: #959da5;
-    background: #f6f8fa;
-}
-
 /* Message GLaDOS de l'ecran recap */
 .labo-recap-glados {
     text-align: center;

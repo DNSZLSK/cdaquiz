@@ -5,7 +5,7 @@
 //   'q-<cle>' : ok des que le diagramme a ete reconnu une fois ; 'f-<key>' : ok si fiche faite a 7/7.
 import { registerScreen, showScreen } from '../screens.js';
 import { getStatus, record, getDomainStats } from './progress.js';
-import { playSuccess, playFail, playComplete, toggleMuted, muteButtonLabel } from './sounds.js';
+import { playSuccess, playFail, playComplete } from './sounds.js';
 import { esc, svgWrap } from './diagram-draw.js';
 
 const root = () => document.getElementById('laboDiagram');
@@ -43,7 +43,6 @@ function shell() {
         <div class="labo-topbar">
             <button data-action="back">← Labo</button>
             <span class="labo-title">${esc(entry.title)}</span>
-            <button class="labo-mute" data-action="mute">${muteButtonLabel()}</button>
             <span class="labo-counter" id="dgCal" title="Éléments calibrés"></span>
         </div>
         <div class="dg-tabs" role="tablist" aria-label="Exercices">
@@ -339,7 +338,6 @@ function wire() {
         if (btn.classList.contains('dg-pick')) { pick(btn); return; }
         switch (btn.dataset.action) {
             case 'back': showScreen('labo-hub'); break;
-            case 'mute': toggleMuted(); btn.textContent = muteButtonLabel(); break;
             case 'q-next': nextQ(); break;
             case 'q-again': startQuiz(); break;
             case 'd-validate': validateDiff(); break;

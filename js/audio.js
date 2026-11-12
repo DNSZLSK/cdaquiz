@@ -1,3 +1,5 @@
+import { isMuted } from './labo/sounds.js';
+
 const portalVoices = [
     'turretVocals/critical-error.mp3',
     'turretVocals/good-shot.mp3',
@@ -20,6 +22,7 @@ const portalVoices = [
 let lastPlayedIndex = -1;
 
 export function playRandomPortalVoice() {
+    if (isMuted()) return; // bouton son de l'en-tete : coupe toutes les voix
     let randomIndex;
     if (portalVoices.length > 1) {
         do {

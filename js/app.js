@@ -12,6 +12,7 @@ import { initIdentity } from './ui/identity.js';
 import { resetQuizProgress } from './storage.js';
 import { getLink, pushOverwrite } from './labo/cloud.js';
 import { purgeRemovedModules } from './storage.js';
+import { isMuted, toggleMuted, muteButtonLabel } from './labo/sounds.js';
 
 registerExerciseType('qcm', qcmType);
 
@@ -88,6 +89,16 @@ function initApp() {
     document.getElementById('retrySection').addEventListener('click', (e) => {
         if (e.target.closest('[data-action="retry"]')) startRetry();
     });
+
+    // Bouton son de l'en-tete : unique reglage des voix (labo, vocabulaire, gateau)
+    const soundBtn = document.getElementById('soundToggle');
+    const paintSound = () => {
+        soundBtn.textContent = muteButtonLabel();
+        soundBtn.setAttribute('aria-pressed', String(!isMuted()));
+        soundBtn.classList.toggle('is-off', isMuted());
+    };
+    paintSound();
+    soundBtn.addEventListener('click', () => { toggleMuted(); paintSound(); });
 
     // Voix de tourelle Portal au clic sur le logo
     const logo = document.getElementById('apertureLogo');

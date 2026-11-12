@@ -8,7 +8,7 @@
 import { CHAPTERS, PLACEMENT } from '../../data/sensei/index.js';
 import { registerScreen, showScreen, getCurrentScreen } from '../screens.js';
 import { setTabsVisible, setActiveTab } from '../ui/tabs.js';
-import { playSuccess, playFail, playComplete, toggleMuted, muteButtonLabel } from '../labo/sounds.js';
+import { playSuccess, playFail, playComplete } from '../labo/sounds.js';
 import { unit } from '../ui/mascot.js';
 
 const app = document.getElementById('senseiRoot');
@@ -611,7 +611,6 @@ function renderLesson(){
       <button class="quit" data-act="quit" aria-label="Quitter la chambre">${ICON.close}</button>
       <span class="step-num" role="progressbar" aria-label="Progression" aria-valuenow="${pct}" aria-valuemin="0" aria-valuemax="100">Étape ${L.i+1}/${n}</span>
       <span class="step-tag">${esc(tag)}</span>
-      <button class="mute" data-act="mute">${muteButtonLabel()}</button>
       ${langSwitch()}
     </div>
     ${origin}
@@ -777,7 +776,6 @@ app.addEventListener("click", e=>{
   if(act==="placement"){ startPlacement(); return; }
   if(act==="weak"){ startWeak(); return; }
   if(act==="vocab"){ startVocab(); return; }
-  if(act==="mute"){ toggleMuted(); b.textContent=muteButtonLabel(); return; }
   if(view.name==="review"){
     if(act==="reveal"){ view.revealed=true; render(); }
     else if(act==="know") grade(true);
