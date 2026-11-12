@@ -1,0 +1,100 @@
+/* Labo « Lire un diagramme » (js/labo/diagram-lab.js). Tout est limite a #laboDiagram.
+   Meme direction que aperture.css : panneaux blancs joints par 2 px, grands chiffres fins,
+   orange = selection, vert / rouge = juste / faux. Les boutons neutralisent les capitales
+   espacees du style global quand ils portent du texte long (reponses, explications). */
+#laboDiagram [hidden] { display: none !important; }
+#laboDiagram .dg-stack { display: grid; gap: 18px; }
+#laboDiagram > .dg-stack { margin-top: 24px; }
+#laboDiagram .dg-muted { color: var(--ap-muted); margin: 0; }
+#laboDiagram .dg-label { margin: 0; font-size: .72em; font-weight: 600; letter-spacing: .26em; text-transform: uppercase; color: var(--ap-subtle); }
+#laboDiagram .dg-h2 { margin: 6px 0 6px; font-size: 1.25em; font-weight: 600; color: var(--ap-ink); }
+#laboDiagram .dg-panel { background: var(--ap-panel); border-radius: var(--ap-r); padding: 22px 24px; }
+#laboDiagram .dg-note { margin: 28px 0 0; font-size: .8em; color: var(--ap-subtle); }
+#laboDiagram .dg-row { display: flex; flex-wrap: wrap; gap: 10px; }
+#laboDiagram .dg-btn { justify-self: start; }
+
+/* Onglets : deux panneaux numerotes */
+#laboDiagram .dg-tabs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 2px; background: var(--ap-hair); border-radius: var(--ap-r); overflow: hidden; }
+#laboDiagram .dg-tab { position: relative; display: flex; align-items: center; gap: 18px; padding: 20px 22px; border: 0; border-radius: 0; background: var(--ap-panel); color: var(--ap-ink); text-align: left; text-transform: none; letter-spacing: normal; font-size: 1em; font-weight: 400; min-width: 0; }
+#laboDiagram .dg-tab:hover:not(:disabled) { background: var(--ap-panel); border: 0; }
+#laboDiagram .dg-tabnum { font-weight: 200; font-size: 3em; line-height: 1; color: var(--ap-subtle); font-variant-numeric: tabular-nums; }
+#laboDiagram .dg-t1 { display: block; font-weight: 600; font-size: 1.05em; }
+#laboDiagram .dg-t2 { display: block; font-size: .85em; color: var(--ap-muted); }
+#laboDiagram .dg-tab::after { content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 3px; background: transparent; }
+#laboDiagram .dg-tab[aria-selected="true"]::after { background: var(--ap-orange); }
+#laboDiagram .dg-tab[aria-selected="true"] .dg-tabnum { color: var(--ap-orange); }
+#laboDiagram .dg-tab:focus-visible, #laboDiagram .dg-opt:focus-visible, #laboDiagram .dg-pick:focus-visible { outline: 2px solid var(--ap-blue); outline-offset: 2px; }
+
+/* Exercice 1 */
+#laboDiagram .dg-qhead { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+#laboDiagram .dg-qnum { font-weight: 200; font-size: 3.2em; line-height: 1; font-variant-numeric: tabular-nums; }
+#laboDiagram .dg-qnum small { font-size: .4em; color: var(--ap-subtle); font-weight: 400; margin-left: 4px; }
+#laboDiagram .dg-track { height: 3px; background: var(--ap-hair); border-radius: 2px; overflow: hidden; }
+#laboDiagram .dg-track i { display: block; height: 100%; width: 0; background: var(--ap-blue); transition: width .2s; }
+#laboDiagram .dg-opts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 2px; background: var(--ap-hair); border-radius: var(--ap-r); overflow: hidden; }
+#laboDiagram .dg-opt, #laboDiagram .dg-pick { border: 0; border-radius: 0; background: var(--ap-panel); color: var(--ap-ink); font-size: 1rem; font-weight: 500; text-transform: none; letter-spacing: normal; text-align: left; min-width: 0; cursor: pointer; }
+#laboDiagram .dg-opt { padding: 18px 20px; display: flex; justify-content: space-between; gap: 12px; }
+#laboDiagram .dg-opt:hover:not(:disabled), #laboDiagram .dg-pick:hover:not(:disabled) { background: var(--ap-orange-soft); border: 0; }
+#laboDiagram .dg-opt:disabled, #laboDiagram .dg-pick:disabled { opacity: 1; cursor: default; }
+#laboDiagram .dg-tag { font-size: .7em; font-weight: 600; letter-spacing: .2em; text-transform: uppercase; align-self: center; }
+#laboDiagram .good { background: var(--ap-ok-soft); color: var(--ap-ok-deep); }
+#laboDiagram .bad { background: var(--ap-ko-soft); color: var(--ap-ko-deep); }
+#laboDiagram .dg-opt.dim { color: var(--ap-subtle); }
+#laboDiagram .dg-feedback { display: grid; gap: 14px; }
+#laboDiagram .dg-verdict { font-weight: 600; font-size: 1.1em; background: none; }
+#laboDiagram .dg-verdict.good { color: var(--ap-ok-deep); background: none; }
+#laboDiagram .dg-verdict.bad { color: var(--ap-ko-deep); background: none; }
+#laboDiagram .dg-hint { background: var(--ap-bg); border-radius: var(--ap-r); padding: 14px 16px; max-width: 72ch; }
+#laboDiagram .dg-hint b { display: block; font-size: .72em; letter-spacing: .22em; text-transform: uppercase; color: var(--ap-muted); margin-bottom: 4px; }
+#laboDiagram .dg-big { font-weight: 200; font-size: 4.5em; line-height: 1; font-variant-numeric: tabular-nums; }
+#laboDiagram .dg-big small { font-size: .35em; color: var(--ap-subtle); font-weight: 400; }
+
+/* Exercice 2 */
+#laboDiagram .dg-rules { margin: 12px 0 0; padding-left: 1.4em; display: grid; gap: 4px; max-width: 80ch; }
+#laboDiagram .dg-stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 2px; background: var(--ap-hair); border-radius: var(--ap-r); overflow: hidden; }
+#laboDiagram .dg-stat { background: var(--ap-panel); padding: 14px 20px; display: flex; align-items: baseline; gap: 10px; min-width: 0; }
+#laboDiagram .dg-stat b { font-weight: 200; font-size: 2.4em; line-height: 1; font-variant-numeric: tabular-nums; }
+#laboDiagram .dg-stat span { font-size: .72em; font-weight: 600; letter-spacing: .2em; text-transform: uppercase; color: var(--ap-subtle); }
+#laboDiagram .dg-versions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 2px; background: var(--ap-hair); border-radius: var(--ap-r); overflow: hidden; }
+#laboDiagram .dg-version { background: var(--ap-panel); padding: 16px 18px; min-width: 0; }
+#laboDiagram .dg-vname { font-weight: 200; font-size: 2em; line-height: 1; margin-bottom: 8px; }
+#laboDiagram .dg-toast { min-height: 1.5em; color: var(--ap-muted); font-size: .95em; }
+#laboDiagram .dg-qblock { display: grid; gap: 10px; }
+#laboDiagram .dg-qblock h3 { margin: 0; font-size: .72em; font-weight: 600; letter-spacing: .24em; text-transform: uppercase; color: var(--ap-subtle); }
+#laboDiagram .dg-picks { display: flex; flex-wrap: wrap; gap: 2px; background: var(--ap-hair); border-radius: var(--ap-r); overflow: hidden; }
+#laboDiagram .dg-whys { display: grid; gap: 2px; background: var(--ap-hair); border-radius: var(--ap-r); overflow: hidden; }
+#laboDiagram .dg-pick { flex: 1 1 160px; font-size: .95rem; padding: 14px 16px; }
+#laboDiagram .dg-whys .dg-pick { flex: none; }
+#laboDiagram .dg-pick[aria-pressed="true"] { background: var(--ap-orange-soft); color: var(--ap-orange-deep); box-shadow: inset 0 0 0 2px var(--ap-orange); }
+#laboDiagram .dg-pick.good, #laboDiagram .dg-pick.bad { box-shadow: none; }
+
+/* Diagrammes (SVG) */
+#laboDiagram .dg-box { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+#laboDiagram svg.dg { display: block; width: 100%; min-width: 520px; height: auto; }
+#laboDiagram .dg text { font-family: var(--ap-font); font-size: 12px; fill: var(--ap-ink); }
+#laboDiagram .dg .ts { font-size: 10.5px; fill: var(--ap-muted); }
+#laboDiagram .dg .tb { font-weight: 600; }
+#laboDiagram .dg .ti { font-style: italic; }
+#laboDiagram .dg .lbl { font-size: 11px; paint-order: stroke; stroke: var(--ap-panel); stroke-width: 4px; stroke-linejoin: round; }
+#laboDiagram .dg .l { stroke: var(--ap-ink); stroke-width: 1.3; fill: none; }
+#laboDiagram .dg .dash { stroke-dasharray: 5 4; }
+#laboDiagram .dg .lt { stroke: var(--ap-subtle); }
+#laboDiagram .dg .bx { fill: var(--ap-panel); stroke: var(--ap-ink); stroke-width: 1.3; }
+#laboDiagram .dg .bxe { fill: var(--ap-hair); stroke: var(--ap-ink); stroke-width: 1.3; }
+#laboDiagram .dg .bnd { fill: none; stroke: var(--ap-muted); stroke-width: 1.2; stroke-dasharray: 6 4; }
+#laboDiagram .dg .lane { fill: none; stroke: var(--ap-subtle); stroke-width: 1; }
+#laboDiagram .dg .fi { fill: var(--ap-ink); stroke: var(--ap-ink); stroke-width: 1; }
+#laboDiagram .dg .frm { fill: none; stroke: var(--ap-ink); stroke-width: 1.1; }
+#laboDiagram .dg .hs { fill: transparent; }
+#laboDiagram .dg .ring { fill: none; stroke-width: 2.5; pointer-events: none; }
+#laboDiagram .dg .ring.on { stroke: var(--ap-orange); }
+#laboDiagram .dg .ring.good { stroke: var(--ap-ok-deep); }
+#laboDiagram .dg .ring.part { stroke: var(--ap-ko); }
+#laboDiagram .diffsvg { cursor: crosshair; }
+
+@media (max-width: 720px) {
+    #laboDiagram .dg-tabs, #laboDiagram .dg-opts, #laboDiagram .dg-versions, #laboDiagram .dg-stats { grid-template-columns: minmax(0, 1fr); }
+    #laboDiagram .dg-tabnum { font-size: 2.4em; }
+    #laboDiagram .dg-panel { padding: 18px 16px; }
+}
+@media (prefers-reduced-motion: reduce) { #laboDiagram * { transition: none !important; scroll-behavior: auto !important; } }

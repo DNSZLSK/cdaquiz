@@ -15,5 +15,6 @@ export const laboCatalog = [
     { domain: 'python-fichiers', title: 'Python : fichiers & données', description: "Lecture/écriture de fichiers, CSV, JSON, exceptions",                         count: 9,  kind: 'code', color: '#2C5F8A', load: () => import('./python-fichiers.js') },
     { domain: 'git',             title: 'Git',                        description: "Commits, branches, merge, conflits, remote",                                   count: 11, kind: 'code', color: '#F14E32', load: () => import('./git.js') },
     { domain: 'docker',          title: 'Docker',                     description: "Images, containers, Dockerfile, ports, volumes",                               count: 8,  kind: 'code', color: '#2496ED', load: () => import('./docker.js') },
-    { domain: 'uml-archi',       title: 'UML / Architecture',         description: "Relations UML, patterns, 3-tiers, microservices",                              count: 9,  kind: 'code', color: '#3498DB', load: () => import('./uml-archi.js') }
+    { domain: 'uml-archi',       title: 'UML / Architecture',         description: "Relations UML, patterns, 3-tiers, microservices",                              count: 9,  kind: 'code', color: '#3498DB', load: () => import('./uml-archi.js') },
+    { domain: 'diagrammes',      title: 'Lire un diagramme',          description: "Reconnaître un diagramme UML ou C4, trouver 7 différences et les justifier",   count: 34, kind: 'diagram', color: '#0098FF', load: () => import('./diagrammes.js') }
 ];

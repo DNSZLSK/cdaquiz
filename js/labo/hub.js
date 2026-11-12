@@ -27,7 +27,7 @@ registerScreen('labo-hub', {
 const DOMAIN_PICTO = {
     'sql': 'bdd', 'mcd-mld': 'mcd', 'oop-java': 'poo', 'tests-junit': 'tests', 'spring-boot': 'architecture',
     'spring-security': 'lock', 'angular': 'component', 'javascript': 'javascript', 'html-css': 'markup', 'bootstrap': 'conception',
-    'python': 'python', 'python-fichiers': 'documentation', 'git': 'git', 'docker': 'docker', 'uml-archi': 'uml'
+    'python': 'python', 'python-fichiers': 'documentation', 'git': 'git', 'docker': 'docker', 'uml-archi': 'uml', 'diagrammes': 'diagramme'
 };
 
 function renderHub() {
@@ -67,6 +67,9 @@ async function openDomain(domainKey) {
     if (entry.kind === 'sql') {
         const mod = await import('./sql-lab.js');
         await mod.openSqlLab(entry);
+    } else if (entry.kind === 'diagram') {
+        const mod = await import('./diagram-lab.js');
+        await mod.openDiagramLab(entry);
     } else {
         const mod = await import('./code-lab.js');
         await mod.openCodeLab(entry);

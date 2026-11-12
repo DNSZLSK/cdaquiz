@@ -1,7 +1,7 @@
 // Service worker CDA Quiz — strategie network-first : en ligne on sert
 // toujours la version fraiche (les mises a jour arrivent toutes seules),
 // le cache ne sert que de filet hors-ligne.
-const CACHE = 'cdaquiz-v11'; // incremente quand ASSETS change : force le re-pre-cache complet
+const CACHE = 'cdaquiz-v12'; // incremente quand ASSETS change : force le re-pre-cache complet
 
 const ASSETS = [
     '.',
@@ -18,6 +18,7 @@ const ASSETS = [
     'assets/icon-512.png',
     'assets/icon-maskable-512.png',
     'css/aperture.css',
+    'css/diagrammes.css',
     'css/labo.css',
     'css/main.css',
     'css/modules.css',
@@ -27,6 +28,7 @@ const ASSETS = [
     'data/questions.js',
     'data/exercises/angular.js',
     'data/exercises/bootstrap.js',
+    'data/exercises/diagrammes.js',
     'data/exercises/docker.js',
     'data/exercises/git.js',
     'data/exercises/html-css.js',
@@ -65,6 +67,8 @@ const ASSETS = [
     'js/exercises/qcm.js',
     'js/exercises/registry.js',
     'js/labo/code-lab.js',
+    'js/labo/diagram-draw.js',
+    'js/labo/diagram-lab.js',
     'js/labo/drafts.js',
     'js/labo/highlight.js',
     'js/labo/hub.js',
